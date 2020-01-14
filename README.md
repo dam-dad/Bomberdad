@@ -1,3 +1,2 @@
 # Bomberdad
-Juego del Bomberman en JavaFX
-probando Rosmen
+Juego del Bomberman en JavaFX segunda prueba
