@@ -63,7 +63,7 @@ public class BombermanApp extends GameApplication {
             protected void onActionBegin() {
                 playerComponent.placeBomb();
             }
-        }, KeyCode.F);
+        }, KeyCode.SPACE);
         
         getInput().addAction(new UserAction("Move Up2") {
             @Override
