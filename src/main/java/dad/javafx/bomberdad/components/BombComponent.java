@@ -54,7 +54,7 @@ public class BombComponent extends Component {
         //Eliminar jugador H
         
         FXGL.getGameWorld()
-        .getEntitiesInRange(bbox.range(0, radius))
+        .getEntitiesInRange(bbox.range(radius, 0))
         .stream()
         .filter(e -> e.isType(BombermanType.PLAYER))
         .forEach(e -> {
