@@ -23,7 +23,7 @@ public class BombComponent extends Component {
         FXGL.getGameWorld()
                 .getEntitiesInRange(bbox.range(0, radius))
                 .stream()
-                .filter(e -> e.isType(BombermanType.BRICK))
+                .filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER))
                 .forEach(e -> {
                     FXGL.<BombermanApp>getAppCast().onWallDestroyed(e);
                     e.removeFromWorld();
@@ -34,34 +34,12 @@ public class BombComponent extends Component {
         FXGL.getGameWorld()
         .getEntitiesInRange(bbox.range(radius, 0))
         .stream()
-        .filter(e -> e.isType(BombermanType.BRICK))
+        .filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER))
         .forEach(e -> {
             FXGL.<BombermanApp>getAppCast().onWallDestroyed(e);
             e.removeFromWorld();
         });
         
-        //Eliminar jugador V
-        
-        FXGL.getGameWorld()
-        .getEntitiesInRange(bbox.range(0, radius))
-        .stream()
-        .filter(e -> e.isType(BombermanType.PLAYER))
-        .forEach(e -> {
-            FXGL.<BombermanApp>getAppCast();
-            e.removeFromWorld();
-        });
-        
-        //Eliminar jugador H
-        
-        FXGL.getGameWorld()
-        .getEntitiesInRange(bbox.range(radius, 0))
-        .stream()
-        .filter(e -> e.isType(BombermanType.PLAYER))
-        .forEach(e -> {
-            FXGL.<BombermanApp>getAppCast();
-            e.removeFromWorld();
-        });
-
         getEntity().removeFromWorld();
     }
 }
