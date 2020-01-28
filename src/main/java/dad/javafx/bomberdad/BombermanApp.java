@@ -9,136 +9,156 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import dad.javafx.bomberdad.components.PlayerComponent;
+import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class BombermanApp extends GameApplication {
 
-    public static final int TILE_SIZE = 40;
+	public static final int TILE_SIZE = 40;
 
-    private Entity player, player2;
-    private PlayerComponent playerComponent, playerComponent2;
+	private Entity player, player2;
+	private PlayerComponent playerComponent, playerComponent2;
 
-    @Override
-    protected void initSettings(GameSettings settings) {
-        settings.setTitle("BomberDAD");
-        settings.setVersion("0.1");
-        settings.setMenuEnabled(true);
-        settings.setWidth(TILE_SIZE*15);
-        settings.setHeight(TILE_SIZE*15);
-    }
+	@Override
+	protected void initSettings(GameSettings settings) {
+		settings.setTitle("BomberDAD");
+		settings.setVersion("0.1");
+		settings.setMenuEnabled(true);
+		settings.setWidth(TILE_SIZE * 15);
+		settings.setHeight(TILE_SIZE * 15);
+	}
 
-    @Override
-    protected void initInput() {
-        getInput().addAction(new UserAction("Move Up") {
-            @Override
-            protected void onAction() {
-                playerComponent.moveUp();
-            }
-        }, KeyCode.W);
+	@Override
+	protected void initInput() {
+		getInput().addAction(new UserAction("Move Up") {
+			@Override
+			protected void onAction() {
+				playerComponent.moveUp();
+			}
+		}, KeyCode.W);
 
-        getInput().addAction(new UserAction("Move Left") {
-            @Override
-            protected void onAction() {
-                playerComponent.moveLeft();
-            }
-        }, KeyCode.A);
+		getInput().addAction(new UserAction("Move Left") {
+			@Override
+			protected void onAction() {
+				playerComponent.moveLeft();
+			}
+		}, KeyCode.A);
 
-        getInput().addAction(new UserAction("Move Down") {
-            @Override
-            protected void onAction() {
-                playerComponent.moveDown();
-            }
-        }, KeyCode.S);
+		getInput().addAction(new UserAction("Move Down") {
+			@Override
+			protected void onAction() {
+				playerComponent.moveDown();
+			}
+		}, KeyCode.S);
 
-        getInput().addAction(new UserAction("Move Right") {
-            @Override
-            protected void onAction() {
-                playerComponent.moveRight();
-            }
-        }, KeyCode.D);
+		getInput().addAction(new UserAction("Move Right") {
+			@Override
+			protected void onAction() {
+				playerComponent.moveRight();
+			}
+		}, KeyCode.D);
 
-        getInput().addAction(new UserAction("Place Bomb") {
-            @Override
-            protected void onActionBegin() {
-                playerComponent.placeBomb();
-            }
-        }, KeyCode.SPACE);
-        
-        getInput().addAction(new UserAction("Move Up2") {
-            @Override
-            protected void onActionBegin() {
-                playerComponent2.moveUp();
-            }
-        }, KeyCode.UP);
+		getInput().addAction(new UserAction("Place Bomb") {
+			@Override
+			protected void onActionBegin() {
+				playerComponent.placeBomb();
+			}
+		}, KeyCode.SPACE);
 
-        getInput().addAction(new UserAction("Move Left2") {
-            @Override
-            protected void onActionBegin() {
-                playerComponent2.moveLeft();
-            }
-        }, KeyCode.LEFT);
+		getInput().addAction(new UserAction("Move Up2") {
+			@Override
+			protected void onActionBegin() {
+				playerComponent2.moveUp();
+			}
+		}, KeyCode.UP);
 
-        getInput().addAction(new UserAction("Move Down2") {
-            @Override
-            protected void onActionBegin() {
-                playerComponent2.moveDown();
-            }
-        }, KeyCode.DOWN);
+		getInput().addAction(new UserAction("Move Left2") {
+			@Override
+			protected void onActionBegin() {
+				playerComponent2.moveLeft();
+			}
+		}, KeyCode.LEFT);
 
-        getInput().addAction(new UserAction("Move Right2") {
-            @Override
-            protected void onActionBegin() {
-                playerComponent2.moveRight();
-            }
-        }, KeyCode.RIGHT);
+		getInput().addAction(new UserAction("Move Down2") {
+			@Override
+			protected void onActionBegin() {
+				playerComponent2.moveDown();
+			}
+		}, KeyCode.DOWN);
 
-        getInput().addAction(new UserAction("Place Bomb2S") {
-            @Override
-            protected void onActionBegin() {
-                playerComponent2.placeBomb();
-            }
-        }, KeyCode.ENTER);
-    }
+		getInput().addAction(new UserAction("Move Right2") {
+			@Override
+			protected void onActionBegin() {
+				playerComponent2.moveRight();
+			}
+		}, KeyCode.RIGHT);
 
-    @Override
-    protected void initGame() {
-        getGameWorld().addEntityFactory(new BombermanFactory());
+		getInput().addAction(new UserAction("Place Bomb2S") {
+			@Override
+			protected void onActionBegin() {
+				playerComponent2.placeBomb();
+			}
+		}, KeyCode.ENTER);
+	}
 
-        getGameWorld().spawn("f");
+	@Override
+	protected void initGame() {
+		getGameWorld().addEntityFactory(new BombermanFactory());
 
-        Level level = getAssetLoader().loadLevel("0.txt", new TextLevelLoader(40, 40, '0'));
-        getGameWorld().setLevel(level);
+		getGameWorld().spawn("f");
 
-        player = getGameWorld().spawn("Player", 0 ,0);
-        player2 = getGameWorld().spawn("Player", TILE_SIZE*14, TILE_SIZE*14);
-        playerComponent = player.getComponent(PlayerComponent.class);
-        playerComponent2 = player2.getComponent(PlayerComponent.class);
-    }
+		Level level = getAssetLoader().loadLevel("0.txt", new TextLevelLoader(40, 40, '0'));
+		getGameWorld().setLevel(level);
 
-    @Override
-    protected void initPhysics() {
-        getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.POWERUP) {
-            @Override
-            protected void onCollisionBegin(Entity pl, Entity powerup) {
-                powerup.removeFromWorld();
-                playerComponent.increaseMaxBombs();
-            }
-        });
-    }
+		player = getGameWorld().spawn("Player", 0, 0);
+		player2 = getGameWorld().spawn("Player", TILE_SIZE * 14, TILE_SIZE * 14);
+		playerComponent = player.getComponent(PlayerComponent.class);
+		playerComponent.setName("Player");
+		playerComponent2 = player2.getComponent(PlayerComponent.class);
+		playerComponent2.setName("Player2");
+	}
 
+	@Override
+	protected void initPhysics() {
+		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.POWERUP) {
+			@Override
+			protected void onCollisionBegin(Entity pl, Entity powerup) {
+				powerup.removeFromWorld();
+				playerComponent.increaseMaxBombs();
+			}
+		});
+	}
 
 	public void onWallDestroyed(Entity e) {
-        if (FXGLMath.randomBoolean()) {
-            // TODO:
-//            int x = wall.getPositionComponent().getGridX(BombermanApp.TILE_SIZE);
-//            int y = wall.getPositionComponent().getGridY(BombermanApp.TILE_SIZE);
+		if (e.isType(BombermanType.PLAYER)) {
+			PlayerComponent playerHit = e.getComponent(PlayerComponent.class);
+			if (playerHit.getVidas() <= 0) {
+				e.setPosition(new Point2D(TILE_SIZE-16, TILE_SIZE*16));
+				e.removeFromWorld();
+			} else {
+				playerHit.setVidas(playerHit.getVidas()-1);
+				if (playerHit.getName().equals("Player")) {
+					e.setPosition(new Point2D(0, 0));
+				} else {
+					e.setPosition(new Point2D(TILE_SIZE * 14, TILE_SIZE * 14));
+				}
+			}
+		} else {
+			e.removeFromWorld();
+			if (FXGLMath.randomBoolean()) {
+				// TODO:
+//		            int x = wall.getPositionComponent().getGridX(BombermanApp.TILE_SIZE);
+//		            int y = wall.getPositionComponent().getGridY(BombermanApp.TILE_SIZE);
 //
-//            getGameWorld().spawn("Powerup", x*40, y*40);
-        }
-    }
+//		            getGameWorld().spawn("Powerup", x*40, y*40);
+			}
+		}
+		
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+	}
+
+	public static void main(String[] args) {
+		launch(args);
+	}
 }
