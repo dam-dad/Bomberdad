@@ -38,7 +38,7 @@ public class BombComponent extends Component {
         .forEach(e -> {
             FXGL.<BombermanApp>getAppCast().onWallDestroyed(e);
             });
-        
+
         getEntity().removeFromWorld();
     }
 }

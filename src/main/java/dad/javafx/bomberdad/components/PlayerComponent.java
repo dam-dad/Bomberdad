@@ -26,7 +26,7 @@ public class PlayerComponent extends Component {
 	}
 
 	public void placeBomb() {
-		if (vidas > 0) {
+		if (vidas >= 0) {
 			if (bombsPlaced == maxBombs) {
 				return;
 			}
@@ -48,28 +48,28 @@ public class PlayerComponent extends Component {
 	}
 
 	public void moveRight() {
-		if (vidas > 0) {
+		if (vidas >= 0) {
 			if (canMove(new Point2D(40, 0)))
 				position.translateX(BombermanApp.TILE_SIZE);
 		}
 	}
 
 	public void moveLeft() {
-		if (vidas > 0) {
+		if (vidas >= 0) {
 			if (canMove(new Point2D(-40, 0)))
 				position.translateX(-BombermanApp.TILE_SIZE);
 		}
 	}
 
 	public void moveUp() {
-		if (vidas > 0) {
+		if (vidas >= 0) {
 			if (canMove(new Point2D(0, -40)))
 				position.translateY(-BombermanApp.TILE_SIZE);
 		}
 	}
 
 	public void moveDown() {
-		if (vidas > 0) {
+		if (vidas >= 0) {
 			if (canMove(new Point2D(0, 40)))
 				position.translateY(BombermanApp.TILE_SIZE);
 		}
