@@ -26,44 +26,54 @@ public class PlayerComponent extends Component {
 	}
 
 	public void placeBomb() {
-		if (bombsPlaced == maxBombs) {
-			return;
+		if (vidas > 0) {
+			if (bombsPlaced == maxBombs) {
+				return;
+			}
+
+			bombsPlaced++;
+
+			// TODO: double check
+			int x = (int) position.getX() / BombermanApp.TILE_SIZE;
+			int y = (int) position.getY() / BombermanApp.TILE_SIZE;
+
+			Entity bomb = FXGL.getGameWorld().spawn("Bomb",
+					new SpawnData(x * 40, y * 40).put("radius", BombermanApp.TILE_SIZE / 2));
+
+			FXGL.getGameTimer().runOnceAfter(() -> {
+				bomb.getComponent(BombComponent.class).explode();
+				bombsPlaced--;
+			}, Duration.seconds(2));
 		}
-
-		bombsPlaced++;
-
-		// TODO: double check
-		int x = (int) position.getX() / BombermanApp.TILE_SIZE;
-		int y = (int) position.getY() / BombermanApp.TILE_SIZE;
-
-		Entity bomb = FXGL.getGameWorld().spawn("Bomb",
-				new SpawnData(x * 40, y * 40).put("radius", BombermanApp.TILE_SIZE / 2));
-
-		FXGL.getGameTimer().runOnceAfter(() -> {
-			bomb.getComponent(BombComponent.class).explode();
-			bombsPlaced--;
-		}, Duration.seconds(2));
 	}
 
 	public void moveRight() {
-		System.out.println(name);
-		if (canMove(new Point2D(40, 0)))
-			position.translateX(BombermanApp.TILE_SIZE);
+		if (vidas > 0) {
+			System.out.println(name);
+			if (canMove(new Point2D(40, 0)))
+				position.translateX(BombermanApp.TILE_SIZE);
+		}
 	}
 
 	public void moveLeft() {
-		if (canMove(new Point2D(-40, 0)))
-			position.translateX(-BombermanApp.TILE_SIZE);
+		if (vidas > 0) {
+			if (canMove(new Point2D(-40, 0)))
+				position.translateX(-BombermanApp.TILE_SIZE);
+		}
 	}
 
 	public void moveUp() {
-		if (canMove(new Point2D(0, -40)))
-			position.translateY(-BombermanApp.TILE_SIZE);
+		if (vidas > 0) {
+			if (canMove(new Point2D(0, -40)))
+				position.translateY(-BombermanApp.TILE_SIZE);
+		}
 	}
 
 	public void moveDown() {
-		if (canMove(new Point2D(0, 40)))
-			position.translateY(BombermanApp.TILE_SIZE);
+		if (vidas > 0) {
+			if (canMove(new Point2D(0, 40)))
+				position.translateY(BombermanApp.TILE_SIZE);
+		}
 	}
 
 	private boolean canMove(Point2D direction) {
@@ -78,21 +88,21 @@ public class PlayerComponent extends Component {
 						.noneMatch(type -> type.isType(BombermanType.BRICK) || type.isType(BombermanType.WALL)
 								|| type.isType(BombermanType.BOMB));
 	}
-	
-	//getters & setters
-	
+
+	// getters & setters
+
 	public int getVidas() {
 		return vidas;
 	}
-	
+
 	public void setVidas(int vidas) {
 		this.vidas = vidas;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
