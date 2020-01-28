@@ -24,17 +24,17 @@ public class BombComponent extends Component {
         FXGL.getGameWorld()
                 .getEntitiesInRange(bbox.range(0, radius))
                 .stream()
-                .filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER))
+                .filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER) )
                 .forEach(e -> {
                     FXGL.<BombermanApp>getAppCast().onWallDestroyed(e);
                 });
-        
+     
         //Explosion horizontal
         
         FXGL.getGameWorld()
         .getEntitiesInRange(bbox.range(radius, 0))
         .stream()
-        .filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER))
+        .filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER) )
         .forEach(e -> {
             FXGL.<BombermanApp>getAppCast().onWallDestroyed(e);
             });

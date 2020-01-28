@@ -5,7 +5,9 @@ import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.entity.level.text.TextLevelLoader;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import dad.javafx.bomberdad.components.PlayerComponent;
@@ -133,8 +135,8 @@ public class BombermanApp extends GameApplication {
 	public void onWallDestroyed(Entity e) {
 		if (e.isType(BombermanType.PLAYER)) {
 			PlayerComponent playerHit = e.getComponent(PlayerComponent.class);
-			if (playerHit.getVidas() <= 1) {
-				e.setPosition(new Point2D(TILE_SIZE-16, TILE_SIZE*16));
+			if (playerHit.getVidas() == 0) {
+				e.setPosition(new Point2D(TILE_SIZE*16, TILE_SIZE*16));
 				e.removeFromWorld();
 			} else {
 				playerHit.setVidas(playerHit.getVidas()-1);
