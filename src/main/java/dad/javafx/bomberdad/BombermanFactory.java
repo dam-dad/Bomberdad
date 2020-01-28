@@ -18,7 +18,7 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
         		.type(BombermanType.FLOOR)
                 .from(data)
-                .viewWithBBox(FXGL.getAssetLoader().loadTexture("floor.png", 40, 40))
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("floor.png", 40*15, 40*15))
                 .build();
     }
 

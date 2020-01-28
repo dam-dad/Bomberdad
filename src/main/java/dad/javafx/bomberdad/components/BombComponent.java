@@ -4,6 +4,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.BoundingBoxComponent;
 
+
 import dad.javafx.bomberdad.BombermanApp;
 import dad.javafx.bomberdad.BombermanType;
 
@@ -38,7 +39,7 @@ public class BombComponent extends Component {
         .forEach(e -> {
             FXGL.<BombermanApp>getAppCast().onWallDestroyed(e);
             e.removeFromWorld();
-        });
+            });
         
         //Eliminar jugador V
         
