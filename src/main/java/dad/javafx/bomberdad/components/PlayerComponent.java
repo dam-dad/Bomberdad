@@ -46,7 +46,6 @@ public class PlayerComponent extends Component {
 	}
 
 	public void moveRight() {
-		System.out.println(name);
 		if (canMove(new Point2D(40, 0)))
 			position.translateX(BombermanApp.TILE_SIZE);
 	}

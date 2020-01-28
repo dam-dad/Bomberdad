@@ -9,6 +9,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import dad.javafx.bomberdad.components.PlayerComponent;
+import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -113,7 +114,9 @@ public class BombermanApp extends GameApplication {
 		player = getGameWorld().spawn("Player", 0, 0);
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 14, TILE_SIZE * 14);
 		playerComponent = player.getComponent(PlayerComponent.class);
+		playerComponent.setName("Player");
 		playerComponent2 = player2.getComponent(PlayerComponent.class);
+		playerComponent2.setName("Player2");
 	}
 
 	@Override
@@ -128,13 +131,30 @@ public class BombermanApp extends GameApplication {
 	}
 
 	public void onWallDestroyed(Entity e) {
-		if (FXGLMath.randomBoolean()) {
-			// TODO:
-//	            int x = wall.getPositionComponent().getGridX(BombermanApp.TILE_SIZE);
-//	            int y = wall.getPositionComponent().getGridY(BombermanApp.TILE_SIZE);
+		if (e.isType(BombermanType.PLAYER)) {
+			PlayerComponent playerHit = e.getComponent(PlayerComponent.class);
+			if (playerHit.getVidas() <= 0) {
+				e.setPosition(new Point2D(TILE_SIZE-16, TILE_SIZE*16));
+				e.removeFromWorld();
+			} else {
+				playerHit.setVidas(playerHit.getVidas()-1);
+				if (playerHit.getName().equals("Player")) {
+					e.setPosition(new Point2D(0, 0));
+				} else {
+					e.setPosition(new Point2D(TILE_SIZE * 14, TILE_SIZE * 14));
+				}
+			}
+		} else {
+			e.removeFromWorld();
+			if (FXGLMath.randomBoolean()) {
+				// TODO:
+//		            int x = wall.getPositionComponent().getGridX(BombermanApp.TILE_SIZE);
+//		            int y = wall.getPositionComponent().getGridY(BombermanApp.TILE_SIZE);
 //
-//	            getGameWorld().spawn("Powerup", x*40, y*40);
+//		            getGameWorld().spawn("Powerup", x*40, y*40);
+			}
 		}
+		
 
 	}
 
