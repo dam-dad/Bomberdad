@@ -133,11 +133,12 @@ public class BombermanApp extends GameApplication {
 	public void onWallDestroyed(Entity e) {
 		if (e.isType(BombermanType.PLAYER)) {
 			PlayerComponent playerHit = e.getComponent(PlayerComponent.class);
-			if (playerHit.getVidas() <= 1) {
-				e.setPosition(new Point2D(TILE_SIZE-16, TILE_SIZE*16));
+			System.out.println(playerHit.getName() + " vidas:"+playerHit.getVidas());
+			if (playerHit.getVidas() == 0) {
+				e.setPosition(new Point2D(TILE_SIZE * 16, TILE_SIZE * 16));
 				e.removeFromWorld();
 			} else {
-				playerHit.setVidas(playerHit.getVidas()-1);
+				playerHit.setVidas(playerHit.getVidas() - 1);
 				if (playerHit.getName().equals("Player")) {
 					e.setPosition(new Point2D(0, 0));
 				} else {
@@ -154,7 +155,6 @@ public class BombermanApp extends GameApplication {
 //		            getGameWorld().spawn("Powerup", x*40, y*40);
 			}
 		}
-		
 
 	}
 
