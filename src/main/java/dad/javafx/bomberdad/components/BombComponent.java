@@ -27,7 +27,6 @@ public class BombComponent extends Component {
                 .filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER))
                 .forEach(e -> {
                     FXGL.<BombermanApp>getAppCast().onWallDestroyed(e);
-                    e.removeFromWorld();
                 });
         
         //Explosion horizontal
@@ -38,7 +37,6 @@ public class BombComponent extends Component {
         .filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER))
         .forEach(e -> {
             FXGL.<BombermanApp>getAppCast().onWallDestroyed(e);
-            e.removeFromWorld();
             });
         
         getEntity().removeFromWorld();
