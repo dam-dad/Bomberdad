@@ -6,7 +6,6 @@ import com.almasb.fxgl.entity.level.text.TextLevelLoader;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import dad.javafx.bomberdad.components.PlayerComponent;

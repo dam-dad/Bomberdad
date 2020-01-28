@@ -18,6 +18,7 @@ public class PlayerComponent extends Component {
 
 	private int maxBombs = 1;
 	private int bombsPlaced = 0;
+	private int vidas = 3;
 
 	public void increaseMaxBombs() {
 		maxBombs++;
@@ -74,5 +75,15 @@ public class PlayerComponent extends Component {
 						.map(e -> e.getComponent(TypeComponent.class))
 						.noneMatch(type -> type.isType(BombermanType.BRICK) || type.isType(BombermanType.WALL)
 								|| type.isType(BombermanType.BOMB));
+	}
+	
+	//getters & setters
+	
+	public int getVidas() {
+		return vidas;
+	}
+	
+	public void setVidas(int vidas) {
+		this.vidas = vidas;
 	}
 }
