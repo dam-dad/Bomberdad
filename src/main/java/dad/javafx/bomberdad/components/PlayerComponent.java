@@ -19,6 +19,7 @@ public class PlayerComponent extends Component {
 	private int maxBombs = 1;
 	private int bombsPlaced = 0;
 	private int vidas = 3;
+	private String name;
 
 	public void increaseMaxBombs() {
 		maxBombs++;
@@ -45,6 +46,7 @@ public class PlayerComponent extends Component {
 	}
 
 	public void moveRight() {
+		System.out.println(name);
 		if (canMove(new Point2D(40, 0)))
 			position.translateX(BombermanApp.TILE_SIZE);
 	}
@@ -85,5 +87,13 @@ public class PlayerComponent extends Component {
 	
 	public void setVidas(int vidas) {
 		this.vidas = vidas;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 }
