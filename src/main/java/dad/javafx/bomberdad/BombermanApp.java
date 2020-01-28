@@ -133,7 +133,7 @@ public class BombermanApp extends GameApplication {
 	public void onWallDestroyed(Entity e) {
 		if (e.isType(BombermanType.PLAYER)) {
 			PlayerComponent playerHit = e.getComponent(PlayerComponent.class);
-			if (playerHit.getVidas() <= 0) {
+			if (playerHit.getVidas() <= 1) {
 				e.setPosition(new Point2D(TILE_SIZE-16, TILE_SIZE*16));
 				e.removeFromWorld();
 			} else {
