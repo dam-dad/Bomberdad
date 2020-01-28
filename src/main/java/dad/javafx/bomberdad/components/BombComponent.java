@@ -1,6 +1,10 @@
 package dad.javafx.bomberdad.components;
 
+import java.util.ArrayList;
+import java.util.stream.Stream;
+
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.BoundingBoxComponent;
 
@@ -18,7 +22,8 @@ public class BombComponent extends Component {
 
     public void explode() {
         BoundingBoxComponent bbox = getEntity().getBoundingBoxComponent();
-
+        ArrayList<Entity> entities = new ArrayList<Entity>();
+        
         //Explosion vertical
         
         FXGL.getGameWorld()
@@ -26,19 +31,32 @@ public class BombComponent extends Component {
                 .stream()
                 .filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER) )
                 .forEach(e -> {
-                    FXGL.<BombermanApp>getAppCast().onWallDestroyed(e);
+                		entities.add(e);
                 });
      
         //Explosion horizontal
-        
         FXGL.getGameWorld()
-        .getEntitiesInRange(bbox.range(radius, 0))
-        .stream()
-        .filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER) )
-        .forEach(e -> {
-            FXGL.<BombermanApp>getAppCast().onWallDestroyed(e);
-            });
-        
+
+        		.getEntitiesInRange(bbox.range(radius, 0))
+        		.stream()
+        		.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER))
+        		.forEach(e -> {
+        			boolean is = false;
+        			for (int i = 0; i < entities.size(); i++) {
+						if (entities.get(i) == e) {
+							is = true;
+							break;
+						}
+					}
+        			if (!is) {
+        				entities.add(e);
+        			}
+        		});
+
+        for (Entity st:entities) {
+        	FXGL.<BombermanApp>getAppCast().onWallDestroyed(st);
+		}
+
         getEntity().removeFromWorld();
     }
 }

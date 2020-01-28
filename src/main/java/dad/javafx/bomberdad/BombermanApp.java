@@ -35,28 +35,28 @@ public class BombermanApp extends GameApplication {
 	protected void initInput() {
 		getInput().addAction(new UserAction("Move Up") {
 			@Override
-			protected void onAction() {
+			protected void onActionBegin() {
 				playerComponent.moveUp();
 			}
 		}, KeyCode.W);
 
 		getInput().addAction(new UserAction("Move Left") {
 			@Override
-			protected void onAction() {
+			protected void onActionBegin() {
 				playerComponent.moveLeft();
 			}
 		}, KeyCode.A);
 
 		getInput().addAction(new UserAction("Move Down") {
 			@Override
-			protected void onAction() {
+			protected void onActionBegin() {
 				playerComponent.moveDown();
 			}
 		}, KeyCode.S);
 
 		getInput().addAction(new UserAction("Move Right") {
 			@Override
-			protected void onAction() {
+			protected void onActionBegin() {
 				playerComponent.moveRight();
 			}
 		}, KeyCode.D);
@@ -117,8 +117,9 @@ public class BombermanApp extends GameApplication {
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 14, TILE_SIZE * 14);
 		playerComponent = player.getComponent(PlayerComponent.class);
 		playerComponent.setName("Player");
+		playerComponent.setVidas(3);;
 		playerComponent2 = player2.getComponent(PlayerComponent.class);
-		playerComponent2.setName("Player2");
+		playerComponent2.setName("Player2");;
 	}
 
 	@Override
@@ -135,11 +136,13 @@ public class BombermanApp extends GameApplication {
 	public void onWallDestroyed(Entity e) {
 		if (e.isType(BombermanType.PLAYER)) {
 			PlayerComponent playerHit = e.getComponent(PlayerComponent.class);
+
+			System.out.println(playerHit.getName() + " vidas:"+playerHit.getVidas());
 			if (playerHit.getVidas() == 0) {
-				e.setPosition(new Point2D(TILE_SIZE*16, TILE_SIZE*16));
+				e.setPosition(new Point2D(TILE_SIZE * 16, TILE_SIZE * 16));
 				e.removeFromWorld();
 			} else {
-				playerHit.setVidas(playerHit.getVidas()-1);
+				playerHit.setVidas(playerHit.getVidas() - 1);
 				if (playerHit.getName().equals("Player")) {
 					e.setPosition(new Point2D(0, 0));
 				} else {
@@ -156,7 +159,6 @@ public class BombermanApp extends GameApplication {
 //		            getGameWorld().spawn("Powerup", x*40, y*40);
 			}
 		}
-		
 
 	}
 
