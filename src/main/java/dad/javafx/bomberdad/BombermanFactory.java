@@ -61,12 +61,22 @@ public class BombermanFactory implements EntityFactory {
                 .build();
     }
 
-    @Spawns("Powerup")
-    public Entity newPowerup(SpawnData data) {
+    @Spawns("PUMaxBombs")
+    public Entity newMaxBomsUp(SpawnData data) {
         return FXGL.entityBuilder()
-                .type(BombermanType.POWERUP)
+                .type(BombermanType.UPMAXBOMBS)
                 .from(data)
                 .viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.YELLOW))
+                .with(new CollidableComponent(true))
+                .build();
+    }
+    
+    @Spawns("PUPower")
+    public Entity newPower(SpawnData data) {
+        return FXGL.entityBuilder()
+                .type(BombermanType.UPPOWER)
+                .from(data)
+                .viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.RED))
                 .with(new CollidableComponent(true))
                 .build();
     }
