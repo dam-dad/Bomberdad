@@ -1,7 +1,6 @@
 package dad.javafx.bomberdad.components;
 
 import java.util.ArrayList;
-import java.util.stream.Stream;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;

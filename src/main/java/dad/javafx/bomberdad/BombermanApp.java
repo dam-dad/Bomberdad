@@ -19,6 +19,8 @@ public class BombermanApp extends GameApplication {
 
 	private Entity player, player2;
 	private PlayerComponent playerComponent, playerComponent2;
+	private int lvl = 0;
+	private boolean requestNewGame = false;
 
 	@Override
 	protected void initSettings(GameSettings settings) {
@@ -27,6 +29,7 @@ public class BombermanApp extends GameApplication {
 		settings.setMenuEnabled(true);
 		settings.setWidth(TILE_SIZE * 15);
 		settings.setHeight(TILE_SIZE * 15);
+		settings.setIntroEnabled(false);
 	}
 
 	@Override
@@ -108,17 +111,17 @@ public class BombermanApp extends GameApplication {
 
 		getGameWorld().spawn("f");
 
-		Level level = getAssetLoader().loadLevel("0.txt", new TextLevelLoader(40, 40, '0'));
+		Level level = getAssetLoader().loadLevel(lvl+".txt", new TextLevelLoader(40, 40, '0'));
 		getGameWorld().setLevel(level);
 
 		player = getGameWorld().spawn("Player", 0, 0);
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 14, TILE_SIZE * 14);
 		playerComponent = player.getComponent(PlayerComponent.class);
 		playerComponent.setName("Player");
-		playerComponent.setVidas(3);;
 		playerComponent2 = player2.getComponent(PlayerComponent.class);
-		playerComponent2.setName("Player2");;
+		playerComponent2.setName("Player2");
 	}
+	
 
 	@Override
 	protected void initPhysics() {
@@ -130,6 +133,19 @@ public class BombermanApp extends GameApplication {
 			}
 		});
 	}
+	
+	private void levelUp() {
+		lvl = 1;
+		requestNewGame = true;
+	}
+	
+	 @Override
+	    protected void onUpdate(double tpf) {
+	        if (requestNewGame) {
+	            requestNewGame = false;
+	            getGameController().startNewGame();
+	        }
+	    }
 
 	public void onWallDestroyed(Entity e) {
 		if (e.isType(BombermanType.PLAYER)) {
@@ -138,6 +154,7 @@ public class BombermanApp extends GameApplication {
 			if (playerHit.getVidas() == 0) {
 				e.setPosition(new Point2D(TILE_SIZE * 16, TILE_SIZE * 16));
 				e.removeFromWorld();
+				levelUp();
 			} else {
 				playerHit.setVidas(playerHit.getVidas() - 1);
 				if (playerHit.getName().equals("Player")) {
