@@ -5,9 +5,7 @@ import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.entity.level.text.TextLevelLoader;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.core.math.FXGLMath;
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import dad.javafx.bomberdad.components.PlayerComponent;
@@ -29,8 +27,8 @@ public class BombermanApp extends GameApplication {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
 		settings.setMenuEnabled(false);
-		settings.setWidth(TILE_SIZE * 15);
-		settings.setHeight(TILE_SIZE * 15);
+		settings.setWidth(TILE_SIZE * 17);
+		settings.setHeight(TILE_SIZE * 17);
 		settings.setIntroEnabled(false);
 	}
 
@@ -116,8 +114,8 @@ public class BombermanApp extends GameApplication {
 		Level level = getAssetLoader().loadLevel(lvl+".txt", new TextLevelLoader(40, 40, '0'));
 		getGameWorld().setLevel(level);
 
-		player = getGameWorld().spawn("Player", 0, 0);
-		player2 = getGameWorld().spawn("Player", TILE_SIZE * 14, TILE_SIZE * 14);
+		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
+		player2 = getGameWorld().spawn("Player", TILE_SIZE * 15, TILE_SIZE * 15);
 		playerComponent = player.getComponent(PlayerComponent.class);
 		playerComponent.setName("Player");
 		playerComponent2 = player2.getComponent(PlayerComponent.class);
@@ -164,11 +162,12 @@ public class BombermanApp extends GameApplication {
 				e.removeFromWorld();
 				levelUp();
 			} else {
+				playerHit.setVidas(playerHit.getVidas()-1);
 				if (playerHit.getName().equals("Player")) {
-					e.setPosition(new Point2D(0, 0));
+					e.setPosition(new Point2D(TILE_SIZE, TILE_SIZE));
 					playerHit.resetMaxBombs();
 				} else {
-					e.setPosition(new Point2D(TILE_SIZE * 14, TILE_SIZE * 14));
+					e.setPosition(new Point2D(TILE_SIZE * 15, TILE_SIZE * 15));
 					playerHit.resetMaxBombs();
 				}
 			}
