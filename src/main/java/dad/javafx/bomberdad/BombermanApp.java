@@ -5,7 +5,9 @@ import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.entity.level.text.TextLevelLoader;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import dad.javafx.bomberdad.components.PlayerComponent;
@@ -26,7 +28,7 @@ public class BombermanApp extends GameApplication {
 	protected void initSettings(GameSettings settings) {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
-		settings.setMenuEnabled(true);
+		settings.setMenuEnabled(false);
 		settings.setWidth(TILE_SIZE * 15);
 		settings.setHeight(TILE_SIZE * 15);
 		settings.setIntroEnabled(false);
@@ -125,11 +127,18 @@ public class BombermanApp extends GameApplication {
 
 	@Override
 	protected void initPhysics() {
-		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.POWERUP) {
+		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPMAXBOMBS) {
 			@Override
 			protected void onCollisionBegin(Entity pl, Entity powerup) {
 				powerup.removeFromWorld();
 				playerComponent.increaseMaxBombs();
+			}
+		});
+		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPPOWER) {
+			@Override
+			protected void onCollisionBegin(Entity pl, Entity powerup) {
+				powerup.removeFromWorld();
+				playerComponent.increasePower();
 			}
 		});
 	}
@@ -147,30 +156,33 @@ public class BombermanApp extends GameApplication {
 	        }
 	    }
 
-	public void onWallDestroyed(Entity e) {
+	public void onDestroyed(Entity e) {
 		if (e.isType(BombermanType.PLAYER)) {
 			PlayerComponent playerHit = e.getComponent(PlayerComponent.class);
-			System.out.println(playerHit.getName() + " vidas:"+playerHit.getVidas());
 			if (playerHit.getVidas() == 0) {
 				e.setPosition(new Point2D(TILE_SIZE * 16, TILE_SIZE * 16));
 				e.removeFromWorld();
 				levelUp();
 			} else {
-				playerHit.setVidas(playerHit.getVidas() - 1);
 				if (playerHit.getName().equals("Player")) {
 					e.setPosition(new Point2D(0, 0));
+					playerHit.resetMaxBombs();
 				} else {
 					e.setPosition(new Point2D(TILE_SIZE * 14, TILE_SIZE * 14));
+					playerHit.resetMaxBombs();
 				}
 			}
 		} else {
 			e.removeFromWorld();
 			if (FXGLMath.randomBoolean()) {
-				// TODO:
-//		            int x = wall.getPositionComponent().getGridX(BombermanApp.TILE_SIZE);
-//		            int y = wall.getPositionComponent().getGridY(BombermanApp.TILE_SIZE);
-//
-//		            getGameWorld().spawn("Powerup", x*40, y*40);
+		            int x = (int) e.getPosition().getX();
+		            int y = (int) e.getPosition().getY();
+
+		            if (FXGLMath.randomBoolean()) {
+			            getGameWorld().spawn("PUMaxBombs", x, y);
+		            }else {
+		            	getGameWorld().spawn("PUPower", x, y);
+		            }
 			}
 		}
 

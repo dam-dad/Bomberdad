@@ -20,9 +20,22 @@ public class PlayerComponent extends Component {
 	private int bombsPlaced = 0;
 	private int vidas = 3;
 	private String name;
+	private int power = 0;
 
 	public void increaseMaxBombs() {
 		maxBombs++;
+	}
+	
+	public void resetMaxBombs() {
+		maxBombs = 1;
+	}
+	
+	public void increasePower() {
+		power = power + 40;
+	}
+	
+	public void resetPower() {
+		power = 1;
 	}
 
 	public void placeBomb() {
@@ -38,7 +51,7 @@ public class PlayerComponent extends Component {
 			int y = (int) position.getY() / BombermanApp.TILE_SIZE;
 
 			Entity bomb = FXGL.getGameWorld().spawn("Bomb",
-					new SpawnData(x * 40, y * 40).put("radius", BombermanApp.TILE_SIZE / 2));
+					new SpawnData(x * 40, y * 40).put("radius", (BombermanApp.TILE_SIZE / 2)+power));
 
 			FXGL.getGameTimer().runOnceAfter(() -> {
 				bomb.getComponent(BombComponent.class).explode();
@@ -105,4 +118,5 @@ public class PlayerComponent extends Component {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 }
