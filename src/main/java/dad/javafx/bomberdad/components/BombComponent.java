@@ -23,16 +23,17 @@ public class BombComponent extends Component {
     public void explode() {
         BoundingBoxComponent bbox = getEntity().getBoundingBoxComponent();
         ArrayList<Entity> entities = new ArrayList<Entity>();
-        
         //Explosion vertical
         
+
         FXGL.getGameWorld()
-                .getEntitiesInRange(bbox.range(0, radius))
-                .stream()
-                .filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER) )
-                .forEach(e -> {
-                		entities.add(e);
-                });
+        .getEntitiesInRange(bbox.range(0, radius))
+        .stream()
+        .filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER) )
+        .forEach(e -> {
+        		entities.add(e);
+        });
+       
      
         //Explosion horizontal
         FXGL.getGameWorld()
