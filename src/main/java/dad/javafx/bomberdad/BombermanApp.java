@@ -189,16 +189,16 @@ public class BombermanApp extends GameApplication {
 			}
 		} else {
 			e.removeFromWorld();
-//			if (FXGLMath.randomBoolean()) {
+			if (FXGLMath.randomBoolean()) {
 		            int x = (int) e.getPosition().getX();
 		            int y = (int) e.getPosition().getY();
-//
-//		            if (FXGLMath.randomBoolean()) {
-//			            getGameWorld().spawn("PUMaxBombs", x, y);
-//		            }else {
+
+		            if (FXGLMath.randomBoolean()) {
+			            getGameWorld().spawn("PUMaxBombs", x, y);
+		            }else {
 		            	getGameWorld().spawn("PUPower", x, y);
-//		            }
-//			}
+		            }
+			}
 		}
 
 	}
