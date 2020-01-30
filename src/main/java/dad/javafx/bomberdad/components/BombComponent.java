@@ -69,8 +69,10 @@ public class BombComponent extends Component {
 			if (st.getX() < this.getEntity().getX()) {
 				for (int i = (int) (st.getX() + 40); i < this.getEntity().getX(); i = i + 40) {
 					ent = FXGL.getGameWorld().getEntitiesAt(new Point2D(i, st.getY()));
-					if (ent.get(0).isType(BombermanType.WALL)) {
-						isWall = true;
+					if (!ent.isEmpty()) {
+						if (ent.get(0).isType(BombermanType.WALL)) {
+							isWall = true;
+						}
 					}
 				}
 				if (!isWall) {
@@ -80,8 +82,10 @@ public class BombComponent extends Component {
 			} else if (st.getX() > this.getEntity().getX()) {
 				for (int i = (int) (st.getX() - 40); i > this.getEntity().getX(); i = i - 40) {
 					ent = FXGL.getGameWorld().getEntitiesAt(new Point2D(i, st.getY()));
-					if (ent.get(0).isType(BombermanType.WALL)) {
-						isWall = true;
+					if (!ent.isEmpty()) {
+						if (ent.get(0).isType(BombermanType.WALL)) {
+							isWall = true;
+						}
 					}
 				}
 				if (!isWall) {
@@ -90,8 +94,10 @@ public class BombComponent extends Component {
 			} else if (st.getY() < this.getEntity().getY()) {
 				for (int i = (int) (st.getY() + 40); i < this.getEntity().getY(); i = i + 40) {
 					ent = FXGL.getGameWorld().getEntitiesAt(new Point2D(st.getX(), i));
-					if (ent.get(0).isType(BombermanType.WALL)) {
-						isWall = true;
+					if (!ent.isEmpty()) {
+						if (ent.get(0).isType(BombermanType.WALL)) {
+							isWall = true;
+						}
 					}
 				}
 				if (!isWall) {
@@ -100,8 +106,10 @@ public class BombComponent extends Component {
 			} else if (st.getY() > this.getEntity().getY()) {
 				for (int i = (int) (st.getY() - 40); i > this.getEntity().getY(); i = i - 40) {
 					ent = FXGL.getGameWorld().getEntitiesAt(new Point2D(st.getX(), i));
-					if (ent.get(0).isType(BombermanType.WALL)) {
-						isWall = true;
+					if (!ent.isEmpty()) {
+						if (ent.get(0).isType(BombermanType.WALL)) {
+							isWall = true;
+						}
 					}
 				}
 				if (!isWall) {
