@@ -155,7 +155,8 @@ public class BombermanApp extends GameApplication {
 					playerHit.resetMaxBombs();
 				}
 			}
-		} else {
+		} else if(e.isType(BombermanType.BRICK)) {
+	
 			e.removeFromWorld();
 			if (FXGLMath.randomBoolean()) {
 		            int x = (int) e.getPosition().getX();

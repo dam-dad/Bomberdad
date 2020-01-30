@@ -17,16 +17,17 @@ import javafx.geometry.Point2D;
 public class BombComponent extends Component {
 
 	private int radius;
+	 ArrayList<Entity> entities = new ArrayList<Entity>();
 
+     ArrayList<Entity> entitiesToDelete = new ArrayList<Entity>();
     public BombComponent(int radius) {
         this.radius = radius;
     }
 
     public void explode() {
         BoundingBoxComponent bbox = getEntity().getBoundingBoxComponent();
-        ArrayList<Entity> entities = new ArrayList<Entity>();
-
-        ArrayList<Entity> entitiesToDelete = new ArrayList<Entity>();
+        entities.clear();
+        entitiesToDelete.clear();
         
 
         //Explosion vertical
@@ -35,8 +36,9 @@ public class BombComponent extends Component {
         FXGL.getGameWorld()
         .getEntitiesInRange(bbox.range(0, radius))
         .stream()
-        .filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER) )
+        .filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER) || e.isType(BombermanType.FLOOR))
         .forEach(e -> {
+        	
         		entities.add(e);
         });
        
@@ -71,7 +73,9 @@ public class BombComponent extends Component {
 				if (ent.get(0).isType(BombermanType.WALL)) {
 					//NOTHING
 				} else {
+//					FXGL.spawn("explosion",st.getPosition());
 					entitiesToDelete.add(st);
+				
 				}
 			} else if (st.getX() > this.getEntity().getX()) {
         		ent = FXGL.getGameWorld().getEntitiesAt(new Point2D(st.getX()-40,st.getY()));
@@ -79,6 +83,7 @@ public class BombComponent extends Component {
 					//NOTHING
 				} else {
 					entitiesToDelete.add(st);
+					
 				}
 			} else if (st.getY() < this.getEntity().getY()) {
         		ent = FXGL.getGameWorld().getEntitiesAt(new Point2D(st.getX(),st.getY()+40));
@@ -86,6 +91,7 @@ public class BombComponent extends Component {
 					//NOTHING
 				} else {
 					entitiesToDelete.add(st);
+					
 				}
 			} else if (st.getY() > this.getEntity().getY()) {
         		ent = FXGL.getGameWorld().getEntitiesAt(new Point2D(st.getX(),st.getY()-40));
@@ -93,6 +99,7 @@ public class BombComponent extends Component {
 					//NOTHING
 				} else {
 					entitiesToDelete.add(st);
+				
 				}
 			}
         	
@@ -102,8 +109,10 @@ public class BombComponent extends Component {
         
         for (Entity st:entitiesToDelete) {
         	FXGL.<BombermanApp>getAppCast().onDestroyed(st);
+//        	FXGL.spawn("explosion",st.getPosition());
 		}
-
+        
         getEntity().removeFromWorld();
+        FXGL.spawn("explosion",getEntity().getPosition());
     }
 }
