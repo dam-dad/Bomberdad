@@ -17,27 +17,38 @@ public class BombComponent extends Component {
 
 	private int radius;
 
-	public BombComponent(int radius) {
-		this.radius = radius;
-	}
+    public BombComponent(int radius) {
+        this.radius = radius;
+    }
 
-	public void explode() {
-		BoundingBoxComponent bbox = getEntity().getBoundingBoxComponent();
-		ArrayList<Entity> entities = new ArrayList<Entity>();
-		ArrayList<Entity> entitiesToDelete = new ArrayList<Entity>();
+    public void explode() {
+        BoundingBoxComponent bbox = getEntity().getBoundingBoxComponent();
+        ArrayList<Entity> entities = new ArrayList<Entity>();
 
-		// Explosion vertical
+        ArrayList<Entity> entitiesToDelete = new ArrayList<Entity>();
+        
 
-		FXGL.getGameWorld().getEntitiesInRange(bbox.range(0, radius)).stream()
-				.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER)).forEach(e -> {
-					entities.add(e);
-				});
+        //Explosion vertical
+        
 
-		// Explosion horizontal
-		FXGL.getGameWorld().getEntitiesInRange(bbox.range(radius, 0)).stream()
-				.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER)).forEach(e -> {
-					boolean thereIs = false;
-					for (int i = 0; i < entities.size(); i++) {
+        FXGL.getGameWorld()
+        .getEntitiesInRange(bbox.range(0, radius))
+        .stream()
+        .filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER) )
+        .forEach(e -> {
+        		entities.add(e);
+        });
+       
+     
+        //Explosion horizontal
+        FXGL.getGameWorld()
+
+        		.getEntitiesInRange(bbox.range(radius, 0))
+        		.stream()
+        		.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER))
+        		.forEach(e -> {
+        			boolean thereIs = false;
+        			for (int i = 0; i < entities.size(); i++) {
 						if (entities.get(i) == e) {
 							thereIs = true;
 							break;
