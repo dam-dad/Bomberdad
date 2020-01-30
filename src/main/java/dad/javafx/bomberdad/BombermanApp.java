@@ -1,16 +1,19 @@
 package dad.javafx.bomberdad;
 
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.app.MenuType;
+import com.almasb.fxgl.app.PauseMenu;
+import com.almasb.fxgl.app.SceneFactory;
 import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.entity.level.text.TextLevelLoader;
+import com.almasb.fxgl.app.FXGLMenu;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.core.math.FXGLMath;
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import dad.javafx.bomberdad.components.PlayerComponent;
+import dad.javafx.bomberdad.menu.CustomMenu;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -26,9 +29,21 @@ public class BombermanApp extends GameApplication {
 	protected void initSettings(GameSettings settings) {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
-		settings.setMenuEnabled(false);
 		settings.setWidth(TILE_SIZE * 15);
 		settings.setHeight(TILE_SIZE * 15);
+		
+		settings.setMenuEnabled(false);
+        settings.setSceneFactory(new SceneFactory() {
+            @Override
+            public FXGLMenu newMainMenu() {
+                return new CustomMenu(MenuType.MAIN_MENU);
+            }
+            
+            @Override
+            public PauseMenu newPauseMenu() {
+            	return super.newPauseMenu();
+            }
+        });
 	}
 
 	@Override
@@ -147,6 +162,7 @@ public class BombermanApp extends GameApplication {
 				e.setPosition(new Point2D(TILE_SIZE * 16, TILE_SIZE * 16));
 				e.removeFromWorld();
 			} else {
+				playerHit.setVidas(playerHit.getVidas()-1);
 				if (playerHit.getName().equals("Player")) {
 					e.setPosition(new Point2D(0, 0));
 					playerHit.resetMaxBombs();
@@ -157,16 +173,16 @@ public class BombermanApp extends GameApplication {
 			}
 		} else {
 			e.removeFromWorld();
-			if (FXGLMath.randomBoolean()) {
+//			if (FXGLMath.randomBoolean()) {
 		            int x = (int) e.getPosition().getX();
 		            int y = (int) e.getPosition().getY();
-
-		            if (FXGLMath.randomBoolean()) {
-			            getGameWorld().spawn("PUMaxBombs", x, y);
-		            }else {
+//
+//		            if (FXGLMath.randomBoolean()) {
+//			            getGameWorld().spawn("PUMaxBombs", x, y);
+//		            }else {
 		            	getGameWorld().spawn("PUPower", x, y);
-		            }
-			}
+//		            }
+//			}
 		}
 
 	}
