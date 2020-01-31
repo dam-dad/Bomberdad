@@ -10,6 +10,7 @@ import com.almasb.fxgl.particle.ParticleEmitters;
 import com.almasb.fxgl.particle.ParticleSystem;
 import com.almasb.fxgl.texture.Texture;
 
+import dad.javafx.bomberdad.menu.components.TitleController;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
@@ -110,8 +111,7 @@ public class CustomMenu extends FXGLMenu {
 				titleRoot.getTranslateY() + 34);
 		 */
 		
-		
-		return ;
+		return new TitleController();
 	}
 
 	@Override
@@ -124,16 +124,16 @@ public class CustomMenu extends FXGLMenu {
 		return new Text(profileName);
 	}
 
-	@Override
-	protected void onUpdate(double tpf) {
-		double frequency = 1.7;
-
-		t += tpf * frequency;
-
-		particleSystem.onUpdate(tpf);
-
+//	@Override
+//	protected void onUpdate(double tpf) {
+//		double frequency = 1.7;
+//
+//		t += tpf * frequency;
+//
+//		particleSystem.onUpdate(tpf);
+//
 //		Color color = Color.color(1.0, 1.0, 1.0 , FXGLMath.noise1D(t));
-		Color color = Color.DARKRED;
-		titleColor.set(color);
-	}
+//		Color color = Color.DARKRED;
+//		titleColor.set(color);
+//	}
 }

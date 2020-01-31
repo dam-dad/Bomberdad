@@ -155,14 +155,14 @@ public class BombermanApp extends GameApplication {
 			@Override
 			protected void onCollisionBegin(Entity pl, Entity powerup) {
 				powerup.removeFromWorld();
-				playerComponent.increaseMaxBombs();
+				pl.getComponent(PlayerComponent.class).increaseMaxBombs();
 			}
 		});
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPPOWER) {
 			@Override
 			protected void onCollisionBegin(Entity pl, Entity powerup) {
 				powerup.removeFromWorld();
-				playerComponent.increasePower();
+				pl.getComponent(PlayerComponent.class).increasePower();
 			}
 		});
 	}
@@ -188,7 +188,6 @@ public class BombermanApp extends GameApplication {
 				e.removeFromWorld();
 				levelUp();
 			} else {
-				System.out.println(playerHit.getVidas());
 				playerHit.setVidas(playerHit.getVidas()-1);
 				if (playerHit.getName().equals("Player")) {
 					e.setPosition(new Point2D(TILE_SIZE, TILE_SIZE));
