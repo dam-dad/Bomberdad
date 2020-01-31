@@ -120,6 +120,8 @@ public class BombermanApp extends GameApplication {
 		playerComponent.setName("Player");
 		playerComponent2 = player2.getComponent(PlayerComponent.class);
 		playerComponent2.setName("Player2");
+		GenerateMap generateMap = new GenerateMap();
+		generateMap.newMap();
 	}
 	
 
