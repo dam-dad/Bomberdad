@@ -55,8 +55,8 @@ public class CustomMenu extends FXGLMenu {
 
 	@Override
 	protected Node createTitleView(String title) {
-		titleColor = new SimpleObjectProperty<Color>(Color.WHITE);
-		
+		/*titleColor = new SimpleObjectProperty<Color>(Color.WHITE);
+
 		Text text = FXGL.getUIFactory().newText(title.substring(0, 1), 50.0);
 		text.setFill(null);
 		text.setStroke(titleColor.get());
@@ -77,7 +77,7 @@ public class CustomMenu extends FXGLMenu {
 
 		ParticleEmitter emitter = ParticleEmitters.newExplosionEmitter(50);
 
-		/*Texture t = new Texture(new Image("particles/trace_horizontal.png"));
+		Texture t = new Texture(new Image("particles/trace_horizontal.png"));
 		Random r = new Random();
 		emitter.setBlendMode(BlendMode.ADD);
 		emitter.setSourceImage(t.getImage());
@@ -85,17 +85,17 @@ public class CustomMenu extends FXGLMenu {
 		emitter.setSize(18.0, 22.0);
 		emitter.setNumParticles(2);
 		emitter.setEmissionRate(0.2);
-		        emitter.setVelocityFunction(i -> {
-		            if (i % 2 == 0)
-		                new Point2D(r.nextInt(-10), 0);
-		            else
-		            	new Point2D(r.nextInt(10), 0);
-		        });
-		        emitter.setExpireFunction(Duration.seconds((double) r.nextInt(6-4)+4));
-		        emitter.setScaleFunction(new Point2D(-0.03, -0.03));
-		        emitter.setSpawnPointFunction(new Point2D((double) random(0, 0), (double) random(0, 0)));
-		        emitter.setAccelerationFunction(Point2D(random(-1, 1).toDouble(), random(0, 0).toDouble()));
-*/
+		emitter.setVelocityFunction(i -> {
+			if (i % 2 == 0)
+				new Point2D(r.nextInt(-10), 0);
+			else
+				new Point2D(r.nextInt(10), 0);
+		});
+		emitter.setExpireFunction(Duration.seconds((double) r.nextInt(6 - 4) + 4));
+		emitter.setScaleFunction(new Point2D(-0.03, -0.03));
+		emitter.setSpawnPointFunction(new Point2D((double) random(0, 0), (double) random(0, 0)));
+		emitter.setAccelerationFunction(Point2D(random(-1, 1).toDouble(), random(0, 0).toDouble()));
+
 		HBox box = new HBox(text, text2);
 		box.setAlignment(Pos.CENTER);
 
@@ -108,8 +108,10 @@ public class CustomMenu extends FXGLMenu {
 		particleSystem = new ParticleSystem();
 		particleSystem.addParticleEmitter(emitter, (double) (FXGL.getAppWidth() / 2 - 30),
 				titleRoot.getTranslateY() + 34);
-
-		return titleRoot;
+		 */
+		
+		
+		return ;
 	}
 
 	@Override
