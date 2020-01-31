@@ -155,14 +155,14 @@ public class BombermanApp extends GameApplication {
 			@Override
 			protected void onCollisionBegin(Entity pl, Entity powerup) {
 				powerup.removeFromWorld();
-				playerComponent.increaseMaxBombs();
+				pl.getComponent(PlayerComponent.class).increaseMaxBombs();
 			}
 		});
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPPOWER) {
 			@Override
 			protected void onCollisionBegin(Entity pl, Entity powerup) {
 				powerup.removeFromWorld();
-				playerComponent.increasePower();
+				pl.getComponent(PlayerComponent.class).increasePower();
 			}
 		});
 	}
