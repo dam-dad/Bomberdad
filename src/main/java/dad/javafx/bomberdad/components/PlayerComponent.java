@@ -35,7 +35,7 @@ public class PlayerComponent extends Component {
 	}
 	
 	public void resetPower() {
-		power = 1;
+		power = 0;
 	}
 
 	public void placeBomb() {
@@ -49,12 +49,11 @@ public class PlayerComponent extends Component {
 			// TODO: double check
 			int x = (int) position.getX() / BombermanApp.TILE_SIZE;
 			int y = (int) position.getY() / BombermanApp.TILE_SIZE;
-
 			Entity bomb = FXGL.getGameWorld().spawn("Bomb",
 					new SpawnData(x * 40, y * 40).put("radius", (BombermanApp.TILE_SIZE / 2)+power));
 
 			FXGL.getGameTimer().runOnceAfter(() -> {
-				bomb.getComponent(BombComponent.class).explode();
+				bomb.getComponent(BombComponent.class).explode(power);
 				bombsPlaced--;
 			}, Duration.seconds(2));
 		}

@@ -1,15 +1,16 @@
 package dad.javafx.bomberdad;
 
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.components.ExpireCleanComponent;
 import com.almasb.fxgl.entity.components.CollidableComponent;
-
 import dad.javafx.bomberdad.components.BombComponent;
 import dad.javafx.bomberdad.components.PlayerComponent;
-
 import com.almasb.fxgl.entity.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
+import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class BombermanFactory implements EntityFactory {
 
@@ -18,7 +19,7 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
         		.type(BombermanType.FLOOR)
                 .from(data)
-                .viewWithBBox(FXGL.getAssetLoader().loadTexture("floor.png", 40*15, 40*15))
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("floor.png", 40, 40))
                 .build();
     }
 
@@ -78,6 +79,15 @@ public class BombermanFactory implements EntityFactory {
                 .from(data)
                 .viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.RED))
                 .with(new CollidableComponent(true))
+                .build();
+    }
+    @Spawns("explosion")
+    public Entity newExplosion(SpawnData data) {
+        return FXGL.entityBuilder()
+                .type(BombermanType.EXPLOSION)
+                .from(data)
+                .view(texture("explosion.png").toAnimatedTexture(16, Duration.seconds(0.66)).play())
+                .with(new ExpireCleanComponent(Duration.seconds(0.66)))
                 .build();
     }
 }

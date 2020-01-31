@@ -1,14 +1,24 @@
 package dad.javafx.bomberdad;
 
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.app.GameView;
+import com.almasb.fxgl.app.MenuType;
+import com.almasb.fxgl.app.PauseMenu;
+import com.almasb.fxgl.app.SceneFactory;
 import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.entity.level.text.TextLevelLoader;
+import com.almasb.fxgl.app.FXGLMenu;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.dsl.views.ScrollingBackgroundView;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
+import com.almasb.fxgl.texture.Texture;
+
 import dad.javafx.bomberdad.components.PlayerComponent;
+import dad.javafx.bomberdad.menu.CustomMenu;
+import javafx.geometry.Orientation;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -26,10 +36,21 @@ public class BombermanApp extends GameApplication {
 	protected void initSettings(GameSettings settings) {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
-		settings.setMenuEnabled(false);
 		settings.setWidth(TILE_SIZE * 17);
 		settings.setHeight(TILE_SIZE * 17);
-		settings.setIntroEnabled(false);
+		
+		settings.setMenuEnabled(false);
+        settings.setSceneFactory(new SceneFactory() {
+            @Override
+            public FXGLMenu newMainMenu() {
+                return new CustomMenu(MenuType.MAIN_MENU);
+            }
+            
+            @Override
+            public PauseMenu newPauseMenu() {
+            	return super.newPauseMenu();
+            }
+        });
 	}
 
 	@Override
@@ -109,7 +130,11 @@ public class BombermanApp extends GameApplication {
 	protected void initGame() {
 		getGameWorld().addEntityFactory(new BombermanFactory());
 
-		getGameWorld().spawn("f");
+//		getGameWorld().spawn("f");
+		Texture texture = getAssetLoader().loadTexture("floor.png");
+		ScrollingBackgroundView bg = new ScrollingBackgroundView(texture, Orientation.HORIZONTAL);
+		GameView vista= new GameView(bg, 0);
+		getGameScene().addGameView(vista);
 
 		Level level = getAssetLoader().loadLevel(lvl+".txt", new TextLevelLoader(40, 40, '0'));
 		getGameWorld().setLevel(level);
@@ -173,9 +198,14 @@ public class BombermanApp extends GameApplication {
 					playerHit.resetMaxBombs();
 				}
 			}
-		} else {
+		} else if(e.isType(BombermanType.BRICK)) {
+			
 			e.removeFromWorld();
+			Entity f=getGameWorld().spawn("f", e.getX(), e.getY());
+			f.getViewComponent().setOpacity(0);
+
 			if (FXGLMath.randomBoolean()) {
+
 		            int x = (int) e.getPosition().getX();
 		            int y = (int) e.getPosition().getY();
 
