@@ -25,7 +25,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class BombermanApp extends GameApplication {
 
-	public static final int TILE_SIZE = 40;
+	public static final int TILE_SIZE = 30;
 
 	private Entity player, player2;
 	private PlayerComponent playerComponent, playerComponent2;
@@ -36,8 +36,8 @@ public class BombermanApp extends GameApplication {
 	protected void initSettings(GameSettings settings) {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
-		settings.setWidth(TILE_SIZE * 17);
-		settings.setHeight(TILE_SIZE * 17);
+		settings.setWidth(TILE_SIZE * 19);
+		settings.setHeight(TILE_SIZE * 19);
 		
 		settings.setMenuEnabled(false);
         settings.setSceneFactory(new SceneFactory() {
@@ -128,6 +128,7 @@ public class BombermanApp extends GameApplication {
 
 	@Override
 	protected void initGame() {
+		GenerateMap.newMap();
 		getGameWorld().addEntityFactory(new BombermanFactory());
 
 //		getGameWorld().spawn("f");
@@ -136,7 +137,7 @@ public class BombermanApp extends GameApplication {
 		GameView vista= new GameView(bg, 0);
 		getGameScene().addGameView(vista);
 
-		Level level = getAssetLoader().loadLevel(lvl+".txt", new TextLevelLoader(40, 40, '0'));
+		Level level = getAssetLoader().loadLevel("map.txt", new TextLevelLoader(TILE_SIZE, TILE_SIZE, '0'));
 		getGameWorld().setLevel(level);
 
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
@@ -145,8 +146,6 @@ public class BombermanApp extends GameApplication {
 		playerComponent.setName("Player");
 		playerComponent2 = player2.getComponent(PlayerComponent.class);
 		playerComponent2.setName("Player2");
-		GenerateMap generateMap = new GenerateMap();
-		generateMap.newMap();
 	}
 	
 

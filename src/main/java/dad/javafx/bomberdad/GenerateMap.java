@@ -9,7 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class GenerateMap {
-	public static void main(String[] args) {
+	
+	public static void newMap() {
 		try {
 			String line;
 			String map = "";
@@ -35,9 +36,6 @@ public class GenerateMap {
 		} catch (IOException e) {
 			System.out.println("f2");
 		}
-	}
-	public  void newMap() {
-		
 	}
 
 }

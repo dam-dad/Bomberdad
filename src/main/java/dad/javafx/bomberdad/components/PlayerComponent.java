@@ -31,7 +31,7 @@ public class PlayerComponent extends Component {
 	}
 	
 	public void increasePower() {
-		power = power + 40;
+		power = power + BombermanApp.TILE_SIZE;
 	}
 	
 	public void resetPower() {
@@ -50,7 +50,7 @@ public class PlayerComponent extends Component {
 			int x = (int) position.getX() / BombermanApp.TILE_SIZE;
 			int y = (int) position.getY() / BombermanApp.TILE_SIZE;
 			Entity bomb = FXGL.getGameWorld().spawn("Bomb",
-					new SpawnData(x * 40, y * 40).put("radius", (BombermanApp.TILE_SIZE / 2)+power));
+					new SpawnData(x * BombermanApp.TILE_SIZE, y * BombermanApp.TILE_SIZE).put("radius", (BombermanApp.TILE_SIZE / 2)+power));
 
 			FXGL.getGameTimer().runOnceAfter(() -> {
 				bomb.getComponent(BombComponent.class).explode(power);
@@ -61,28 +61,28 @@ public class PlayerComponent extends Component {
 
 	public void moveRight() {
 		if (vidas >= 0) {
-			if (canMove(new Point2D(40, 0)))
+			if (canMove(new Point2D(BombermanApp.TILE_SIZE, 0)))
 				position.translateX(BombermanApp.TILE_SIZE);
 		}
 	}
 
 	public void moveLeft() {
 		if (vidas >= 0) {
-			if (canMove(new Point2D(-40, 0)))
+			if (canMove(new Point2D(-BombermanApp.TILE_SIZE, 0)))
 				position.translateX(-BombermanApp.TILE_SIZE);
 		}
 	}
 
 	public void moveUp() {
 		if (vidas >= 0) {
-			if (canMove(new Point2D(0, -40)))
+			if (canMove(new Point2D(0, -BombermanApp.TILE_SIZE)))
 				position.translateY(-BombermanApp.TILE_SIZE);
 		}
 	}
 
 	public void moveDown() {
 		if (vidas >= 0) {
-			if (canMove(new Point2D(0, 40)))
+			if (canMove(new Point2D(0, BombermanApp.TILE_SIZE)))
 				position.translateY(BombermanApp.TILE_SIZE);
 		}
 	}
