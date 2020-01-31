@@ -128,7 +128,7 @@ public class BombermanApp extends GameApplication {
 
 	@Override
 	protected void initGame() {
-		GenerateMap.newMap();
+		GenerateMap.newMap(lvl);
 		getGameWorld().addEntityFactory(new BombermanFactory());
 
 //		getGameWorld().spawn("f");
@@ -184,10 +184,11 @@ public class BombermanApp extends GameApplication {
 		if (e.isType(BombermanType.PLAYER)) {
 			PlayerComponent playerHit = e.getComponent(PlayerComponent.class);
 			if (playerHit.getVidas() == 0) {
-				e.setPosition(new Point2D(TILE_SIZE * 16, TILE_SIZE * 16));
+				e.setPosition(new Point2D(TILE_SIZE * 22, TILE_SIZE * 22));
 				e.removeFromWorld();
 				levelUp();
 			} else {
+				System.out.println(playerHit.getVidas());
 				playerHit.setVidas(playerHit.getVidas()-1);
 				if (playerHit.getName().equals("Player")) {
 					e.setPosition(new Point2D(TILE_SIZE, TILE_SIZE));

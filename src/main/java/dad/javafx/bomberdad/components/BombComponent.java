@@ -130,14 +130,16 @@ public class BombComponent extends Component {
 			if(st.isType(BombermanType.FLOOR)) {
 				
 				FXGL.spawn("explosion",st.getPosition());	
-			}else {
+			}else if (st.isType(BombermanType.BRICK)){
 				Entity aux=st;
-				FXGL.<BombermanApp>getAppCast().onDestroyed(st);
 				aux.getTypeComponent().setValue(BombermanType.FLOOR);
+				FXGL.<BombermanApp>getAppCast().onDestroyed(st);
 				
 			
 	        FXGL.spawn("explosion",st.getPosition());
 			     
+			} else {
+				FXGL.<BombermanApp>getAppCast().onDestroyed(st);
 			}
 		}
 
