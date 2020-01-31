@@ -19,7 +19,7 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
         		.type(BombermanType.FLOOR)
                 .from(data)
-                .viewWithBBox(FXGL.getAssetLoader().loadTexture("floor.png", 40, 40))
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("floor.png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
                 .build();
     }
 
@@ -28,7 +28,7 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .type(BombermanType.WALL)
                 .from(data)
-                .viewWithBBox(FXGL.getAssetLoader().loadTexture("wall.png", 40, 40))
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("wall.png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
                 .build();
     }
 
@@ -37,7 +37,7 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .type(BombermanType.BRICK)
                 .from(data)
-                .viewWithBBox(FXGL.getAssetLoader().loadTexture("brick.png", 40, 40))
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("brick.png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
                 .build();
     }
 

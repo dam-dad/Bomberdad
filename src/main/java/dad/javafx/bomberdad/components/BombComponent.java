@@ -65,7 +65,7 @@ public class BombComponent extends Component {
 			boolean isWall = false;
 			boolean isFloor= false;
 			if (st.getX() < this.getEntity().getX()) {
-				for (int i = (int) (st.getX() + 40); i < this.getEntity().getX(); i = i + 40) {
+				for (int i = (int) (st.getX() + BombermanApp.TILE_SIZE); i < this.getEntity().getX(); i = i + BombermanApp.TILE_SIZE) {
 					ent = FXGL.getGameWorld().getEntitiesAt(new Point2D(i, st.getY()));
 					if (!ent.isEmpty()) {
 						if (ent.get(0).isType(BombermanType.WALL)) {
@@ -80,7 +80,7 @@ public class BombComponent extends Component {
 				}
 
 			} else if (st.getX() > this.getEntity().getX()) {
-				for (int i = (int) (st.getX() - 40); i > this.getEntity().getX(); i = i - 40) {
+				for (int i = (int) (st.getX() - BombermanApp.TILE_SIZE); i > this.getEntity().getX(); i = i - BombermanApp.TILE_SIZE) {
 					ent = FXGL.getGameWorld().getEntitiesAt(new Point2D(i, st.getY()));
 					if (!ent.isEmpty()) {
 						if (ent.get(0).isType(BombermanType.WALL)) {
@@ -93,7 +93,7 @@ public class BombComponent extends Component {
 
 				}
 			} else if (st.getY() < this.getEntity().getY()) {
-				for (int i = (int) (st.getY() + 40); i < this.getEntity().getY(); i = i + 40) {
+				for (int i = (int) (st.getY() + BombermanApp.TILE_SIZE); i < this.getEntity().getY(); i = i + BombermanApp.TILE_SIZE) {
 					ent = FXGL.getGameWorld().getEntitiesAt(new Point2D(st.getX(), i));
 					if (!ent.isEmpty()) {
 						if (ent.get(0).isType(BombermanType.WALL)) {
@@ -106,7 +106,7 @@ public class BombComponent extends Component {
 
 				}
 			} else if (st.getY() > this.getEntity().getY()) {
-				for (int i = (int) (st.getY() - 40); i > this.getEntity().getY(); i = i - 40) {
+				for (int i = (int) (st.getY() - BombermanApp.TILE_SIZE); i > this.getEntity().getY(); i = i - BombermanApp.TILE_SIZE) {
 					ent = FXGL.getGameWorld().getEntitiesAt(new Point2D(st.getX(), i));
 					if (!ent.isEmpty()) {
 						if (ent.get(0).isType(BombermanType.WALL)) {
