@@ -10,12 +10,12 @@ import java.io.IOException;
 
 public class GenerateMap {
 	
-	public static void newMap() {
+	public static void newMap(int lvl) {
 		try {
 			String line;
 			String map = "";
 			File file = new File(
-					GenerateMap.class.getClassLoader().getResource("./assets/levels/0.txt").getFile()
+					GenerateMap.class.getClassLoader().getResource("./assets/levels/"+lvl+".txt").getFile()
 				);
 			FileReader f = new FileReader(file);
 			BufferedReader b = new BufferedReader(f);
