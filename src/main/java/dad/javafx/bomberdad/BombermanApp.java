@@ -36,9 +36,9 @@ public class BombermanApp extends GameApplication {
 	protected void initSettings(GameSettings settings) {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
-		settings.setWidth(TILE_SIZE * 19);
-		settings.setHeight(TILE_SIZE * 19);
-		
+		settings.setWidth(TILE_SIZE*19);
+		settings.setHeight(TILE_SIZE*19);
+		//settings.setFullScreenAllowed(true);
 		settings.setMenuEnabled(false);
         settings.setSceneFactory(new SceneFactory() {
             @Override
@@ -168,7 +168,7 @@ public class BombermanApp extends GameApplication {
 	}
 	
 	private void levelUp() {
-		if (lvl == 4) {
+		if (lvl == 3) {
 			lvl = 0;
 		} else {
 			lvl++;
