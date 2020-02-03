@@ -19,11 +19,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 public class CustomMenu extends FXGLMenu {
-
-	private ParticleSystem particleSystem;
-	private SimpleObjectProperty<Color> titleColor;
-	private double t;
-
+	
 	public CustomMenu(MenuType type) {
 		super(type);
 
@@ -50,62 +46,10 @@ public class CustomMenu extends FXGLMenu {
 
 	@Override
 	protected Node createTitleView(String title) {
-		/*titleColor = new SimpleObjectProperty<Color>(Color.WHITE);
-
-		Text text = FXGL.getUIFactory().newText(title.substring(0, 1), 50.0);
-		text.setFill(null);
-		text.setStroke(titleColor.get());
-		text.setStrokeWidth(1.5);
-
-		Text text2 = FXGL.getUIFactory().newText(title.substring(1, title.length()), 50.0);
-		text2.setFill(null);
-		text2.setStroke(titleColor.get());
-		text2.setStrokeWidth(1.5);
-
-		double textWidth = text.getLayoutBounds().getWidth() + text2.getLayoutBounds().getWidth();
-
-		Rectangle bg = new Rectangle(textWidth + 30, 65.0, null);
-		bg.setStroke(Color.WHITE);
-		bg.setStrokeWidth(4.0);
-		bg.setArcWidth(25.0);
-		bg.setArcHeight(25.0);
-
-		ParticleEmitter emitter = ParticleEmitters.newExplosionEmitter(50);
-
-		Texture t = new Texture(new Image("particles/trace_horizontal.png"));
-		Random r = new Random();
-		emitter.setBlendMode(BlendMode.ADD);
-		emitter.setSourceImage(t.getImage());
-		emitter.setMaxEmissions(Integer.MAX_VALUE);
-		emitter.setSize(18.0, 22.0);
-		emitter.setNumParticles(2);
-		emitter.setEmissionRate(0.2);
-		emitter.setVelocityFunction(i -> {
-			if (i % 2 == 0)
-				new Point2D(r.nextInt(-10), 0);
-			else
-				new Point2D(r.nextInt(10), 0);
-		});
-		emitter.setExpireFunction(Duration.seconds((double) r.nextInt(6 - 4) + 4));
-		emitter.setScaleFunction(new Point2D(-0.03, -0.03));
-		emitter.setSpawnPointFunction(new Point2D((double) random(0, 0), (double) random(0, 0)));
-		emitter.setAccelerationFunction(Point2D(random(-1, 1).toDouble(), random(0, 0).toDouble()));
-
-		HBox box = new HBox(text, text2);
-		box.setAlignment(Pos.CENTER);
-
-		StackPane titleRoot = new StackPane();
-		titleRoot.getChildren().addAll(bg, box);
-
-		titleRoot.setTranslateX(FXGL.getAppWidth() / 2 - (textWidth + 30) / 2);
-		titleRoot.setTranslateY(50.0);
-
-		particleSystem = new ParticleSystem();
-		particleSystem.addParticleEmitter(emitter, (double) (FXGL.getAppWidth() / 2 - 30),
-				titleRoot.getTranslateY() + 34);
-		 */
-		
-		return new TitleController();
+		TitleController titleC = new TitleController();
+		titleC.setText(title);
+		titleC.setW(FXGL.getAppWidth());
+		return titleC;
 	}
 
 	@Override
@@ -125,16 +69,4 @@ public class CustomMenu extends FXGLMenu {
 	}
 	
 
-//	@Override
-//	protected void onUpdate(double tpf) {
-//		double frequency = 1.7;
-//
-//		t += tpf * frequency;
-//
-//		particleSystem.onUpdate(tpf);
-//
-//		Color color = Color.color(1.0, 1.0, 1.0 , FXGLMath.noise1D(t));
-//		Color color = Color.DARKRED;
-//		titleColor.set(color);
-//	}
 }
