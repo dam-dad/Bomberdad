@@ -14,7 +14,7 @@ import javafx.util.Duration;
 
 public class PlayerComponent extends Component {
 
-	private TransformComponent position;
+	public TransformComponent position;
 
 	private int maxBombs = 1;
 	private int bombsPlaced = 0;
@@ -87,7 +87,7 @@ public class PlayerComponent extends Component {
 		}
 	}
 
-	private boolean canMove(Point2D direction) {
+	public boolean canMove(Point2D direction) {
 		Point2D newPosition = position.getPosition().add(direction);
 
 		return FXGL.getGameScene().getViewport().getVisibleArea().contains(newPosition)
@@ -101,7 +101,7 @@ public class PlayerComponent extends Component {
 	}
 
 	// getters & setters
-
+	
 	public int getVidas() {
 		return vidas;
 	}
