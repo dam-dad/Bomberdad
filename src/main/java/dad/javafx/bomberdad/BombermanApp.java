@@ -26,7 +26,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class BombermanApp extends GameApplication {
 
-	public static final int TILE_SIZE = 40;
+	public static final int TILE_SIZE = 30;
 
 	private Entity player, player2, ia;
 	private PlayerComponent playerComponent, playerComponent2, playerComponent3;
@@ -37,9 +37,10 @@ public class BombermanApp extends GameApplication {
 	protected void initSettings(GameSettings settings) {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
-		settings.setWidth(TILE_SIZE * 17);
-		settings.setHeight(TILE_SIZE * 17);
 
+		settings.setWidth(TILE_SIZE*19);
+		settings.setHeight(TILE_SIZE*19);
+		//settings.setFullScreenAllowed(true);
 		settings.setMenuEnabled(false);
 		settings.setSceneFactory(new SceneFactory() {
 			@Override
@@ -129,6 +130,7 @@ public class BombermanApp extends GameApplication {
 
 	@Override
 	protected void initGame() {
+		GenerateMap.newMap(lvl);
 		getGameWorld().addEntityFactory(new BombermanFactory());
 
 //		getGameWorld().spawn("f");
@@ -137,12 +139,12 @@ public class BombermanApp extends GameApplication {
 		GameView vista = new GameView(bg, 0);
 		getGameScene().addGameView(vista);
 
-		Level level = getAssetLoader().loadLevel(lvl + ".txt", new TextLevelLoader(40, 40, '0'));
+
+		Level level = getAssetLoader().loadLevel("map.txt", new TextLevelLoader(TILE_SIZE, TILE_SIZE, '0'));
 		getGameWorld().setLevel(level);
 
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
-		player2 = getGameWorld().spawn("Player", TILE_SIZE * 15, TILE_SIZE * 15);
-		ia = getGameWorld().spawn("Player", TILE_SIZE * 11, TILE_SIZE * 12);
+		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
 		playerComponent = player.getComponent(PlayerComponent.class);
 		playerComponent.setName("Player");
 		playerComponent2 = player2.getComponent(PlayerComponent.class);
@@ -159,20 +161,24 @@ public class BombermanApp extends GameApplication {
 			@Override
 			protected void onCollisionBegin(Entity pl, Entity powerup) {
 				powerup.removeFromWorld();
-				playerComponent.increaseMaxBombs();
+				pl.getComponent(PlayerComponent.class).increaseMaxBombs();
 			}
 		});
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPPOWER) {
 			@Override
 			protected void onCollisionBegin(Entity pl, Entity powerup) {
 				powerup.removeFromWorld();
-				playerComponent.increasePower();
+				pl.getComponent(PlayerComponent.class).increasePower();
 			}
 		});
 	}
 
 	private void levelUp() {
-		lvl = 1;
+		if (lvl == 3) {
+			lvl = 0;
+		} else {
+			lvl++;
+		}
 		requestNewGame = true;
 	}
 
@@ -192,7 +198,7 @@ public class BombermanApp extends GameApplication {
 		if (e.isType(BombermanType.PLAYER)) {
 			PlayerComponent playerHit = e.getComponent(PlayerComponent.class);
 			if (playerHit.getVidas() == 0) {
-				e.setPosition(new Point2D(TILE_SIZE * 16, TILE_SIZE * 16));
+				e.setPosition(new Point2D(TILE_SIZE * 22, TILE_SIZE * 22));
 				e.removeFromWorld();
 				levelUp();
 			} else {
@@ -201,7 +207,7 @@ public class BombermanApp extends GameApplication {
 					e.setPosition(new Point2D(TILE_SIZE, TILE_SIZE));
 					playerHit.resetMaxBombs();
 				} else {
-					e.setPosition(new Point2D(TILE_SIZE * 15, TILE_SIZE * 15));
+					e.setPosition(new Point2D(TILE_SIZE * 17, TILE_SIZE * 17));
 					playerHit.resetMaxBombs();
 				}
 			}
