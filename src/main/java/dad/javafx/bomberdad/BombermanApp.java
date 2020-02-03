@@ -16,6 +16,7 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.texture.Texture;
 
+import dad.javafx.bomberdad.components.EnemyComponent;
 import dad.javafx.bomberdad.components.IA;
 import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.menu.CustomMenu;
@@ -28,8 +29,13 @@ public class BombermanApp extends GameApplication {
 
 	public static final int TILE_SIZE = 30;
 
-	private Entity player, player2, ia;
-	private PlayerComponent playerComponent, playerComponent2, playerComponent3;
+	public static Entity player;
+
+	public static Entity player2;
+
+	private Entity ia, ia2;
+	private PlayerComponent playerComponent, playerComponent2;
+	private EnemyComponent enemyComponent, enemyComponent2;
 	private int lvl = 0;
 	private boolean requestNewGame = false;
 
@@ -143,16 +149,22 @@ public class BombermanApp extends GameApplication {
 		Level level = getAssetLoader().loadLevel("map.txt", new TextLevelLoader(TILE_SIZE, TILE_SIZE, '0'));
 		getGameWorld().setLevel(level);
 
+		ia = getGameWorld().spawn("Enemy", TILE_SIZE, TILE_SIZE * 17);
+		ia2 = getGameWorld().spawn("Enemy", TILE_SIZE * 17, TILE_SIZE);
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
 		playerComponent = player.getComponent(PlayerComponent.class);
 		playerComponent.setName("Player");
 		playerComponent2 = player2.getComponent(PlayerComponent.class);
 		playerComponent2.setName("Player2");
-		playerComponent3 = ia.getComponent(PlayerComponent.class);
-		playerComponent3.setName("IA");
-		IA ia = new IA(playerComponent3, playerComponent2, playerComponent);
+		enemyComponent = ia.getComponent(EnemyComponent.class);
+		enemyComponent.setName("IA");
+		enemyComponent2 = ia2.getComponent(EnemyComponent.class);
+		enemyComponent2.setName("IA2");
+		IA ia = new IA(enemyComponent, playerComponent, playerComponent2, "chase");
 		ia.start();
+		IA ia2 = new IA(enemyComponent2, playerComponent, playerComponent2, "chase");
+		ia2.start();
 	}
 
 	@Override

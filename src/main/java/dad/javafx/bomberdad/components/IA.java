@@ -1,25 +1,36 @@
 package dad.javafx.bomberdad.components;
 
+import dad.javafx.bomberdad.BombermanApp;
 import javafx.geometry.Point2D;
 
 public class IA extends Thread {
-	PlayerComponent ia;
+	EnemyComponent ia;
 	PlayerComponent player;
 	PlayerComponent player2;
 	PlayerComponent cercano;
+	String action;
 
-	public IA(PlayerComponent player1, PlayerComponent player2, PlayerComponent player3) {
-		ia = player1;
-		player = player2;
-		this.player2 = player3;
+	public IA(EnemyComponent enemy, PlayerComponent player, PlayerComponent player2, String action) {
+		ia = enemy;
+		this.player = player;
+		this.player2 = player2;
+		this.action = action;
 	}
 
 	public void run() {
 		try {
-			while (player.getVidas() >= 0 & player2.getVidas() >= 0) {
+			while (ia.getVidas() > 0) {
 				cercano = masCercano(ia, player, player2);
-				perseguir(cercano);
-				sleep(500);
+				switch (action) {
+				case "chase":
+					chase(cercano);
+					sleep(500);
+					break;
+
+				case "escape":
+					escape();
+					break;
+				}
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -27,7 +38,12 @@ public class IA extends Thread {
 		}
 	}
 
-	public void perseguir(PlayerComponent player) {
+	private void escape() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void chase(PlayerComponent player) {
 		try {
 			if (player.position.getX() < ia.position.getX() & this.left()) {
 				ia.moveLeft();
@@ -81,11 +97,6 @@ public class IA extends Thread {
 				ia.moveRight();
 				sleep(500);
 				ia.moveDown();
-//			} else if (player.position.getY() == ia.position.getY() & ia.position.getX() < player.position.getX()
-//					& !this.right() & !this.up() & !this.down()) {
-//				ia.moveLeft();
-//				sleep(500);
-//				ia.moveUp();
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -93,7 +104,7 @@ public class IA extends Thread {
 		}
 	}
 
-	public PlayerComponent masCercano(PlayerComponent enemigo, PlayerComponent player1, PlayerComponent player2) {
+	public PlayerComponent masCercano(EnemyComponent enemigo, PlayerComponent player1, PlayerComponent player2) {
 		PlayerComponent cercano = player2;
 
 		double d1;
@@ -112,18 +123,18 @@ public class IA extends Thread {
 	}
 
 	private boolean up() {
-		return ia.canMove(new Point2D(0, -40));
+		return ia.canMove(new Point2D(0, -BombermanApp.TILE_SIZE));
 	}
 
 	private boolean down() {
-		return ia.canMove(new Point2D(0, 40));
+		return ia.canMove(new Point2D(0, BombermanApp.TILE_SIZE));
 	}
 
 	private boolean left() {
-		return ia.canMove(new Point2D(-40, 0));
+		return ia.canMove(new Point2D(-BombermanApp.TILE_SIZE, 0));
 	}
 
 	private boolean right() {
-		return ia.canMove(new Point2D(40, 0));
+		return ia.canMove(new Point2D(BombermanApp.TILE_SIZE, 0));
 	}
 }

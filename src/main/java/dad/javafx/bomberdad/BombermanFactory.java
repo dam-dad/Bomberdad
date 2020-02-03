@@ -4,6 +4,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.ExpireCleanComponent;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import dad.javafx.bomberdad.components.BombComponent;
+import dad.javafx.bomberdad.components.EnemyComponent;
 import dad.javafx.bomberdad.components.PlayerComponent;
 import com.almasb.fxgl.entity.*;
 import javafx.scene.paint.Color;
@@ -49,6 +50,17 @@ public class BombermanFactory implements EntityFactory {
                 .viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.BLUE))
                 .with(new CollidableComponent(true))
                 .with(new PlayerComponent())
+                .build();
+    }
+    
+    @Spawns("Enemy")
+    public Entity newEnemy(SpawnData data) {
+        return FXGL.entityBuilder()
+                .type(BombermanType.ENEMY)
+                .from(data)
+                .viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.DARKRED))
+                .with(new CollidableComponent(true))
+                .with(new EnemyComponent())
                 .build();
     }
 
