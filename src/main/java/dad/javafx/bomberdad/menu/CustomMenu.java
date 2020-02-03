@@ -1,30 +1,22 @@
 package dad.javafx.bomberdad.menu;
 
-import java.util.Random;
 
 import com.almasb.fxgl.app.FXGLMenu;
 import com.almasb.fxgl.app.MenuType;
-import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.particle.ParticleEmitter;
-import com.almasb.fxgl.particle.ParticleEmitters;
 import com.almasb.fxgl.particle.ParticleSystem;
-import com.almasb.fxgl.texture.Texture;
+import com.almasb.fxgl.ui.FXGLButton;
 
+import dad.javafx.bomberdad.menu.components.MenuButton;
 import dad.javafx.bomberdad.menu.components.TitleController;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.geometry.Point2D;
+import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.effect.BlendMode;
-import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 
 public class CustomMenu extends FXGLMenu {
 
@@ -39,14 +31,16 @@ public class CustomMenu extends FXGLMenu {
 
 	@Override
 	protected Button createActionButton(String name, Runnable action) {
-		return new Button(name);
+		MenuButton btn = new MenuButton(name);
+		btn.addEventHandler(ActionEvent.ACTION, event->action.run());
+		return btn.getBtn();
 	}
 
 	@Override
 	protected Button createActionButton(StringBinding name, Runnable action) {
-		Button btn = new Button(name.get());
-		btn.setOnAction(e -> System.exit(0));
-		return btn;
+		MenuButton btn = new MenuButton(name.get());
+		btn.addEventHandler(ActionEvent.ACTION, event->action.run());
+		return btn.getBtn();
 	}
 
 	@Override
@@ -123,6 +117,13 @@ public class CustomMenu extends FXGLMenu {
 	protected Node createProfileView(String profileName) {
 		return new Text(profileName);
 	}
+	
+	@Override
+	protected void switchMenuContentTo(Node content) {
+		// TODO Auto-generated method stub
+		super.switchMenuContentTo(content);
+	}
+	
 
 //	@Override
 //	protected void onUpdate(double tpf) {
