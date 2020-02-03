@@ -143,7 +143,7 @@ public class BombermanApp extends GameApplication {
 		getGameWorld().setLevel(level);
 
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
-		player2 = getGameWorld().spawn("Player", TILE_SIZE * 15, TILE_SIZE * 15);
+		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
 		playerComponent = player.getComponent(PlayerComponent.class);
 		playerComponent.setName("Player");
 		playerComponent2 = player2.getComponent(PlayerComponent.class);
@@ -170,7 +170,11 @@ public class BombermanApp extends GameApplication {
 	}
 	
 	private void levelUp() {
-		lvl = 1;
+		if (lvl == 3) {
+			lvl = 0;
+		} else {
+			lvl++;
+		}
 		requestNewGame = true;
 	}
 	
@@ -195,7 +199,7 @@ public class BombermanApp extends GameApplication {
 					e.setPosition(new Point2D(TILE_SIZE, TILE_SIZE));
 					playerHit.resetMaxBombs();
 				} else {
-					e.setPosition(new Point2D(TILE_SIZE * 15, TILE_SIZE * 15));
+					e.setPosition(new Point2D(TILE_SIZE * 17, TILE_SIZE * 17));
 					playerHit.resetMaxBombs();
 				}
 			}
