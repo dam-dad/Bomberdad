@@ -54,12 +54,12 @@ public class CustomMenu extends FXGLMenu {
 
 		getMenuContentRoot().setTranslateX((FXGL.getAppWidth() - 500));
 		getMenuContentRoot().setTranslateY(menuY);
-		
+
 		menu.getStylesheets().add(getClass().getResource("/css/TitleCSS.css").toExternalForm());
 		menu.getStyleClass().add("root");
-		
+
 		getMenuRoot().getChildren().addAll(menu);
-		
+
 		activeProperty().addListener((observable, wasActive, isActive) -> {
 			if (!isActive) {
 				switchMenuTo(menu);
@@ -104,21 +104,25 @@ public class CustomMenu extends FXGLMenu {
 
 		MenuButton itemNewGame = new MenuButton("Nueva Partida");
 		itemNewGame.setOnAction(e -> fireNewGame());
+		itemNewGame.getStyleClass().add("btn");
 		box.getChildren().add(itemNewGame);
+		
 		MenuButton itemOptions = new MenuButton("Controles");
 		Supplier<MenuContent> s = new Supplier<FXGLMenu.MenuContent>() {
 
 			@Override
 			public MenuContent get() {
 
-				return createContentControls();
+				return createContentControl();
 			}
 		};
 		itemOptions.setMenuContent(s);
+		itemOptions.getStyleClass().add("btn");
 		box.getChildren().add(itemOptions);
-
+		
 		MenuButton itemExit = new MenuButton("Salir");
 		itemExit.setOnAction(e -> exit());
+		itemExit.getStyleClass().add("btn");
 		box.getChildren().add(itemExit);
 
 		return box;
@@ -133,6 +137,7 @@ public class CustomMenu extends FXGLMenu {
 		if (result.get() == ButtonType.OK) {
 			getController().exit();
 		}
+	}
 
 	protected MenuContent createContentControl() {
 		ControlsController controls = new ControlsController();
@@ -213,6 +218,8 @@ public class CustomMenu extends FXGLMenu {
 		String stringKey;
 
 		public MenuButton(String stringKey) {
+			getStylesheets().add(getClass().getResource("/css/TitleCSS.css").toExternalForm());
+			getStyleClass().add("root");
 			btn = new FXGLButton();
 			btn.setAlignment(Pos.CENTER_LEFT);
 			btn.setStyle("-fx-background-color: transparent");

@@ -98,7 +98,7 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .type(BombermanType.EXPLOSION)
                 .from(data)
-                .view(texture("explosion.png").toAnimatedTexture(16, Duration.seconds(0.66)).play())
+                .view(texture("explosion"+BombermanApp.TILE_SIZE+".png").toAnimatedTexture(16, Duration.seconds(0.66)).play())
                 .with(new ExpireCleanComponent(Duration.seconds(0.66)))
                 .build();
     }

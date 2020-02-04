@@ -4,11 +4,17 @@
 
 .root {
 	-fx-font-family: 'PixelarRegularW01-Regular';
-	-fx-background-color:transparent;
+	-fx-background-color: transparent;
 }
 
 .titulo {
 	-fx-font-size: 70.0pt;
 	-fx-text-fill: lightblue;
 	-fx-effect: dropshadow(gaussian, black, 10, 0.8, 3, 3);
+}
+
+.btn {
+	-fx-text-color: red;
+	-fx-font-family: 'PixelarRegularW01-Regular';
+	-fx-background-color: red;
 }
