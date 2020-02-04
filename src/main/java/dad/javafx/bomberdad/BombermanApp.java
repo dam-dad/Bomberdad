@@ -48,7 +48,7 @@ public class BombermanApp extends GameApplication {
 		settings.setHeight(TILE_SIZE * 19);
 //		settings.setWidth(1280);
 //		settings.setHeight(700);
-		settings.setMenuEnabled(false);
+		settings.setMenuEnabled(true);
         settings.setSceneFactory(new SceneFactory() {
             @Override
             public FXGLMenu newMainMenu() {
