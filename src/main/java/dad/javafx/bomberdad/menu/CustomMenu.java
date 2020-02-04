@@ -9,6 +9,7 @@ import com.almasb.fxgl.app.MenuItem;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.ui.FXGLButton;
 
+import dad.javafx.bomberdad.menu.components.ControlsController;
 import dad.javafx.bomberdad.menu.components.TitleController;
 import javafx.animation.FadeTransition;
 import javafx.beans.binding.Bindings;
@@ -51,7 +52,6 @@ public class CustomMenu extends FXGLMenu {
 		getMenuContentRoot().setTranslateX((FXGL.getAppWidth() - 500));
 		getMenuContentRoot().setTranslateY(menuY);
 
-
 		getMenuRoot().getChildren().addAll(menu);
 
 		activeProperty().addListener((observable, wasActive, isActive) -> {
@@ -60,7 +60,6 @@ public class CustomMenu extends FXGLMenu {
 			}
 		});
 	}
-
 
 	@Override
 	protected Node createBackground(double width, double height) {
@@ -97,20 +96,6 @@ public class CustomMenu extends FXGLMenu {
 		MenuButton itemNewGame = new MenuButton("Nueva Partida");
 		itemNewGame.setOnAction(e -> fireNewGame());
 		box.getChildren().add(itemNewGame);
-
-		MenuButton itemOptions = new MenuButton("Controles");
-		Supplier<MenuContent> s = new Supplier<FXGLMenu.MenuContent>() {
-
-			@Override
-			public MenuContent get() {
-
-				return createContentControls();
-			}
-		};
-		itemOptions.setMenuContent(s);
-		box.getChildren().add(itemOptions);
-
-
 		MenuButton itemExit = new MenuButton("Salir");
 		itemExit.setOnAction(e -> fireExit());
 		box.getChildren().add(itemExit);
@@ -118,35 +103,21 @@ public class CustomMenu extends FXGLMenu {
 		return box;
 	}
 
+	protected MenuContent createContentControl() {
+		ControlsController controls = new ControlsController();
+//    	controls.setW(FXGL.getAppWidth()/10);
+		controls.setAlignment(Pos.TOP_RIGHT);
+		MenuContent f = new MenuContent(controls);
+//    	f.setAlignment(Pos.BOTTOM_RIGHT);
+		return f;
+	}
+
 	private MenuBox createMenuBodyGameMenu() {
 		MenuBox box = new MenuBox();
-
-		EnumSet<MenuItem> enabledItems = FXGL.getSettings().getEnabledMenuItems();
 
 		MenuButton itemResume = new MenuButton("menu.resume");
 		itemResume.setOnAction(e -> fireResume());
 		box.getChildren().add(itemResume);
-
-		if (enabledItems.contains(MenuItem.SAVE_LOAD)) {
-			MenuButton itemSave = new MenuButton("menu.save");
-			itemSave.setOnAction(e -> fireSave());
-
-			MenuButton itemLoad = new MenuButton("menu.load");
-//            itemLoad.setMenuContent(new Supplier(this.createContentLoad()));
-
-			box.getChildren().add(itemSave);
-			box.getChildren().add(itemLoad);
-		}
-
-//		MenuButton itemOptions = new MenuButton("menu.options");
-//		itemOptions.setChild(createOptionsMenu());
-//		box.getChildren().add(itemOptions);
-
-		if (enabledItems.contains(MenuItem.EXTRA)) {
-			MenuButton itemExtra = new MenuButton("menu.extra");
-//			itemExtra.setChild(createExtraMenu());
-			box.getChildren().add(itemExtra);
-		}
 
 		MenuButton itemExit = new MenuButton("menu.mainMenu");
 		itemExit.setOnAction(e -> fireExitToMainMenu());
@@ -180,8 +151,9 @@ public class CustomMenu extends FXGLMenu {
 
 	public class MenuBox extends VBox {
 		double layoutHeight;
-		
-		public MenuBox() {	}
+
+		public MenuBox() {
+		}
 
 		public double get() {
 			return (10 * getChildren().size());
@@ -209,7 +181,6 @@ public class CustomMenu extends FXGLMenu {
 		FXGLButton btn;
 
 		String stringKey;
-
 
 		public MenuButton(String stringKey) {
 			btn = new FXGLButton();
@@ -282,6 +253,5 @@ public class CustomMenu extends FXGLMenu {
 		btn.addEventHandler(ActionEvent.ACTION, event -> action.run());
 		return btn.getBtn();
 	}
-	
-	
+
 }

@@ -20,6 +20,7 @@ import dad.javafx.bomberdad.components.EnemyComponent;
 import dad.javafx.bomberdad.components.IA;
 import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.menu.CustomMenu;
+import dad.javafx.bomberdad.menu.PauseCustomMenu;
 import javafx.geometry.Orientation;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
@@ -56,8 +57,9 @@ public class BombermanApp extends GameApplication {
             }
             
             @Override
-            public PauseMenu newPauseMenu() {
-            	return super.newPauseMenu();
+            public FXGLMenu newGameMenu() {
+            	// TODO Auto-generated method stub
+            	return super.newGameMenu();
             }
         });
 	}
