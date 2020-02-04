@@ -9,11 +9,13 @@ import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.entity.level.text.TextLevelLoader;
 import com.almasb.fxgl.app.FXGLMenu;
 import com.almasb.fxgl.app.GameApplication;
+import com.almasb.fxgl.app.GameScene;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.dsl.views.ScrollingBackgroundView;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
+import com.almasb.fxgl.saving.DataFile;
 import com.almasb.fxgl.texture.Texture;
 
 import dad.javafx.bomberdad.components.PlayerComponent;
@@ -38,6 +40,7 @@ public class BombermanApp extends GameApplication {
 		settings.setVersion("0.1");
 		settings.setWidth(TILE_SIZE * 17);
 		settings.setHeight(TILE_SIZE * 17);
+		settings.setFullScreenAllowed(true);
 		
 		settings.setMenuEnabled(false);
         settings.setSceneFactory(new SceneFactory() {
@@ -134,6 +137,7 @@ public class BombermanApp extends GameApplication {
 		Texture texture = getAssetLoader().loadTexture("floor.png");
 		ScrollingBackgroundView bg = new ScrollingBackgroundView(texture, Orientation.HORIZONTAL);
 		GameView vista= new GameView(bg, 0);
+		
 		getGameScene().addGameView(vista);
 
 		Level level = getAssetLoader().loadLevel(lvl+".txt", new TextLevelLoader(40, 40, '0'));
@@ -145,6 +149,11 @@ public class BombermanApp extends GameApplication {
 		playerComponent.setName("Player");
 		playerComponent2 = player2.getComponent(PlayerComponent.class);
 		playerComponent2.setName("Player2");
+	
+	}
+	
+	public static GameScene scene() {
+		return getGameScene();
 	}
 	
 
@@ -216,6 +225,7 @@ public class BombermanApp extends GameApplication {
 		}
 
 	}
+
 
 	public static void main(String[] args) {
 		launch(args);
