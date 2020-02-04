@@ -31,7 +31,9 @@ public class PlayerComponent extends Component {
 	}
 	
 	public void increasePower() {
-		power = power + BombermanApp.TILE_SIZE;
+		if (power <= 45) {
+			power = power + BombermanApp.TILE_SIZE;
+		}
 	}
 	
 	public void resetPower() {

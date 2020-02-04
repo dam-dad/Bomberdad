@@ -183,6 +183,7 @@ public class BombermanApp extends GameApplication {
 				powerup.removeFromWorld();
 				pl.getComponent(PlayerComponent.class).increasePower();
 			}
+			
 		});
 	}
 

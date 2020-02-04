@@ -1,17 +1,12 @@
 package dad.javafx.bomberdad.menu;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.ResourceBundle;
 
 import com.almasb.fxgl.app.FXGLMenu;
 import com.almasb.fxgl.app.MenuType;
 import com.almasb.fxgl.core.util.Supplier;
 import com.almasb.fxgl.animation.Animation;
-import com.almasb.fxgl.animation.Interpolators;
-import com.almasb.fxgl.app.FXGLDefaultMenu.MenuBox;
-import com.almasb.fxgl.app.FXGLMenu.MenuContent;
 import com.almasb.fxgl.app.MenuItem;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.ui.FXGLButton;
@@ -22,7 +17,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -36,7 +30,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class CustomMenu extends FXGLMenu {
@@ -48,11 +41,11 @@ public class CustomMenu extends FXGLMenu {
 
 		if (type == MenuType.MAIN_MENU)
 			menu = createMenuBodyMainMenu();
-//		else
-//			menu = createMenuBodyGameMenu();
+		else
+			menu = createMenuBodyGameMenu();
 
 		double menuX = 50.0;
-		double menuY = FXGL.getAppHeight() / 2 - menu.getLayoutHeight$fxgl() / 2;
+		double menuY = FXGL.getAppHeight() / 2 - menu.getLayoutX() / 2;
 
 		getMenuRoot().setTranslateX(menuX);
 		getMenuRoot().setTranslateY(menuY);
@@ -303,6 +296,8 @@ public class CustomMenu extends FXGLMenu {
 
 	public class MenuBox extends VBox {
 		double layoutHeight;
+		
+		public MenuBox() {	}
 
 		public double get() {
 			return (10 * getChildren().size());
