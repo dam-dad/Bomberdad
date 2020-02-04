@@ -17,6 +17,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.ui.FXGLButton;
 
 import dad.javafx.bomberdad.menu.components.TitleController;
+import javafx.animation.FadeTransition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.event.ActionEvent;
@@ -27,6 +28,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -234,10 +236,88 @@ public class CustomMenu extends FXGLMenu {
 		return box;
 	}
 
+	private MenuBox createExtraMenu() {
+		MenuButton itemAchievements = new MenuButton("menu.trophies");
+		Supplier<MenuContent> s = new Supplier<FXGLMenu.MenuContent>() {
+
+			@Override
+			public MenuContent get() {
+
+				return createContentAchievements();
+			}
+		};
+		itemAchievements.setMenuContent(s);
+//		itemAchievements.setMenuContent( Supplier<MenuContent>(this.createContentAchievements()) );
+		MenuButton itemCredits = new MenuButton("menu.credits");
+		Supplier<MenuContent> s2 = new Supplier<FXGLMenu.MenuContent>() {
+
+			@Override
+			public MenuContent get() {
+
+				return createContentCredits();
+			}
+		};
+		itemCredits.setMenuContent(s2);
+//		itemCredits.setMenuContent(Supplier { this.createContentCredits() });
+
+		MenuButton itemFeedback = new MenuButton("menu.feedback");
+		Supplier<MenuContent> s3 = new Supplier<FXGLMenu.MenuContent>() {
+
+			@Override
+			public MenuContent get() {
+
+				return createContentFeedback();
+			}
+		};
+		itemFeedback.setMenuContent(s3);
+//        itemFeedback.setMenuContent(Supplier<MenuContent> { this.createContentFeedback() });
+
+		MenuButton[] listMenuButton = { itemAchievements, itemCredits, itemFeedback };
+
+		return new MenuBox(listMenuButton);
+
+	}
+
+	@Override
+	protected void switchMenuTo(Node menuBox) {
+		Node oldMenu = getMenuRoot().getChildren().get(0);
+
+		FadeTransition ft = new FadeTransition(Duration.seconds(0.33), oldMenu);
+		ft.setToValue(0.0);
+		ft.setOnFinished(e -> {
+			menuBox.setOpacity(0.0);
+			getMenuRoot().getChildren().set(0, menuBox);
+			oldMenu.setOpacity(1.0);
+
+			FadeTransition ft2 = new FadeTransition(Duration.seconds(0.33), menuBox);
+			ft2.setToValue(1.0);
+			ft2.play();
+		});
+		ft.play();
+	}
+
 	@Override
 	protected void switchMenuContentTo(Node content) {
-		// TODO Auto-generated method stub
-		super.switchMenuContentTo(content);
+		getContentRoot().getChildren().set(0, content);
+	}
+
+	public class MenuBox extends VBox {
+		double layoutHeight;
+
+		public double get() {
+			return (10 * getChildren().size());
+		}
+
+		public MenuBox(MenuButton[] items) {
+			for (MenuButton item : items) {
+				add(item);
+			}
+		}
+
+		public void add(MenuButton item) {
+			item.setParent(this);
+			getChildren().addAll(item);
+		}
 	}
 
 	public class MenuButton extends Pane {
