@@ -1,4 +1,14 @@
+@font-face {
+    src: url(../fonts/PixelarRegular.ttf);
+}
+
 .root {
-	-fx-font-family: 'Pixelar';
-	-fx-font-size: 30.0pt;
+	-fx-font-family: 'PixelarRegularW01-Regular';
+	-fx-background-color:transparent;
+}
+
+.titulo {
+	-fx-font-size: 70.0pt;
+	-fx-text-fill: lightblue;
+	-fx-effect: dropshadow(gaussian, black, 10, 0.8, 3, 3);
 }

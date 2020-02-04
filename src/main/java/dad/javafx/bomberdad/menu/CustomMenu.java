@@ -10,6 +10,7 @@ import com.almasb.fxgl.app.MenuItem;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.ui.FXGLButton;
 
+import dad.javafx.bomberdad.menu.components.BackgroundController;
 import dad.javafx.bomberdad.menu.components.TitleController;
 import javafx.animation.FadeTransition;
 import javafx.beans.binding.Bindings;
@@ -31,7 +32,6 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 public class CustomMenu extends FXGLMenu {
@@ -40,7 +40,6 @@ public class CustomMenu extends FXGLMenu {
 
 	public CustomMenu(MenuType type) {
 		super(type);
-
 		if (type == MenuType.MAIN_MENU)
 			menu = createMenuBodyMainMenu();
 		else
@@ -54,10 +53,12 @@ public class CustomMenu extends FXGLMenu {
 
 		getMenuContentRoot().setTranslateX((FXGL.getAppWidth() - 500));
 		getMenuContentRoot().setTranslateY(menuY);
-
-
+		
+		menu.getStylesheets().add(getClass().getResource("/css/TitleCSS.css").toExternalForm());
+		menu.getStyleClass().add("root");
+		
 		getMenuRoot().getChildren().addAll(menu);
-
+		
 		activeProperty().addListener((observable, wasActive, isActive) -> {
 			if (!isActive) {
 				switchMenuTo(menu);
@@ -68,7 +69,10 @@ public class CustomMenu extends FXGLMenu {
 
 	@Override
 	protected Node createBackground(double width, double height) {
-		return new Rectangle(width, height, Color.DARKGREEN);
+//		return new Rectangle(width, height, Color.DARKGREEN);
+		BackgroundController bg = new BackgroundController();
+		bg.setS(FXGL.getAppWidth(), FXGL.getAppHeight());
+		return bg;
 	}
 
 	@Override
@@ -137,7 +141,7 @@ public class CustomMenu extends FXGLMenu {
 
 		EnumSet<MenuItem> enabledItems = FXGL.getSettings().getEnabledMenuItems();
 
-		MenuButton itemResume = new MenuButton("menu.resume");
+		MenuButton itemResume = new MenuButton("Continuar");
 		itemResume.setOnAction(e -> fireResume());
 		box.getChildren().add(itemResume);
 

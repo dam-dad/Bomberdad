@@ -3,7 +3,6 @@ package dad.javafx.bomberdad;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.GameView;
 import com.almasb.fxgl.app.MenuType;
-import com.almasb.fxgl.app.PauseMenu;
 import com.almasb.fxgl.app.SceneFactory;
 import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.entity.level.text.TextLevelLoader;
@@ -56,8 +55,8 @@ public class BombermanApp extends GameApplication {
 			}
 
 			@Override
-			public PauseMenu newPauseMenu() {
-				return super.newPauseMenu();
+			public FXGLMenu newGameMenu() {
+				return new CustomMenu(MenuType.GAME_MENU);
 			}
 		});
 	}
@@ -162,9 +161,9 @@ public class BombermanApp extends GameApplication {
 		enemyComponent2 = ia2.getComponent(EnemyComponent.class);
 		enemyComponent2.setName("IA2");
 		IA ia = new IA(enemyComponent, playerComponent, playerComponent2, "chase");
-		//ia.start();
+		// ia.start();
 		IA ia2 = new IA(enemyComponent2, playerComponent, playerComponent2, "chase");
-		//ia2.start();
+		// ia2.start();
 	}
 
 	@Override
@@ -172,19 +171,15 @@ public class BombermanApp extends GameApplication {
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPMAXBOMBS) {
 			@Override
 			protected void onCollision(Entity pl, Entity powerup) {
-				if (powerup.getPosition() == pl.getPosition()) {
-					powerup.removeFromWorld();
-					pl.getComponent(PlayerComponent.class).increaseMaxBombs();
-				}
+				powerup.removeFromWorld();
+				pl.getComponent(PlayerComponent.class).increaseMaxBombs();
 			}
 		});
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPPOWER) {
 			@Override
 			protected void onCollision(Entity pl, Entity powerup) {
-				if (powerup.getPosition() == pl.getPosition()) {
-					powerup.removeFromWorld();
-					pl.getComponent(PlayerComponent.class).increasePower();
-				}
+				powerup.removeFromWorld();
+				pl.getComponent(PlayerComponent.class).increasePower();
 			}
 		});
 	}
