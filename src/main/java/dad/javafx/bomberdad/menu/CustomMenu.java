@@ -2,6 +2,7 @@ package dad.javafx.bomberdad.menu;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.Optional;
 
 import com.almasb.fxgl.app.FXGLMenu;
 import com.almasb.fxgl.app.MenuType;
@@ -19,7 +20,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -45,7 +49,7 @@ public class CustomMenu extends FXGLMenu {
 			menu = createMenuBodyGameMenu();
 
 		double menuX = 50.0;
-		double menuY = FXGL.getAppHeight() / 2 - menu.getLayoutX() / 2;
+		double menuY = FXGL.getAppHeight() / 2 - menu.getLayoutY() / 2;
 
 		getMenuRoot().setTranslateX(menuX);
 		getMenuRoot().setTranslateY(menuY);
@@ -160,10 +164,21 @@ public class CustomMenu extends FXGLMenu {
 		}
 
 		MenuButton itemExit = new MenuButton("menu.exit");
-		itemExit.setOnAction(e -> fireExit());
+		itemExit.setOnAction(e -> exit());
 		box.getChildren().add(itemExit);
 
 		return box;
+	}
+
+	private void exit() {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirmacion");
+		alert.setContentText("¿Está seguro de querer salir?");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK) {
+			getController().exit();
+		}
 	}
 
 	private MenuBox createMenuBodyGameMenu() {
@@ -296,8 +311,9 @@ public class CustomMenu extends FXGLMenu {
 
 	public class MenuBox extends VBox {
 		double layoutHeight;
-		
-		public MenuBox() {	}
+
+		public MenuBox() {
+		}
 
 		public double get() {
 			return (10 * getChildren().size());
@@ -332,7 +348,8 @@ public class CustomMenu extends FXGLMenu {
 			btn = new FXGLButton();
 			btn.setAlignment(Pos.CENTER_LEFT);
 			btn.setStyle("-fx-background-color: transparent");
-			btn.textProperty().bind(FXGL.localizedStringProperty(stringKey));
+//			btn.textProperty().bind(FXGL.localizedStringProperty(stringKey));
+			btn.setText(stringKey);
 
 			p.setMouseTransparent(true);
 

@@ -49,17 +49,17 @@ public class BombermanApp extends GameApplication {
 //		settings.setWidth(1280);
 //		settings.setHeight(700);
 		settings.setMenuEnabled(true);
-        settings.setSceneFactory(new SceneFactory() {
-            @Override
-            public FXGLMenu newMainMenu() {
-                return new CustomMenu(MenuType.MAIN_MENU);
-            }
-            
-            @Override
-            public PauseMenu newPauseMenu() {
-            	return super.newPauseMenu();
-            }
-        });
+		settings.setSceneFactory(new SceneFactory() {
+			@Override
+			public FXGLMenu newMainMenu() {
+				return new CustomMenu(MenuType.MAIN_MENU);
+			}
+
+			@Override
+			public PauseMenu newPauseMenu() {
+				return super.newPauseMenu();
+			}
+		});
 	}
 
 	@Override
@@ -146,7 +146,6 @@ public class BombermanApp extends GameApplication {
 		GameView vista = new GameView(bg, 0);
 		getGameScene().addGameView(vista);
 
-
 		Level level = getAssetLoader().loadLevel("map.txt", new TextLevelLoader(TILE_SIZE, TILE_SIZE, '0'));
 		getGameWorld().setLevel(level);
 
@@ -172,18 +171,21 @@ public class BombermanApp extends GameApplication {
 	protected void initPhysics() {
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPMAXBOMBS) {
 			@Override
-			protected void onCollisionBegin(Entity pl, Entity powerup) {
-				powerup.removeFromWorld();
-				pl.getComponent(PlayerComponent.class).increaseMaxBombs();
+			protected void onCollision(Entity pl, Entity powerup) {
+				if (powerup.getPosition() == pl.getPosition()) {
+					powerup.removeFromWorld();
+					pl.getComponent(PlayerComponent.class).increaseMaxBombs();
+				}
 			}
 		});
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPPOWER) {
 			@Override
-			protected void onCollisionBegin(Entity pl, Entity powerup) {
-				powerup.removeFromWorld();
-				pl.getComponent(PlayerComponent.class).increasePower();
+			protected void onCollision(Entity pl, Entity powerup) {
+				if (powerup.getPosition() == pl.getPosition()) {
+					powerup.removeFromWorld();
+					pl.getComponent(PlayerComponent.class).increasePower();
+				}
 			}
-			
 		});
 	}
 
