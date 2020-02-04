@@ -4,6 +4,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.ExpireCleanComponent;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import dad.javafx.bomberdad.components.BombComponent;
+import dad.javafx.bomberdad.components.EnemyComponent;
 import dad.javafx.bomberdad.components.PlayerComponent;
 import com.almasb.fxgl.entity.*;
 import javafx.scene.paint.Color;
@@ -19,7 +20,7 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
         		.type(BombermanType.FLOOR)
                 .from(data)
-                .viewWithBBox(FXGL.getAssetLoader().loadTexture("floor.png", 40, 40))
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("floor.png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
                 .build();
     }
 
@@ -28,7 +29,7 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .type(BombermanType.WALL)
                 .from(data)
-                .viewWithBBox(FXGL.getAssetLoader().loadTexture("wall.png", 40, 40))
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("wall.png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
                 .build();
     }
 
@@ -37,7 +38,7 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .type(BombermanType.BRICK)
                 .from(data)
-                .viewWithBBox(FXGL.getAssetLoader().loadTexture("brick.png", 40, 40))
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("brick.png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
                 .build();
     }
 
@@ -49,6 +50,17 @@ public class BombermanFactory implements EntityFactory {
                 .viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.BLUE))
                 .with(new CollidableComponent(true))
                 .with(new PlayerComponent())
+                .build();
+    }
+    
+    @Spawns("Enemy")
+    public Entity newEnemy(SpawnData data) {
+        return FXGL.entityBuilder()
+                .type(BombermanType.ENEMY)
+                .from(data)
+                .viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.DARKRED))
+                .with(new CollidableComponent(true))
+                .with(new EnemyComponent())
                 .build();
     }
 

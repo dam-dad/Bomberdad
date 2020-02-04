@@ -12,13 +12,13 @@ import com.almasb.fxgl.entity.SpawnData;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
-public class PlayerComponent extends Component {
+public class EnemyComponent extends Component {
 
 	public TransformComponent position;
 
 	private int maxBombs = 1;
 	private int bombsPlaced = 0;
-	private int vidas = 3;
+	private int vidas = 1;
 	private String name;
 	private int power = 0;
 
@@ -73,6 +73,18 @@ public class PlayerComponent extends Component {
 		}
 	}
 
+	@Override
+	public void onUpdate(double tpf) {
+		// TODO Auto-generated method stub
+		super.onUpdate(tpf);
+		if (position.getX() == BombermanApp.player.getPosition().getX() && position.getY() == BombermanApp.player.getPosition().getY() 
+				|| position.getX() == BombermanApp.player2.getPosition().getX() && position.getY() == BombermanApp.player2.getPosition().getY() 
+				&& bombsPlaced == 0 ) {
+			placeBomb();
+		}
+	}
+
+	
 	public void moveUp() {
 		if (vidas >= 0) {
 			if (canMove(new Point2D(0, -BombermanApp.TILE_SIZE)))
