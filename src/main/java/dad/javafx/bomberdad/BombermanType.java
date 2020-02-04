@@ -1,5 +1,5 @@
 package dad.javafx.bomberdad;
 
 public enum BombermanType {
-    PLAYER, WALL, BRICK, BOMB, FLOOR, UPPOWER, UPMAXBOMBS,EXPLOSION
+    PLAYER, ENEMY, WALL, BRICK, BOMB, FLOOR, UPPOWER, UPMAXBOMBS,EXPLOSION
 }
