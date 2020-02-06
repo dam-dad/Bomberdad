@@ -58,6 +58,10 @@ public class TitleController extends StackPane implements Initializable{
 		this.setPrefWidth(width);
 	}
 	
+	public void setH(double height) {
+		this.setPrefHeight(height);
+	}
+	
 //	public void setBG(Color color) {
 //		this.b
 //	}

@@ -24,6 +24,9 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 public class BombermanApp extends GameApplication {
 
 	public static final int TILE_SIZE = 30;
@@ -42,11 +45,10 @@ public class BombermanApp extends GameApplication {
 	protected void initSettings(GameSettings settings) {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
-
 		settings.setWidth(TILE_SIZE * 19);
 		settings.setHeight(TILE_SIZE * 19);
-//		settings.setWidth(1280);
-//		settings.setHeight(700);
+		settings.setFullScreenFromStart(true);
+		settings.setFullScreenAllowed(true);
 		settings.setMenuEnabled(true);
 		settings.setSceneFactory(new SceneFactory() {
 			@Override

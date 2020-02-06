@@ -9,13 +9,13 @@ import com.almasb.fxgl.core.util.Supplier;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.ui.FXGLButton;
 
+import dad.javafx.bomberdad.components.BombComponent;
 import dad.javafx.bomberdad.menu.components.BackgroundController;
 import dad.javafx.bomberdad.menu.components.ControlsController;
 import dad.javafx.bomberdad.menu.components.TitleController;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.ScaleTransition;
-import javafx.animation.Transition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.binding.StringBinding;
 import javafx.event.ActionEvent;
@@ -30,16 +30,18 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 
 public class CustomMenu extends FXGLMenu {
 
-	TitleController titleC;
-	MediaPlayer mediaPlayerMusic;
-	MenuBox menu = null;
-	TranslateTransition transicionTrans;
-	ScaleTransition transicionScale;
+	private TitleController titleC;
+	private MediaPlayer mediaPlayerMusic;
+	private MenuBox menu = null;
+	private TranslateTransition transicionTrans;
+	private ScaleTransition transicionScale;
+	private FadeTransition transicionFade;
+	private String title;
+	boolean hidden = true;
 
 	public CustomMenu(MenuType type) {
 		super(type);
@@ -59,12 +61,10 @@ public class CustomMenu extends FXGLMenu {
 		getMenuRoot().setTranslateX(menuX);
 		getMenuRoot().setTranslateY(menuY);
 
-		getMenuRoot().getBackground();
-		
 		getMenuContentRoot().setTranslateX((FXGL.getAppWidth() - 500));
 		getMenuContentRoot().setTranslateY(menuY);
 
-		this.getContentRoot().getStylesheets().add(getClass().getResource("/css/TitleCSS.css").toExternalForm());
+		this.getContentRoot().getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
 		this.getContentRoot().getStyleClass().add("root");
 
 		getMenuRoot().getChildren().addAll(menu);
@@ -74,9 +74,13 @@ public class CustomMenu extends FXGLMenu {
 				switchMenuTo(menu);
 			}
 		});
-		
+
 		transicionTrans.playFromStart();
 		transicionScale.playFromStart();
+		transicionFade.playFromStart();
+		FXGL.getEngineTimer().runOnceAfter(() -> {
+			titleC.setText(title);
+		}, Duration.seconds(5));
 	}
 
 	@Override
@@ -89,32 +93,30 @@ public class CustomMenu extends FXGLMenu {
 	@Override
 	protected Node createTitleView(String title) {
 		titleC = new TitleController();
-		titleC.setText(title);
+		this.title = title;
+		titleC.setText("BomberMAN");
 		titleC.setW(FXGL.getAppWidth());
-		transicionTrans = new TranslateTransition(); 
-		transicionTrans.setAutoReverse(true);
-		transicionTrans.setCycleCount(Transition.INDEFINITE);
-		transicionTrans.setDelay(Duration.ZERO);
-		transicionTrans.setDuration(Duration.seconds(0.50));
-		transicionTrans.setFromX(-200.0);
-		transicionTrans.setToX(200);
-		transicionTrans.setFromY(-100.0);
-		transicionTrans.setToY(100);
+		titleC.setH(FXGL.getAppHeight());
+		titleC.setTranslateY(FXGL.getAppHeight() / 2 - 100);
+
+		transicionTrans = new TranslateTransition();
+		transicionTrans.setDelay(Duration.seconds(2));
+		transicionTrans.setDuration(Duration.seconds(3));
+		transicionTrans.setFromY(FXGL.getAppHeight() / 2 - 100);
+		transicionTrans.setToY(0);
 		transicionTrans.setNode(titleC);
 		transicionTrans.setInterpolator(Interpolator.EASE_BOTH);
-		
-		transicionScale = new ScaleTransition(); 
-		transicionScale.setAutoReverse(true);
-		transicionScale.setCycleCount(Transition.INDEFINITE);
-		transicionScale.setDelay(Duration.ZERO);
-		transicionScale.setDuration(Duration.seconds(0.50));
+
+		transicionScale = new ScaleTransition();
+		transicionScale.setDelay(Duration.seconds(2));
+		transicionScale.setDuration(Duration.seconds(3));
 		transicionScale.setFromX(1);
-		transicionScale.setToX(0.25);
+		transicionScale.setToX(0.75);
 		transicionScale.setFromY(1);
-		transicionScale.setToY(0.25);
+		transicionScale.setToY(0.75);
 		transicionScale.setNode(titleC);
 		transicionScale.setInterpolator(Interpolator.EASE_BOTH);
-		
+
 		return titleC;
 	}
 
@@ -144,14 +146,16 @@ public class CustomMenu extends FXGLMenu {
 		});
 		itemNewGame.getStyleClass().add("btn");
 		box.getChildren().add(itemNewGame);
-
 		MenuButton itemOptions = new MenuButton("Controles");
-		Supplier<MenuContent> s = new Supplier<FXGLMenu.MenuContent>() {
 
+		Supplier<MenuContent> s = new Supplier<FXGLMenu.MenuContent>() {
 			@Override
 			public MenuContent get() {
-
-				return createContentControl();
+				if (hidden) {
+					return createContentControl();
+				} else {
+					return null;
+				}
 			}
 		};
 		itemOptions.setMenuContent(s);
@@ -180,7 +184,9 @@ public class CustomMenu extends FXGLMenu {
 	protected MenuContent createContentControl() {
 		ControlsController controls = new ControlsController();
 //    	controls.setW(FXGL.getAppWidth()/10);
-		controls.setAlignment(Pos.TOP_RIGHT);
+		controls.setAlignment(Pos.BOTTOM_RIGHT);
+		controls.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
+		controls.getStyleClass().add("controls");
 		MenuContent f = new MenuContent(controls);
 //    	f.setAlignment(Pos.BOTTOM_RIGHT);
 		return f;
@@ -200,7 +206,7 @@ public class CustomMenu extends FXGLMenu {
 
 		return box;
 	}
-	
+
 	private void goToMenu() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Confirmacion");
@@ -240,6 +246,16 @@ public class CustomMenu extends FXGLMenu {
 		double layoutHeight;
 
 		public MenuBox() {
+			this.setWidth(800);
+			this.setOpacity(0.0);
+			this.setAlignment(Pos.CENTER_LEFT);
+			transicionFade = new FadeTransition();
+			transicionFade.setDelay(Duration.seconds(3));
+			transicionFade.setFromValue(0.0);
+			transicionFade.setToValue(1.0);
+			transicionFade.setRate(2.0);
+			transicionFade.setNode(this);
+			transicionFade.setInterpolator(Interpolator.LINEAR);
 		}
 
 		public double get() {
@@ -260,6 +276,7 @@ public class CustomMenu extends FXGLMenu {
 
 	public class MenuButton extends Pane {
 
+		@SuppressWarnings("unused")
 		private MenuBox parent = null;
 		private MenuContent cachedContent = null;
 
@@ -270,11 +287,13 @@ public class CustomMenu extends FXGLMenu {
 		String stringKey;
 
 		public MenuButton(String stringKey) {
+			this.setPrefWidth(FXGL.getAppWidth()/3);
 			btn = new FXGLButton();
 			btn.setText(stringKey);
-			btn.getStylesheets().add(getClass().getResource("/css/TitleCSS.css").toExternalForm());
+			btn.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
 			btn.getStyleClass().add("btn");
 			btn.setAlignment(Pos.CENTER_LEFT);
+			btn.setPrefWidth(FXGL.getAppWidth()/3);
 //			btn.setStyle("-fx-background-color: transparent");
 //
 //			p.setMouseTransparent(true);
@@ -312,17 +331,17 @@ public class CustomMenu extends FXGLMenu {
 			});
 		}
 
-		@SuppressWarnings("unused")
-		private void setChild(MenuBox menu) {
-			MenuButton back = new MenuButton("menu.back");
-			menu.getChildren().add(0, back);
-			back.addEventHandler(ActionEvent.ACTION, event -> {
-				switchMenuTo(this.parent);
-			});
-			btn.addEventHandler(ActionEvent.ACTION, event -> {
-				switchMenuTo(menu);
-			});
-		}
+//		@SuppressWarnings("unused")
+//		private void setChild(MenuBox menu) {
+//			MenuButton back = new MenuButton("menu.back");
+//			menu.getChildren().add(0, back);
+//			back.addEventHandler(ActionEvent.ACTION, event -> {
+//				switchMenuTo(this.parent);
+//			});
+//			btn.addEventHandler(ActionEvent.ACTION, event -> {
+//				switchMenuTo(menu);
+//			});
+//		}
 
 		public FXGLButton getBtn() {
 			return btn;
