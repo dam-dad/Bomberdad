@@ -26,11 +26,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 
 public class CustomMenu extends FXGLMenu {
@@ -40,6 +40,7 @@ public class CustomMenu extends FXGLMenu {
 	MenuBox menu = null;
 	TranslateTransition transicionTrans;
 	ScaleTransition transicionScale;
+	boolean showControls = true;
 
 	public CustomMenu(MenuType type) {
 		super(type);
@@ -60,7 +61,7 @@ public class CustomMenu extends FXGLMenu {
 		getMenuRoot().setTranslateY(menuY);
 
 		getMenuRoot().getBackground();
-		
+
 		getMenuContentRoot().setTranslateX((FXGL.getAppWidth() - 500));
 		getMenuContentRoot().setTranslateY(menuY);
 
@@ -74,7 +75,7 @@ public class CustomMenu extends FXGLMenu {
 				switchMenuTo(menu);
 			}
 		});
-		
+
 		transicionTrans.playFromStart();
 		transicionScale.playFromStart();
 	}
@@ -91,7 +92,7 @@ public class CustomMenu extends FXGLMenu {
 		titleC = new TitleController();
 		titleC.setText(title);
 		titleC.setW(FXGL.getAppWidth());
-		transicionTrans = new TranslateTransition(); 
+		transicionTrans = new TranslateTransition();
 		transicionTrans.setAutoReverse(true);
 		transicionTrans.setCycleCount(Transition.INDEFINITE);
 		transicionTrans.setDelay(Duration.ZERO);
@@ -102,8 +103,8 @@ public class CustomMenu extends FXGLMenu {
 		transicionTrans.setToY(100);
 		transicionTrans.setNode(titleC);
 		transicionTrans.setInterpolator(Interpolator.EASE_BOTH);
-		
-		transicionScale = new ScaleTransition(); 
+
+		transicionScale = new ScaleTransition();
 		transicionScale.setAutoReverse(true);
 		transicionScale.setCycleCount(Transition.INDEFINITE);
 		transicionScale.setDelay(Duration.ZERO);
@@ -114,7 +115,7 @@ public class CustomMenu extends FXGLMenu {
 		transicionScale.setToY(0.25);
 		transicionScale.setNode(titleC);
 		transicionScale.setInterpolator(Interpolator.EASE_BOTH);
-		
+
 		return titleC;
 	}
 
@@ -151,12 +152,21 @@ public class CustomMenu extends FXGLMenu {
 			@Override
 			public MenuContent get() {
 
-				return createContentControl();
+				return createContentControl(false);
 			}
 		};
 		itemOptions.setMenuContent(s);
 		itemOptions.getStyleClass().add("btn");
 		box.getChildren().add(itemOptions);
+		itemOptions.setOnAction(e -> {
+			if (showControls) {
+				showControls = false;
+				switchMenuContentTo(createContentControl(false));
+			} else {
+				showControls = true;
+				switchMenuContentTo(createContentControl(true));
+			}
+		});
 
 		MenuButton itemExit = new MenuButton("Salir");
 		itemExit.setOnAction(e -> exit());
@@ -164,6 +174,12 @@ public class CustomMenu extends FXGLMenu {
 		box.getChildren().add(itemExit);
 
 		return box;
+	}
+
+	protected MenuContent createContentControlNull() {
+		HBox hbox = new HBox();
+		MenuContent f = new MenuContent(hbox);
+		return f;
 	}
 
 	private void exit() {
@@ -177,12 +193,15 @@ public class CustomMenu extends FXGLMenu {
 		}
 	}
 
-	protected MenuContent createContentControl() {
+	protected MenuContent createContentControl(boolean opacity) {
 		ControlsController controls = new ControlsController();
-//    	controls.setW(FXGL.getAppWidth()/10);
-		controls.setAlignment(Pos.TOP_RIGHT);
+		controls.setAlignment(Pos.BOTTOM_RIGHT);
 		MenuContent f = new MenuContent(controls);
-//    	f.setAlignment(Pos.BOTTOM_RIGHT);
+		controls.getStylesheets().add(getClass().getResource("/css/TitleCSS.css").toExternalForm());
+		controls.getStyleClass().add("controls");
+		if (opacity) {
+			controls.setOpacity(0);
+		}
 		return f;
 	}
 
@@ -200,7 +219,7 @@ public class CustomMenu extends FXGLMenu {
 
 		return box;
 	}
-	
+
 	private void goToMenu() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Confirmacion");

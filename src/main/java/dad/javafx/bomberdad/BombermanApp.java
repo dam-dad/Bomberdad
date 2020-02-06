@@ -48,6 +48,8 @@ public class BombermanApp extends GameApplication {
 //		settings.setWidth(1280);
 //		settings.setHeight(700);
 		settings.setMenuEnabled(true);
+		settings.setFullScreenAllowed(true);
+		settings.setFullScreenFromStart(true);
 		settings.setSceneFactory(new SceneFactory() {
 			@Override
 			public FXGLMenu newMainMenu() {
