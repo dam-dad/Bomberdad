@@ -9,7 +9,6 @@ import com.almasb.fxgl.core.util.Supplier;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.ui.FXGLButton;
 
-import dad.javafx.bomberdad.components.BombComponent;
 import dad.javafx.bomberdad.menu.components.BackgroundController;
 import dad.javafx.bomberdad.menu.components.ControlsController;
 import dad.javafx.bomberdad.menu.components.TitleController;
@@ -79,8 +78,16 @@ public class CustomMenu extends FXGLMenu {
 		transicionScale.playFromStart();
 		transicionFade.playFromStart();
 		FXGL.getEngineTimer().runOnceAfter(() -> {
-			titleC.setText(title);
-		}, Duration.seconds(5));
+			titleC.setText1(null);
+			titleC.setText2(null);
+			titleC.setTextMiddle(null);
+			titleC.setTextLess(null);
+			FXGL.getEngineTimer().runOnceAfter(() -> {
+				titleC.setStackPane(null);
+				titleC.setText1(title.substring(0, 6));
+				titleC.setTextLess(title.substring(6, 9));
+			}, Duration.seconds(0.75));
+		}, Duration.seconds(6));
 	}
 
 	@Override
@@ -94,9 +101,11 @@ public class CustomMenu extends FXGLMenu {
 	protected Node createTitleView(String title) {
 		titleC = new TitleController();
 		this.title = title;
-		titleC.setText("BomberMAN");
+		titleC.setText1("B");
+		titleC.setText2("o");
+		titleC.setTextMiddle("mber");
+		titleC.setTextLess("MAN");
 		titleC.setW(FXGL.getAppWidth());
-		titleC.setH(FXGL.getAppHeight());
 		titleC.setTranslateY(FXGL.getAppHeight() / 2 - 100);
 
 		transicionTrans = new TranslateTransition();
@@ -116,7 +125,6 @@ public class CustomMenu extends FXGLMenu {
 		transicionScale.setToY(0.75);
 		transicionScale.setNode(titleC);
 		transicionScale.setInterpolator(Interpolator.EASE_BOTH);
-
 		return titleC;
 	}
 
@@ -246,7 +254,7 @@ public class CustomMenu extends FXGLMenu {
 		double layoutHeight;
 
 		public MenuBox() {
-			this.setWidth(800);
+			this.setPrefWidth(FXGL.getAppWidth() / 3);
 			this.setOpacity(0.0);
 			this.setAlignment(Pos.CENTER_LEFT);
 			transicionFade = new FadeTransition();
@@ -287,13 +295,13 @@ public class CustomMenu extends FXGLMenu {
 		String stringKey;
 
 		public MenuButton(String stringKey) {
-			this.setPrefWidth(FXGL.getAppWidth()/3);
+			this.setPrefWidth(FXGL.getAppWidth() / 3);
 			btn = new FXGLButton();
 			btn.setText(stringKey);
 			btn.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
 			btn.getStyleClass().add("btn");
 			btn.setAlignment(Pos.CENTER_LEFT);
-			btn.setPrefWidth(FXGL.getAppWidth()/3);
+			btn.setPrefWidth(FXGL.getAppWidth() / 3);
 //			btn.setStyle("-fx-background-color: transparent");
 //
 //			p.setMouseTransparent(true);
