@@ -36,9 +36,12 @@ public class BackgroundController extends StackPane implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		Media media = new Media(new File(BackgroundController.class.getClassLoader().getResource("./media/gp.mp4").getFile()).toURI().toString());
-		MediaPlayer mediaPlayer = new MediaPlayer(media);  
-        mediaView.setMediaPlayer(mediaPlayer);  
-        mediaPlayer.setAutoPlay(true);  
+		MediaPlayer mediaPlayer = new MediaPlayer(media);
+//		Media mediaMusic = new Media(new File(BackgroundController.class.getClassLoader().getResource("./media/musicMenu.mp3").getFile()).toURI().toString());
+//		MediaPlayer mediaPlayerMusic = new MediaPlayer(mediaMusic);  
+//        mediaView.setMediaPlayer(mediaPlayer);  
+        mediaPlayer.setAutoPlay(false);
+//        mediaPlayerMusic.play();
 	}
 	
 	public void setS(double w,double h) {
