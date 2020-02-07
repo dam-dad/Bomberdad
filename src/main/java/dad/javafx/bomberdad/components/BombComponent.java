@@ -34,7 +34,7 @@ public class BombComponent extends Component {
 		// Explosion vertical
  
 		FXGL.getGameWorld().getEntitiesInRange(bbox.range(0, radius)).stream()
-				.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER) || e.isType(BombermanType.FLOOR)).forEach(e -> {
+				.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.ENEMY) || e.isType(BombermanType.PLAYER) || e.isType(BombermanType.FLOOR)).forEach(e -> {
 //        	System.out.println(e.distance(bomb));
 					entities.add(e);
 				});

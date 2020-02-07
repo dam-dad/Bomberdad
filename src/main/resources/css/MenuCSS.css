@@ -14,6 +14,11 @@
 	-fx-effect: dropshadow(gaussian, white, 5, 0.8, 3, 3);
 	-fx-background-color: transparent;
 }
+.controls {
+	-fx-font-size: 12.5pt;
+	-fx-text-fill: red;
+	-fx-background-color: transparent;
+}
 
 .btn {
 	-fx-font-size: 20.0pt;
