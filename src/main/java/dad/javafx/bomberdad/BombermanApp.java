@@ -1,39 +1,42 @@
 package dad.javafx.bomberdad;
 
+import static com.almasb.fxgl.dsl.FXGL.getAssetLoader;
+import static com.almasb.fxgl.dsl.FXGL.getGameController;
+import static com.almasb.fxgl.dsl.FXGL.getGameScene;
+import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGL.getInput;
+import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
+
+import com.almasb.fxgl.app.FXGLMenu;
+import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.GameView;
 import com.almasb.fxgl.app.MenuType;
 import com.almasb.fxgl.app.PauseMenu;
 import com.almasb.fxgl.app.SceneFactory;
-import com.almasb.fxgl.entity.level.Level;
-import com.almasb.fxgl.entity.level.text.TextLevelLoader;
-import com.almasb.fxgl.app.FXGLMenu;
-import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.dsl.views.ScrollingBackgroundView;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.level.Level;
+import com.almasb.fxgl.entity.level.text.TextLevelLoader;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.texture.Texture;
 
 import dad.javafx.bomberdad.components.EnemyComponent;
-import dad.javafx.bomberdad.components.IA;
 import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.menu.CustomMenu;
 import javafx.geometry.Orientation;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
-import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class BombermanApp extends GameApplication {
 
 	public static final int TILE_SIZE = 30;
 
-	public static Entity player;
+	public static Entity player, player2;
 
-	public static Entity player2;
-
-	private Entity ia, ia2;
+	public static Entity ia, ia2;
 	private PlayerComponent playerComponent, playerComponent2;
 	private EnemyComponent enemyComponent, enemyComponent2;
 	private int lvl = 0;
@@ -49,17 +52,17 @@ public class BombermanApp extends GameApplication {
 //		settings.setWidth(1280);
 //		settings.setHeight(700);
 		settings.setMenuEnabled(false);
-        settings.setSceneFactory(new SceneFactory() {
-            @Override
-            public FXGLMenu newMainMenu() {
-                return new CustomMenu(MenuType.MAIN_MENU);
-            }
-            
-            @Override
-            public PauseMenu newPauseMenu() {
-            	return super.newPauseMenu();
-            }
-        });
+		settings.setSceneFactory(new SceneFactory() {
+			@Override
+			public FXGLMenu newMainMenu() {
+				return new CustomMenu(MenuType.MAIN_MENU);
+			}
+
+			@Override
+			public PauseMenu newPauseMenu() {
+				return super.newPauseMenu();
+			}
+		});
 	}
 
 	@Override
@@ -146,7 +149,6 @@ public class BombermanApp extends GameApplication {
 		GameView vista = new GameView(bg, 0);
 		getGameScene().addGameView(vista);
 
-
 		Level level = getAssetLoader().loadLevel("map.txt", new TextLevelLoader(TILE_SIZE, TILE_SIZE, '0'));
 		getGameWorld().setLevel(level);
 
@@ -162,10 +164,10 @@ public class BombermanApp extends GameApplication {
 		enemyComponent.setName("IA");
 		enemyComponent2 = ia2.getComponent(EnemyComponent.class);
 		enemyComponent2.setName("IA2");
-		IA ia = new IA(enemyComponent, playerComponent, playerComponent2, "chase");
-		ia.start();
-		IA ia2 = new IA(enemyComponent2, playerComponent, playerComponent2, "chase");
-		ia2.start();
+		IATask ia = new IATask(enemyComponent, playerComponent, playerComponent2, "chase");
+		new Thread(ia.task).start();
+		IATask ia2 = new IATask(enemyComponent2, playerComponent, playerComponent2, "walls");
+		new Thread(ia2.task).start();
 	}
 
 	@Override
@@ -200,6 +202,7 @@ public class BombermanApp extends GameApplication {
 		if (requestNewGame) {
 			requestNewGame = false;
 			getGameController().startNewGame();
+		
 		}
 	}
 
@@ -241,8 +244,20 @@ public class BombermanApp extends GameApplication {
 					getGameWorld().spawn("PUPower", x, y);
 				}
 			}
+		} else if (e.isType(BombermanType.ENEMY)) {
+//			EnemyComponent playerHit = e.getComponent(EnemyComponent.class);
+//			if (playerHit.getVidas() == 0) {
+//				e.setPosition(new Point2D(TILE_SIZE * 22, TILE_SIZE * 22));
+//				e.removeFromWorld();
+//			} else {
+//				playerHit.setVidas(playerHit.getVidas() - 1);
+//				if (playerHit.getName().equals("Enemy")) {
+//					e.setPosition(new Point2D(TILE_SIZE, TILE_SIZE * 17));
+//				} else {
+//					e.setPosition(new Point2D(TILE_SIZE * 17, TILE_SIZE));
+//				}
+//			}
 		}
-
 	}
 
 	public static void main(String[] args) {
