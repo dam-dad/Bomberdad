@@ -14,12 +14,15 @@ import com.almasb.fxgl.app.GameView;
 import com.almasb.fxgl.app.MenuType;
 import com.almasb.fxgl.app.SceneFactory;
 import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.views.ScrollingBackgroundView;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.entity.level.text.TextLevelLoader;
+import com.almasb.fxgl.event.EventBus;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
+import com.almasb.fxgl.saving.DataFile;
 import com.almasb.fxgl.texture.Texture;
 
 import dad.javafx.bomberdad.components.EnemyComponent;
@@ -40,15 +43,16 @@ public class BombermanApp extends GameApplication {
 	private EnemyComponent enemyComponent, enemyComponent2;
 	private int lvl = 0;
 	private boolean requestNewGame = false;
-
+	
+	
 	@Override
 	protected void initSettings(GameSettings settings) {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
-//		settings.setWidth(TILE_SIZE * 19);
-//		settings.setHeight(TILE_SIZE * 19);
-		settings.setFullScreenFromStart(true);
-		settings.setFullScreenAllowed(true);
+		settings.setWidth(TILE_SIZE * 19);
+		settings.setHeight(TILE_SIZE * 19);
+//		settings.setFullScreenFromStart(true);
+//		settings.setFullScreenAllowed(true);
 		settings.setMenuEnabled(true);
 		settings.setSceneFactory(new SceneFactory() {
 			@Override
@@ -61,6 +65,9 @@ public class BombermanApp extends GameApplication {
 
 			}
 		});
+	
+		
+
 	}
 
 	@Override
@@ -162,14 +169,15 @@ public class BombermanApp extends GameApplication {
 		enemyComponent.setName("IA");
 		enemyComponent2 = ia2.getComponent(EnemyComponent.class);
 		enemyComponent2.setName("IA2");
-
+		
 		IATask ia = new IATask(enemyComponent, playerComponent, playerComponent2, "chase");
 		new Thread(ia.task).start();
 		IATask ia2 = new IATask(enemyComponent2, playerComponent, playerComponent2, "walls");
 		new Thread(ia2.task).start();
+	
 
 	}
-
+	
 	@Override
 	protected void initPhysics() {
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPMAXBOMBS) {
@@ -209,6 +217,7 @@ public class BombermanApp extends GameApplication {
 	public BombermanApp() {
 		// TODO Auto-generated constructor stub
 	}
+
 
 	public void onDestroyed(Entity e) {
 		if (e.isType(BombermanType.PLAYER)) {
