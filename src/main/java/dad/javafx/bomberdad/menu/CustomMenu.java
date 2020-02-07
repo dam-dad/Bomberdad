@@ -201,7 +201,7 @@ public class CustomMenu extends FXGLMenu {
 		controls.getStyleClass().add("controls");
 		
 		MenuContent f = new MenuContent(controls);
-		controls.getStylesheets().add(getClass().getResource("/css/TitleCSS.css").toExternalForm());
+		controls.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
 		controls.getStyleClass().add("controls");
 		if (opacity) {
 			controls.setOpacity(0);
