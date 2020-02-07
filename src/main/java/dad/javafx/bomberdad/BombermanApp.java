@@ -14,7 +14,6 @@ import com.almasb.fxgl.app.GameView;
 import com.almasb.fxgl.app.MenuType;
 import com.almasb.fxgl.app.SceneFactory;
 import com.almasb.fxgl.core.math.FXGLMath;
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.views.ScrollingBackgroundView;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.level.Level;
@@ -35,7 +34,7 @@ public class BombermanApp extends GameApplication {
 	public static final int TILE_SIZE = 30;
 
 	public static Entity player, player2;
-
+	
 	public static Entity ia, ia2;
 	private PlayerComponent playerComponent, playerComponent2;
 	private EnemyComponent enemyComponent, enemyComponent2;
@@ -164,12 +163,11 @@ public class BombermanApp extends GameApplication {
 		enemyComponent.setName("IA");
 		enemyComponent2 = ia2.getComponent(EnemyComponent.class);
 		enemyComponent2.setName("IA2");
-
+		
 		IATask ia = new IATask(enemyComponent, playerComponent, playerComponent2, "chase");
 		new Thread(ia.task).start();
 		IATask ia2 = new IATask(enemyComponent2, playerComponent, playerComponent2, "walls");
-		new Thread(ia2.task).start();
-
+		new Thread(ia2.task).start();;
 	}
 
 	@Override
