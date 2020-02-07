@@ -42,10 +42,10 @@ public class BombermanApp extends GameApplication {
 	protected void initSettings(GameSettings settings) {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
-//		settings.setWidth(TILE_SIZE * 19);
-//		settings.setHeight(TILE_SIZE * 19);
-		settings.setFullScreenFromStart(true);
-		settings.setFullScreenAllowed(true);
+		settings.setWidth(TILE_SIZE * 19);
+		settings.setHeight(TILE_SIZE * 19);
+//		settings.setFullScreenFromStart(true);
+//		settings.setFullScreenAllowed(true);
 		settings.setMenuEnabled(true);
 		settings.setSceneFactory(new SceneFactory() {
 			@Override

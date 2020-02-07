@@ -7,7 +7,7 @@
 
 <fx:root fx:id="view" alignment="TOP_CENTER" styleClass="root" stylesheets="@../css/MenuCSS.css" type="StackPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox alignment="CENTER">
+      <HBox fx:id="hbox" alignment="CENTER">
          <children>
             <Label fx:id="lbFirst" styleClass="titulo" />
             <Label fx:id="lbSec" styleClass="titulo" />
