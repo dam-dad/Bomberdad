@@ -207,7 +207,8 @@ public class CustomMenu extends FXGLMenu {
 		controls.setAlignment(Pos.BOTTOM_RIGHT);
 		controls.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
 		controls.getStyleClass().add("controls");
-		
+		controls.setPrefWidth(FXGL.getAppWidth());
+		controls.setPrefHeight(FXGL.getAppHeight());
 		MenuContent f = new MenuContent(controls);
 		controls.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
 		controls.getStyleClass().add("controls");
@@ -236,7 +237,6 @@ public class CustomMenu extends FXGLMenu {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Confirmacion");
 		alert.setContentText("¿Quiere volver al Menú Principal?");
-
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			getController().gotoMainMenu();

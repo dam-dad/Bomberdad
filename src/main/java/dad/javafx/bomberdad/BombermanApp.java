@@ -9,6 +9,7 @@ import com.almasb.fxgl.entity.level.text.TextLevelLoader;
 import com.almasb.fxgl.app.FXGLMenu;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.views.ScrollingBackgroundView;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
@@ -42,16 +43,15 @@ public class BombermanApp extends GameApplication {
 	protected void initSettings(GameSettings settings) {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
-//		settings.setWidth(TILE_SIZE * 19);
-//		settings.setHeight(TILE_SIZE * 19);
-		settings.setFullScreenFromStart(true);
-		settings.setFullScreenAllowed(true);
+		settings.setWidth(TILE_SIZE * 19);
+		settings.setHeight(TILE_SIZE * 19);
 		settings.setMenuEnabled(true);
-		settings.setFullScreenAllowed(true);
-		settings.setFullScreenFromStart(true);
+//		settings.setFullScreenAllowed(true);
+//		settings.setFullScreenFromStart(true);
 		settings.setSceneFactory(new SceneFactory() {
 			@Override
 			public FXGLMenu newMainMenu() {
+				
 				return new CustomMenu(MenuType.MAIN_MENU);
 			}
 
