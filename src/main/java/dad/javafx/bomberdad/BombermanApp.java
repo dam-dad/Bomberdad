@@ -37,7 +37,7 @@ public class BombermanApp extends GameApplication {
 	public static final int TILE_SIZE = 30;
 
 	public static Entity player, player2;
-
+	
 	public static Entity ia, ia2;
 	private PlayerComponent playerComponent, playerComponent2;
 	private EnemyComponent enemyComponent, enemyComponent2;
@@ -51,12 +51,13 @@ public class BombermanApp extends GameApplication {
 		settings.setVersion("0.1");
 		settings.setWidth(TILE_SIZE * 19);
 		settings.setHeight(TILE_SIZE * 19);
-//		settings.setFullScreenFromStart(true);
-//		settings.setFullScreenAllowed(true);
 		settings.setMenuEnabled(true);
+//		settings.setFullScreenAllowed(true);
+//		settings.setFullScreenFromStart(true);
 		settings.setSceneFactory(new SceneFactory() {
 			@Override
 			public FXGLMenu newMainMenu() {
+				
 				return new CustomMenu(MenuType.MAIN_MENU);
 			}
 			@Override
@@ -69,7 +70,7 @@ public class BombermanApp extends GameApplication {
 		
 
 	}
-
+	
 	@Override
 	protected void initInput() {
 		getInput().addAction(new UserAction("Move Up") {
@@ -174,8 +175,6 @@ public class BombermanApp extends GameApplication {
 		new Thread(ia.task).start();
 		IATask ia2 = new IATask(enemyComponent2, playerComponent, playerComponent2, "walls");
 		new Thread(ia2.task).start();
-	
-
 	}
 	
 	@Override
@@ -268,6 +267,8 @@ public class BombermanApp extends GameApplication {
 //			}
 		}
 	}
+	
+	
 
 	public static void main(String[] args) {
 		launch(args);

@@ -25,6 +25,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -41,6 +42,7 @@ public class CustomMenu extends FXGLMenu {
 	private FadeTransition transicionFade;
 	private String title;
 	boolean hidden = true;
+	boolean showControls = true;
 
 	public CustomMenu(MenuType type) {
 		super(type);
@@ -159,16 +161,21 @@ public class CustomMenu extends FXGLMenu {
 		Supplier<MenuContent> s = new Supplier<FXGLMenu.MenuContent>() {
 			@Override
 			public MenuContent get() {
-				if (hidden) {
-					return createContentControl();
-				} else {
-					return null;
-				}
+				return createContentControl(false);
 			}
 		};
 		itemOptions.setMenuContent(s);
 		itemOptions.getStyleClass().add("btn");
 		box.getChildren().add(itemOptions);
+		itemOptions.setOnAction(e -> {
+			if (showControls) {
+				showControls = false;
+				switchMenuContentTo(createContentControl(false));
+			} else {
+				showControls = true;
+				switchMenuContentTo(createContentControl(true));
+			}
+		});
 
 		MenuButton itemExit = new MenuButton("Salir");
 		itemExit.setOnAction(e -> exit());
@@ -176,6 +183,12 @@ public class CustomMenu extends FXGLMenu {
 		box.getChildren().add(itemExit);
 
 		return box;
+	}
+
+	protected MenuContent createContentControlNull() {
+		HBox hbox = new HBox();
+		MenuContent f = new MenuContent(hbox);
+		return f;
 	}
 
 	private void exit() {
@@ -189,14 +202,19 @@ public class CustomMenu extends FXGLMenu {
 		}
 	}
 
-	protected MenuContent createContentControl() {
+	protected MenuContent createContentControl(boolean opacity) {
 		ControlsController controls = new ControlsController();
-//    	controls.setW(FXGL.getAppWidth()/10);
 		controls.setAlignment(Pos.BOTTOM_RIGHT);
 		controls.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
 		controls.getStyleClass().add("controls");
+		controls.setPrefWidth(FXGL.getAppWidth());
+		controls.setPrefHeight(FXGL.getAppHeight());
 		MenuContent f = new MenuContent(controls);
-//    	f.setAlignment(Pos.BOTTOM_RIGHT);
+		controls.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
+		controls.getStyleClass().add("controls");
+		if (opacity) {
+			controls.setOpacity(0);
+		}
 		return f;
 	}
 
@@ -219,7 +237,6 @@ public class CustomMenu extends FXGLMenu {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Confirmacion");
 		alert.setContentText("¿Quiere volver al Menú Principal?");
-
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			getController().gotoMainMenu();
