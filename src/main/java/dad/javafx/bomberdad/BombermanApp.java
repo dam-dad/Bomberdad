@@ -12,7 +12,6 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.GameView;
 import com.almasb.fxgl.app.MenuType;
-import com.almasb.fxgl.app.PauseMenu;
 import com.almasb.fxgl.app.SceneFactory;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.dsl.views.ScrollingBackgroundView;
@@ -46,21 +45,20 @@ public class BombermanApp extends GameApplication {
 	protected void initSettings(GameSettings settings) {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
-
-		settings.setWidth(TILE_SIZE * 19);
-		settings.setHeight(TILE_SIZE * 19);
-//		settings.setWidth(1280);
-//		settings.setHeight(700);
-		settings.setMenuEnabled(false);
+//		settings.setWidth(TILE_SIZE * 19);
+//		settings.setHeight(TILE_SIZE * 19);
+		settings.setFullScreenFromStart(true);
+		settings.setFullScreenAllowed(true);
+		settings.setMenuEnabled(true);
 		settings.setSceneFactory(new SceneFactory() {
 			@Override
 			public FXGLMenu newMainMenu() {
 				return new CustomMenu(MenuType.MAIN_MENU);
 			}
-
 			@Override
-			public PauseMenu newPauseMenu() {
-				return super.newPauseMenu();
+			public FXGLMenu newGameMenu() {
+				return new CustomMenu(MenuType.GAME_MENU);
+
 			}
 		});
 	}
@@ -164,24 +162,26 @@ public class BombermanApp extends GameApplication {
 		enemyComponent.setName("IA");
 		enemyComponent2 = ia2.getComponent(EnemyComponent.class);
 		enemyComponent2.setName("IA2");
+
 		IATask ia = new IATask(enemyComponent, playerComponent, playerComponent2, "chase");
 		new Thread(ia.task).start();
 		IATask ia2 = new IATask(enemyComponent2, playerComponent, playerComponent2, "walls");
 		new Thread(ia2.task).start();
+
 	}
 
 	@Override
 	protected void initPhysics() {
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPMAXBOMBS) {
 			@Override
-			protected void onCollisionBegin(Entity pl, Entity powerup) {
+			protected void onCollision(Entity pl, Entity powerup) {
 				powerup.removeFromWorld();
 				pl.getComponent(PlayerComponent.class).increaseMaxBombs();
 			}
 		});
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPPOWER) {
 			@Override
-			protected void onCollisionBegin(Entity pl, Entity powerup) {
+			protected void onCollision(Entity pl, Entity powerup) {
 				powerup.removeFromWorld();
 				pl.getComponent(PlayerComponent.class).increasePower();
 			}
