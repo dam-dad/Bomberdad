@@ -5,7 +5,7 @@
 .root {
 	-fx-font-family: 'PixelarRegularW01-Regular';
 	-fx-background-color: transparent;
-	-fx-background-color: black;
+	-fx-background-color: gray;
 }
 
 .titulo {
@@ -29,4 +29,8 @@
 
 .btn:hover {
 	-fx-background-color: rgba(255, 0, 0, 0.1);
+}
+
+.lbless {
+	-fx-text-fill: red;
 }
