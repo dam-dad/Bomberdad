@@ -63,7 +63,7 @@ public class BombermanApp extends GameApplication {
 			}
 		});
 	}
-
+	
 	@Override
 	protected void initInput() {
 		getInput().addAction(new UserAction("Move Up") {
@@ -259,6 +259,8 @@ public class BombermanApp extends GameApplication {
 //			}
 		}
 	}
+	
+	
 
 	public static void main(String[] args) {
 		launch(args);
