@@ -12,6 +12,7 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.GameView;
 import com.almasb.fxgl.app.MenuType;
+import com.almasb.fxgl.app.PauseMenu;
 import com.almasb.fxgl.app.SceneFactory;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.dsl.FXGL;
@@ -34,7 +35,7 @@ import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.menu.CustomMenu;
 import javafx.geometry.Orientation;
 import javafx.scene.input.KeyCode;
-
+import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class BombermanApp extends GameApplication {
 
@@ -55,7 +56,7 @@ public class BombermanApp extends GameApplication {
 		settings.setWidth(TILE_SIZE * 19);
 		settings.setHeight(TILE_SIZE * 19);
 
-		settings.setMenuEnabled(false);
+		settings.setMenuEnabled(true);
         settings.setSceneFactory(new SceneFactory() {
             @Override
             public FXGLMenu newMainMenu() {
@@ -70,7 +71,7 @@ public class BombermanApp extends GameApplication {
 	}
 
 
-	}
+	
 	
 	@Override
 	protected void initInput() {
