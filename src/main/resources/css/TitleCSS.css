@@ -1,9 +1,0 @@
-@font-face {
-	font-family: Pixelar;
-    src: url('PixelarRegular.ttf');
-}
-
-.root {
-	-fx-font-family: 'Pixelar';
-	-fx-font-size: 30.0pt;
-}

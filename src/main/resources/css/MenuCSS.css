@@ -1,0 +1,36 @@
+@font-face {
+    src: url(../fonts/PixelarRegular.ttf);
+}
+
+.root {
+	-fx-font-family: 'PixelarRegularW01-Regular';
+	-fx-background-color: transparent;
+	-fx-background-color: gray;
+}
+
+.titulo {
+	-fx-font-size: 105.0pt;
+	-fx-text-fill: lightblue;
+	-fx-effect: dropshadow(gaussian, white, 5, 0.8, 3, 3);
+	-fx-background-color: transparent;
+}
+.controls {
+	-fx-font-size: 12.5pt;
+	-fx-text-fill: red;
+	-fx-background-color: transparent;
+}
+
+.btn {
+	-fx-font-size: 20.0pt;
+	-fx-text-fill: red;
+	-fx-font-family: 'PixelarRegularW01-Regular';
+	-fx-background-color: transparent;
+}
+
+.btn:hover {
+	-fx-background-color: rgba(255, 0, 0, 0.1);
+}
+
+.lbless {
+	-fx-text-fill: red;
+}

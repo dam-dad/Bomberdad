@@ -1,19 +1,28 @@
 package dad.javafx.bomberdad;
 
+import static com.almasb.fxgl.dsl.FXGL.getAssetLoader;
+import static com.almasb.fxgl.dsl.FXGL.getGameController;
+import static com.almasb.fxgl.dsl.FXGL.getGameScene;
+import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGL.getInput;
+import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
+
+import com.almasb.fxgl.app.FXGLMenu;
+import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.GameView;
 import com.almasb.fxgl.app.MenuType;
-import com.almasb.fxgl.app.PauseMenu;
 import com.almasb.fxgl.app.SceneFactory;
-import com.almasb.fxgl.entity.level.Level;
-import com.almasb.fxgl.entity.level.text.TextLevelLoader;
-import com.almasb.fxgl.app.FXGLMenu;
-import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.views.ScrollingBackgroundView;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.level.Level;
+import com.almasb.fxgl.entity.level.text.TextLevelLoader;
+import com.almasb.fxgl.event.EventBus;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
+import com.almasb.fxgl.saving.DataFile;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
 import com.almasb.fxgl.pathfinding.CellState;
@@ -25,7 +34,6 @@ import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.menu.CustomMenu;
 import javafx.geometry.Orientation;
 import javafx.scene.input.KeyCode;
-import static com.almasb.fxgl.dsl.FXGL.*;
 
 
 public class BombermanApp extends GameApplication {
@@ -36,10 +44,12 @@ public class BombermanApp extends GameApplication {
 	private int lvl = 0;
 	private boolean requestNewGame = false;
 	
+
 	@Override
 	protected void initSettings(GameSettings settings) {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
+
 
 
 		settings.setWidth(TILE_SIZE * 19);
@@ -59,6 +69,9 @@ public class BombermanApp extends GameApplication {
         });
 	}
 
+
+	}
+	
 	@Override
 	protected void initInput() {
 		getInput().addAction(new UserAction("Move Up") {
@@ -181,14 +194,14 @@ public class BombermanApp extends GameApplication {
 	protected void initPhysics() {
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPMAXBOMBS) {
 			@Override
-			protected void onCollisionBegin(Entity pl, Entity powerup) {
+			protected void onCollision(Entity pl, Entity powerup) {
 				powerup.removeFromWorld();
 				pl.getComponent(PlayerComponent.class).increaseMaxBombs();
 			}
 		});
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPPOWER) {
 			@Override
-			protected void onCollisionBegin(Entity pl, Entity powerup) {
+			protected void onCollision(Entity pl, Entity powerup) {
 				powerup.removeFromWorld();
 				pl.getComponent(PlayerComponent.class).increasePower();
 			}
@@ -210,9 +223,11 @@ public class BombermanApp extends GameApplication {
 		if (requestNewGame) {
 			requestNewGame = false;
 			getGameController().startNewGame();
+		
 		}
 		
 	}
+
 
 
 
@@ -260,9 +275,10 @@ public class BombermanApp extends GameApplication {
 			}
 		}else if (e.isType(BombermanType.ENEMY)) {
 			e.removeFromWorld();
-		}
-
+		} 
 	}
+	
+	
 
 
 	public static void main(String[] args) {

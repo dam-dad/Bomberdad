@@ -21,6 +21,7 @@ public class EnemyComponent extends Component {
 
 	
 
+
 	public TransformComponent position;
 	private int vida = 1;
 	private ArrayList<Entity> playerCerca;
@@ -48,6 +49,7 @@ public class EnemyComponent extends Component {
 
 	@Override
 	public void onUpdate(double tpf) {
+
 
 		playerCerca=new ArrayList<Entity>(FXGL.getGameWorld().getEntitiesAt(this.getEntity().getPosition()));	
 		for(int i = 0;i<playerCerca.size(); i++ ) {
