@@ -34,8 +34,7 @@ public class BombComponent extends Component {
 		// Explosion vertical
  
 		FXGL.getGameWorld().getEntitiesInRange(bbox.range(0, radius)).stream()
-				.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER) || e.isType(BombermanType.FLOOR)).forEach(e -> {
-//        	System.out.println(e.distance(bomb));
+				.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER) || e.isType(BombermanType.FLOOR) || e.isType(BombermanType.ENEMY)).forEach(e -> {
 					entities.add(e);
 				});
 
@@ -43,7 +42,7 @@ public class BombComponent extends Component {
 		FXGL.getGameWorld()
 
 				.getEntitiesInRange(bbox.range(radius, 0)).stream()
-				.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER) || e.isType(BombermanType.FLOOR)).forEach(e -> {
+				.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER) || e.isType(BombermanType.FLOOR) || e.isType(BombermanType.ENEMY)).forEach(e -> {
 					boolean thereIs = false;
 					for (int i = 0; i < entities.size(); i++) {
 						if (entities.get(i) == e) {
@@ -127,14 +126,13 @@ public class BombComponent extends Component {
 		// Destruimos las entidades
 
 		for (Entity st : entitiesToDelete) {
-			if(st.isType(BombermanType.FLOOR)) {
+			if(st.isType(BombermanType.FLOOR) || st.isType(BombermanType.ENEMY)) {
 				
 				FXGL.spawn("explosion",st.getPosition());	
 			}else if (st.isType(BombermanType.BRICK)){
 				Entity aux=st;
 				FXGL.<BombermanApp>getAppCast().onDestroyed(st);
 				aux.getTypeComponent().setValue(BombermanType.FLOOR);
-				
 			
 	        FXGL.spawn("explosion",st.getPosition());
 			     
