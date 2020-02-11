@@ -53,13 +53,11 @@ public class BombermanApp extends GameApplication {
 		settings.setSceneFactory(new SceneFactory() {
 			@Override
 			public FXGLMenu newMainMenu() {
-				
 				return new CustomMenu(MenuType.MAIN_MENU);
 			}
 			@Override
 			public FXGLMenu newGameMenu() {
 				return new CustomMenu(MenuType.GAME_MENU);
-
 			}
 		});
 	}
