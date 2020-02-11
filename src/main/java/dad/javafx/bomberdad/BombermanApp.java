@@ -57,20 +57,21 @@ public class BombermanApp extends GameApplication {
 		settings.setHeight(TILE_SIZE * 19);
 
 		settings.setMenuEnabled(true);
-        settings.setSceneFactory(new SceneFactory() {
-            @Override
-            public FXGLMenu newMainMenu() {
-                return new CustomMenu(MenuType.MAIN_MENU);
-            }
-            
-            @Override
-            public PauseMenu newPauseMenu() {
-            	return super.newPauseMenu();
-            }
-        });
-	}
 
-
+//		settings.setFullScreenAllowed(true);
+//		settings.setFullScreenFromStart(true);
+		settings.setSceneFactory(new SceneFactory() {
+			@Override
+			public FXGLMenu newMainMenu() {
+				return new CustomMenu(MenuType.MAIN_MENU);
+			}
+			@Override
+			public FXGLMenu newGameMenu() {
+				return new CustomMenu(MenuType.GAME_MENU);
+			}
+		});
+	
+		
 	
 	
 	@Override
