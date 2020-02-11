@@ -4,7 +4,7 @@ import dad.javafx.bomberdad.components.EnemyComponent;
 import dad.javafx.bomberdad.components.PlayerComponent;
 import javafx.concurrent.Task;
 import javafx.geometry.Point2D;
-
+/*
 public class IATask {
 
 	Task<Void> task;
@@ -354,4 +354,4 @@ public class IATask {
 	public void setTarea(Task<Void> tarea) {
 		this.task = tarea;
 	}
-}
+}*/

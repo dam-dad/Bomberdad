@@ -71,7 +71,7 @@ public class BombermanApp extends GameApplication {
 			}
 		});
 	
-		
+	}
 	
 	
 	@Override
