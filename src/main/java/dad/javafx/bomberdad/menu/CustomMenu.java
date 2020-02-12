@@ -80,16 +80,8 @@ public class CustomMenu extends FXGLMenu {
 		transicionScale.playFromStart();
 		transicionFade.playFromStart();
 		FXGL.getEngineTimer().runOnceAfter(() -> {
-			titleC.setText1(null);
-			titleC.setText2(null);
-			titleC.setTextMiddle(null);
-			titleC.setTextLess(null);
-			FXGL.getEngineTimer().runOnceAfter(() -> {
-				titleC.setStackPane(null);
-				titleC.setText1(title.substring(0, 6));
-				titleC.setTextLess(title.substring(6, 9));
-			}, Duration.seconds(0.75));
-		}, Duration.seconds(6));
+				titleC.setTextLess("DAD");
+		}, Duration.seconds(7));
 	}
 
 	@Override
@@ -103,9 +95,6 @@ public class CustomMenu extends FXGLMenu {
 	protected Node createTitleView(String title) {
 		titleC = new TitleController();
 		this.title = title;
-		titleC.setText1("B");
-		titleC.setText2("o");
-		titleC.setTextMiddle("mber");
 		titleC.setTextLess("MAN");
 		titleC.setW(FXGL.getAppWidth());
 		titleC.setTranslateY(FXGL.getAppHeight() / 2 - 100);

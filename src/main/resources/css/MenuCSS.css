@@ -10,8 +10,8 @@
 
 .titulo {
 	-fx-font-size: 105.0pt;
-	-fx-text-fill: lightblue;
-	-fx-effect: dropshadow(gaussian, white, 5, 0.8, 3, 3);
+	-fx-text-fill: #122857;
+	-fx-effect: dropshadow(gaussian, white, 2, 0.8, 3, 3);
 	-fx-background-color: transparent;
 }
 .controls {

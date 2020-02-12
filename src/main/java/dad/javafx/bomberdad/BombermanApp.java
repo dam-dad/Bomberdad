@@ -51,8 +51,6 @@ public class BombermanApp extends GameApplication {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
 
-
-
 		settings.setWidth(TILE_SIZE * 19);
 		settings.setHeight(TILE_SIZE * 19);
 
