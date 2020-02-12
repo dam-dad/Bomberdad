@@ -12,31 +12,21 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.GameView;
 import com.almasb.fxgl.app.MenuType;
-import com.almasb.fxgl.app.PauseMenu;
 import com.almasb.fxgl.app.SceneFactory;
 import com.almasb.fxgl.core.math.FXGLMath;
-import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.views.ScrollingBackgroundView;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.components.ViewComponent;
 import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.entity.level.text.TextLevelLoader;
-import com.almasb.fxgl.event.EventBus;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
-import com.almasb.fxgl.saving.DataFile;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
 import com.almasb.fxgl.pathfinding.CellState;
-import com.almasb.fxgl.pathfinding.astar.AStarCell;
 import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
-import dad.javafx.bomberdad.components.EnemyComponent;
 import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.menu.CustomMenu;
-import javafx.geometry.Orientation;
 import javafx.scene.input.KeyCode;
-import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -47,20 +37,20 @@ public class BombermanApp extends GameApplication {
 	public static Entity player,player2;
 	private int lvl = 0;
 	private boolean requestNewGame = false;
-	private String theme = "fire";
+	private String theme = "crab";
 
 	@Override
 	protected void initSettings(GameSettings settings) {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
 
-		settings.setWidth(TILE_SIZE * 19);
-		settings.setHeight(TILE_SIZE * 19);
+		settings.setWidth(1366);
+		settings.setHeight(768);
 
 		settings.setMenuEnabled(true);
 
-//		settings.setFullScreenAllowed(true);
-//		settings.setFullScreenFromStart(true);
+		settings.setFullScreenAllowed(true);
+		settings.setFullScreenFromStart(true);
 		settings.setSceneFactory(new SceneFactory() {
 			@Override
 			public FXGLMenu newMainMenu() {

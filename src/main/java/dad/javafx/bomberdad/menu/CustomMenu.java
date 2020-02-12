@@ -40,7 +40,6 @@ public class CustomMenu extends FXGLMenu {
 	private TranslateTransition transicionTrans;
 	private ScaleTransition transicionScale;
 	private FadeTransition transicionFade;
-	private String title;
 	boolean hidden = true;
 	boolean showControls = true;
 
@@ -80,7 +79,7 @@ public class CustomMenu extends FXGLMenu {
 		transicionScale.playFromStart();
 		transicionFade.playFromStart();
 		FXGL.getEngineTimer().runOnceAfter(() -> {
-				titleC.setTextLess("DAD");
+				titleC.setTextLess("CRAB");
 		}, Duration.seconds(7));
 	}
 
@@ -94,7 +93,6 @@ public class CustomMenu extends FXGLMenu {
 	@Override
 	protected Node createTitleView(String title) {
 		titleC = new TitleController();
-		this.title = title;
 		titleC.setTextLess("MAN");
 		titleC.setW(FXGL.getAppWidth());
 		titleC.setTranslateY(FXGL.getAppHeight() / 2 - 100);
