@@ -44,7 +44,12 @@ public class TitleController extends StackPane implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		lbLess.textProperty().bind(textLess);
+		animation(5);
+	}
 
+	// getters & setters
+
+	public void animation(int time) {
 		FXGL.getEngineTimer().runOnceAfter(() -> {
 			image.setImage(new Image("./assets/textures/Title.gif"));
 			FXGL.getEngineTimer().runOnceAfter(() -> {
@@ -56,11 +61,8 @@ public class TitleController extends StackPane implements Initializable {
 					image.setImage(new Image("./assets/textures/TitleStatic.png"));
 				}, Duration.seconds(1));
 			}, Duration.seconds(1));
-		}, Duration.seconds(5));
-
+		}, Duration.seconds(time));
 	}
-
-	// getters & setters
 
 	public void setW(double width) {
 		this.setPrefWidth(width);

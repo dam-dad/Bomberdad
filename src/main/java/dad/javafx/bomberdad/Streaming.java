@@ -1,4 +1,5 @@
 package dad.javafx.bomberdad;
+/*
 
 import java.io.File;
 
@@ -9,7 +10,6 @@ import javafx.animation.AnimationTimer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
-/*
 public class Streaming extends AnimationTimer {
 
 	@Override

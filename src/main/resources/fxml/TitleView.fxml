@@ -10,7 +10,7 @@
    <children>
       <HBox fx:id="hbox" alignment="CENTER">
          <children>
-            <ImageView fx:id="image" fitHeight="200.0" fitWidth="330.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="image" fitHeight="200.0" fitWidth="310.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assets/textures/TitleStatic.png" />
                </image>

@@ -37,7 +37,7 @@ public class BombermanApp extends GameApplication {
 	public static Entity player, player2;
 	private int lvl = 0;
 	private boolean requestNewGame = false;
-	private String theme = "crab";
+	public static String theme;
 
 	@Override
 	protected void initSettings(GameSettings settings) {
@@ -216,7 +216,6 @@ public class BombermanApp extends GameApplication {
 			getGameController().startNewGame();
 
 		}
-
 	}
 
 	public void onDestroyed(Entity e) {
@@ -265,4 +264,5 @@ public class BombermanApp extends GameApplication {
 	public static void main(String[] args) {
 		launch(args);
 	}
+
 }

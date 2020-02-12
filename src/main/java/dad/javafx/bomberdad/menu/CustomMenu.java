@@ -9,6 +9,7 @@ import com.almasb.fxgl.core.util.Supplier;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.ui.FXGLButton;
 
+import dad.javafx.bomberdad.BombermanApp;
 import dad.javafx.bomberdad.menu.components.BackgroundController;
 import dad.javafx.bomberdad.menu.components.ControlsController;
 import dad.javafx.bomberdad.menu.components.TitleController;
@@ -17,6 +18,7 @@ import javafx.animation.Interpolator;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.binding.StringBinding;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -44,6 +46,7 @@ public class CustomMenu extends FXGLMenu {
 	private FadeTransition transicionFade, transicionFadeBG;
 	boolean hidden = true;
 	boolean showControls = true;
+	private SimpleStringProperty theme = new SimpleStringProperty();
 
 	public CustomMenu(MenuType type) {
 		super(type);
@@ -80,11 +83,21 @@ public class CustomMenu extends FXGLMenu {
 		transicionTrans.playFromStart();
 		transicionScale.playFromStart();
 		transicionFade.playFromStart();
+		theme.set("CRAB");
 		FXGL.getEngineTimer().runOnceAfter(() -> {
-			bg.setImage(new Image("./imgs/crabrave.gif"));
+			bg.setImage(new Image("./imgs/" + theme.get() + ".gif"));
 			transicionFadeBG.playFromStart();
-			titleC.setTextLess("CRAB");
+			titleC.setTextLess(theme.get());
 		}, Duration.seconds(7));
+
+		theme.addListener((o, ov, nv) -> {
+			titleC.animation(2);
+			FXGL.getEngineTimer().runOnceAfter(() -> {
+				bg.setImage(new Image("./imgs/" + nv + ".gif"));
+				transicionFadeBG.playFromStart();
+				titleC.setTextLess(theme.get());
+			}, Duration.seconds(4));
+		});
 	}
 
 	@Override
@@ -143,7 +156,7 @@ public class CustomMenu extends FXGLMenu {
 		view.setTranslateX(FXGL.getAppWidth() - view.getLayoutBounds().getWidth());
 		return view;
 	}
-	
+
 	private MenuBox createMenuBodyMainMenu() {
 
 		MenuBox box = new MenuBox();
@@ -151,6 +164,7 @@ public class CustomMenu extends FXGLMenu {
 		MenuButton itemNewGame = new MenuButton("Nueva Partida");
 		itemNewGame.setOnAction(e -> {
 			mediaPlayerMusic.stop();
+			BombermanApp.theme = theme.get().toLowerCase();
 			fireNewGame();
 		});
 		itemNewGame.getStyleClass().add("btn");
@@ -180,7 +194,7 @@ public class CustomMenu extends FXGLMenu {
 		itemThemes.setOnAction(e -> switchMenuTo(createMenuThemes()));
 		itemThemes.getStyleClass().add("btn");
 		box.getChildren().add(itemThemes);
-		
+
 		MenuButton itemExit = new MenuButton("Salir");
 		itemExit.setOnAction(e -> exit());
 		itemExit.getStyleClass().add("btn");
@@ -236,12 +250,20 @@ public class CustomMenu extends FXGLMenu {
 
 		return box;
 	}
-	
+
 	private MenuBox createMenuThemes() {
 		MenuBox box = new MenuBox();
 		MenuButton itemBack = new MenuButton("Volver");
 		itemBack.setOnAction(e -> switchMenuTo(createMenuBodyMainMenu()));
 		box.getChildren().add(itemBack);
+
+		MenuButton itemLava = new MenuButton("Fire");
+		itemLava.setOnAction(e -> theme.set("FIRE"));
+		box.getChildren().add(itemLava);
+
+		MenuButton itemCrab = new MenuButton("Crab");
+		itemCrab.setOnAction(e -> theme.set("CRAB"));
+		box.getChildren().add(itemCrab);
 
 		return box;
 	}
