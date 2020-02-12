@@ -18,6 +18,7 @@ import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.views.ScrollingBackgroundView;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.components.ViewComponent;
 import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.entity.level.text.TextLevelLoader;
 import com.almasb.fxgl.event.EventBus;
@@ -35,6 +36,8 @@ import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.menu.CustomMenu;
 import javafx.geometry.Orientation;
 import javafx.scene.input.KeyCode;
+import javafx.util.Duration;
+
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class BombermanApp extends GameApplication {
@@ -44,7 +47,7 @@ public class BombermanApp extends GameApplication {
 	public static Entity player,player2;
 	private int lvl = 0;
 	private boolean requestNewGame = false;
-	
+	private String theme = "fire";
 
 	@Override
 	protected void initSettings(GameSettings settings) {
@@ -70,6 +73,7 @@ public class BombermanApp extends GameApplication {
 				return new CustomMenu(MenuType.GAME_MENU);
 			}
 		});
+	}
 	
 		
 	
@@ -153,13 +157,14 @@ public class BombermanApp extends GameApplication {
 	@Override
 	protected void initGame() {
 		GenerateMap.newMap(lvl);
-		getGameWorld().addEntityFactory(new BombermanFactory());
+		getGameWorld().addEntityFactory(new BombermanFactory(theme));
 		
 //		getGameWorld().spawn("f");
-		Texture texture = getAssetLoader().loadTexture("trump.png");
-		ScrollingBackgroundView bg = new ScrollingBackgroundView(texture, Orientation.HORIZONTAL);
+		Texture texture = getAssetLoader().loadTexture("bg"+theme+".gif");
+		//ScrollingBackgroundView bg = new ScrollingBackgroundView(texture, Orientation.HORIZONTAL);
+		//ScrollingBackgroundView bg = new ScrollingBackgroundView(texture);
 
-		GameView vista = new GameView(bg, 0);
+		GameView vista = new GameView(texture, 0);
 		getGameScene().addGameView(vista);
 
 		Level level = getAssetLoader().loadLevel("map.txt", new TextLevelLoader(TILE_SIZE, TILE_SIZE, '0'));
