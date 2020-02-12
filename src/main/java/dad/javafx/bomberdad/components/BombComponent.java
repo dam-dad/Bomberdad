@@ -7,6 +7,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.BoundingBoxComponent;
+import com.almasb.fxgl.texture.Texture;
 
 import dad.javafx.bomberdad.BombermanApp;
 import dad.javafx.bomberdad.BombermanType;
