@@ -14,13 +14,13 @@ public class Streaming extends AnimationTimer {
 
 	@Override
 	public void handle(long now) {
-		WritableImage image = BombermanApp.scene().getRoot().snapshot(new SnapshotParameters(), null);
-		try {
-			//ImageIO.write(
-			SwingFXUtils.fromFXImage(image,null);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+//		WritableImage image = BombermanApp.scene().getRoot().snapshot(new SnapshotParameters(), null);
+//		try {
+//			//ImageIO.write(
+//			SwingFXUtils.fromFXImage(image,null);
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
 		
 		
 	}

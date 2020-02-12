@@ -30,14 +30,20 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 
 public class BombermanFactory implements EntityFactory {
-
+	
+	private String theme = "crab";
+	
+	public BombermanFactory(String theme) {
+		this.theme = theme;
+	}
+	
     @Spawns("f")
     public Entity newBackground(SpawnData data) {
         return FXGL.entityBuilder()
         		.type(BombermanType.FLOOR)
                 .from(data)
                 .opacity(0)
-                .viewWithBBox(FXGL.getAssetLoader().loadTexture("floor.png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("bg"+theme+".gif", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
                 .build();
     }
 
@@ -46,7 +52,7 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .type(BombermanType.WALL)
                 .from(data)
-                .viewWithBBox(FXGL.getAssetLoader().loadTexture("wall.png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("rock"+theme+".png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
                 .build();
     }
 
@@ -55,7 +61,7 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .type(BombermanType.BRICK)
                 .from(data)
-                .viewWithBBox(FXGL.getAssetLoader().loadTexture("brick.png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("brick"+theme+".png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
                 .with(new CellMoveComponent(30, 30,0))
                 .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
                 .build();
@@ -79,7 +85,7 @@ public class BombermanFactory implements EntityFactory {
                 .from(data)
                 .type(BombermanType.PLAYER)
                 .bbox(new HitBox(new Point2D(2, 2), BoundingShape.box(30, 30)))
-                .viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.BLUE))
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("py"+theme+".gif", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
                 .with(new CollidableComponent(true))
                 .with(new CellMoveComponent(30, 30, 150))
                 .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
