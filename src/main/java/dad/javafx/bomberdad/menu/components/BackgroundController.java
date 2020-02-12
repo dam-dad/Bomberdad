@@ -1,25 +1,30 @@
 package dad.javafx.bomberdad.menu.components;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 
 public class BackgroundController extends StackPane implements Initializable{
 
+	//model
+	
+	private SimpleObjectProperty<Image> image = new SimpleObjectProperty<Image>();
+	
+	//view
+	
 	@FXML
     private StackPane view;
 
     @FXML
-    private MediaView mediaView;
+    private ImageView imageView;
 	
 	public BackgroundController() {
 		super();
@@ -35,19 +40,27 @@ public class BackgroundController extends StackPane implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		Media media = new Media(new File(BackgroundController.class.getClassLoader().getResource("./media/gp.mp4").getFile()).toURI().toString());
-		MediaPlayer mediaPlayer = new MediaPlayer(media);
-//		Media mediaMusic = new Media(new File(BackgroundController.class.getClassLoader().getResource("./media/musicMenu.mp3").getFile()).toURI().toString());
-//		MediaPlayer mediaPlayerMusic = new MediaPlayer(mediaMusic);  
-//        mediaView.setMediaPlayer(mediaPlayer);  
-        mediaPlayer.setAutoPlay(false);
-//        mediaPlayerMusic.play();
+		imageView.imageProperty().bind(image);
 	}
 	
 	public void setS(double w,double h) {
 		setPrefSize(w,h);
-		mediaView.setFitWidth(w);
-		mediaView.setFitHeight(h);
+		imageView.setFitHeight(h);
+		imageView.setFitWidth(w);
 	}
 
+	public final SimpleObjectProperty<Image> imageProperty() {
+		return this.image;
+	}
+	
+
+	public final Image getImage() {
+		return this.imageProperty().get();
+	}
+	
+
+	public final void setImage(final Image image) {
+		this.imageProperty().set(image);
+	}
+	
 }

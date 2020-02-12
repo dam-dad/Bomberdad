@@ -23,6 +23,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.HBox;
@@ -34,19 +35,20 @@ import javafx.util.Duration;
 
 public class CustomMenu extends FXGLMenu {
 
+	private BackgroundController bg;
 	private TitleController titleC;
 	private MediaPlayer mediaPlayerMusic;
 	private MenuBox menu = null;
 	private TranslateTransition transicionTrans;
 	private ScaleTransition transicionScale;
-	private FadeTransition transicionFade;
+	private FadeTransition transicionFade, transicionFadeBG;
 	boolean hidden = true;
 	boolean showControls = true;
 
 	public CustomMenu(MenuType type) {
 		super(type);
 		Media mediaMusic = new Media(
-				new File(BackgroundController.class.getClassLoader().getResource("./media/musicMenu.mp3").getFile())
+				new File(BackgroundController.class.getClassLoader().getResource("./media/musicedit.mp3").getFile())
 						.toURI().toString());
 		mediaPlayerMusic = new MediaPlayer(mediaMusic);
 		if (type == MenuType.MAIN_MENU) {
@@ -79,14 +81,24 @@ public class CustomMenu extends FXGLMenu {
 		transicionScale.playFromStart();
 		transicionFade.playFromStart();
 		FXGL.getEngineTimer().runOnceAfter(() -> {
-				titleC.setTextLess("CRAB");
+			bg.setImage(new Image("./imgs/crabrave.gif"));
+			transicionFadeBG.playFromStart();
+			titleC.setTextLess("CRAB");
 		}, Duration.seconds(7));
 	}
 
 	@Override
 	protected Node createBackground(double width, double height) {
-		BackgroundController bg = new BackgroundController();
+		bg = new BackgroundController();
 		bg.setS(FXGL.getAppWidth(), FXGL.getAppHeight());
+
+		transicionFadeBG = new FadeTransition();
+		transicionFadeBG.setFromValue(0.0);
+		transicionFadeBG.setToValue(1.0);
+		transicionFadeBG.setRate(1.0);
+		transicionFadeBG.setNode(bg);
+		transicionFadeBG.setInterpolator(Interpolator.LINEAR);
+
 		return bg;
 	}
 
@@ -131,7 +143,7 @@ public class CustomMenu extends FXGLMenu {
 		view.setTranslateX(FXGL.getAppWidth() - view.getLayoutBounds().getWidth());
 		return view;
 	}
-
+	
 	private MenuBox createMenuBodyMainMenu() {
 
 		MenuBox box = new MenuBox();
@@ -164,6 +176,11 @@ public class CustomMenu extends FXGLMenu {
 			}
 		});
 
+		MenuButton itemThemes = new MenuButton("Temas");
+		itemThemes.setOnAction(e -> switchMenuTo(createMenuThemes()));
+		itemThemes.getStyleClass().add("btn");
+		box.getChildren().add(itemThemes);
+		
 		MenuButton itemExit = new MenuButton("Salir");
 		itemExit.setOnAction(e -> exit());
 		itemExit.getStyleClass().add("btn");
@@ -216,6 +233,15 @@ public class CustomMenu extends FXGLMenu {
 			goToMenu();
 		});
 		box.getChildren().add(itemExit);
+
+		return box;
+	}
+	
+	private MenuBox createMenuThemes() {
+		MenuBox box = new MenuBox();
+		MenuButton itemBack = new MenuButton("Volver");
+		itemBack.setOnAction(e -> switchMenuTo(createMenuBodyMainMenu()));
+		box.getChildren().add(itemBack);
 
 		return box;
 	}
@@ -288,11 +314,8 @@ public class CustomMenu extends FXGLMenu {
 
 	public class MenuButton extends Pane {
 
-		@SuppressWarnings("unused")
 		private MenuBox parent = null;
 		private MenuContent cachedContent = null;
-
-//		private Polygon p = new Polygon(0.0, 0.0, 220.0, 0.0, 250.0, 35.0, 0.0, 35.0);
 
 		FXGLButton btn;
 
@@ -306,21 +329,6 @@ public class CustomMenu extends FXGLMenu {
 			btn.getStyleClass().add("btn");
 			btn.setAlignment(Pos.CENTER_LEFT);
 			btn.setPrefWidth(FXGL.getAppWidth() / 3);
-//			btn.setStyle("-fx-background-color: transparent");
-//
-//			p.setMouseTransparent(true);
-//
-//			LinearGradient g = new LinearGradient(0.0, 1.0, 1.0, 0.2, true, CycleMethod.NO_CYCLE,
-//					new Stop(0.6, Color.color(1.0, 0.8, 0.0, 0.34)), new Stop(0.85, Color.color(1.0, 0.8, 0.0, 0.74)),
-//					new Stop(1.0, Color.WHITE));
-//
-//			p.fillProperty().bind(
-//					Bindings.when(btn.pressedProperty()).then((Paint) Color.color(1.0, 0.8, 0.0, 0.75)).otherwise(g));
-//
-//			p.setStroke(Color.color(0.1, 0.1, 0.1, 0.15));
-//			p.setEffect(new GaussianBlur());
-//
-//			p.visibleProperty().bind(btn.hoverProperty());
 
 			getChildren().addAll(btn);
 		}
@@ -343,17 +351,17 @@ public class CustomMenu extends FXGLMenu {
 			});
 		}
 
-//		@SuppressWarnings("unused")
-//		private void setChild(MenuBox menu) {
-//			MenuButton back = new MenuButton("menu.back");
-//			menu.getChildren().add(0, back);
-//			back.addEventHandler(ActionEvent.ACTION, event -> {
-//				switchMenuTo(this.parent);
-//			});
-//			btn.addEventHandler(ActionEvent.ACTION, event -> {
-//				switchMenuTo(menu);
-//			});
-//		}
+		@SuppressWarnings("unused")
+		private void setChild(MenuBox menu) {
+			MenuButton back = new MenuButton("menu.back");
+			menu.getChildren().add(0, back);
+			back.addEventHandler(ActionEvent.ACTION, event -> {
+				switchMenuTo(this.parent);
+			});
+			btn.addEventHandler(ActionEvent.ACTION, event -> {
+				switchMenuTo(menu);
+			});
+		}
 
 		public FXGLButton getBtn() {
 			return btn;

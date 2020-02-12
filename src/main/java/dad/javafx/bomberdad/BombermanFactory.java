@@ -17,13 +17,9 @@ import dad.javafx.bomberdad.ia.ChasePlayer;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.entity.*;
-import com.almasb.fxgl.entity.component.Component;
-import java.util.Map;
-import java.util.function.Supplier;
 import javafx.geometry.Point2D;
 //---
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -115,7 +111,7 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .type(BombermanType.UPMAXBOMBS)
                 .from(data)
-                .viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.YELLOW))
+                .viewWithBBox(texture("MoreBombsBottle.gif"))
                 .with(new CollidableComponent(true))
                 .build();
     }
@@ -125,10 +121,11 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .type(BombermanType.UPPOWER)
                 .from(data)
-                .viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.RED))
+                .viewWithBBox(texture("PowerBottle.gif"))
                 .with(new CollidableComponent(true))
                 .build();
     }
+    
     @Spawns("explosion")
     public Entity newExplosion(SpawnData data) {
         return FXGL.entityBuilder()

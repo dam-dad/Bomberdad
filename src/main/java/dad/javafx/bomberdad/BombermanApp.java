@@ -34,7 +34,7 @@ public class BombermanApp extends GameApplication {
 
 	public static final int TILE_SIZE = 30;
 
-	public static Entity player,player2;
+	public static Entity player, player2;
 	private int lvl = 0;
 	private boolean requestNewGame = false;
 	private String theme = "crab";
@@ -44,28 +44,26 @@ public class BombermanApp extends GameApplication {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
 
-		settings.setWidth(1366);
-		settings.setHeight(768);
-
+		settings.setWidth(19 * TILE_SIZE);
+		settings.setHeight(19 * TILE_SIZE);
+		settings.setManualResizeEnabled(true);
 		settings.setMenuEnabled(true);
 
-		settings.setFullScreenAllowed(true);
-		settings.setFullScreenFromStart(true);
+//		settings.setFullScreenAllowed(true);
+//		settings.setFullScreenFromStart(true);
 		settings.setSceneFactory(new SceneFactory() {
 			@Override
 			public FXGLMenu newMainMenu() {
 				return new CustomMenu(MenuType.MAIN_MENU);
 			}
+
 			@Override
 			public FXGLMenu newGameMenu() {
 				return new CustomMenu(MenuType.GAME_MENU);
 			}
 		});
 	}
-	
-	
-	
-	
+
 	@Override
 	protected void initInput() {
 		getInput().addAction(new UserAction("Move Up") {
@@ -79,14 +77,16 @@ public class BombermanApp extends GameApplication {
 		getInput().addAction(new UserAction("Move Left") {
 			@Override
 			protected void onAction() {
-				player.getComponent(PlayerComponent.class).left();;
+				player.getComponent(PlayerComponent.class).left();
+				;
 			}
 		}, KeyCode.A);
 
 		getInput().addAction(new UserAction("Move Down") {
 			@Override
 			protected void onAction() {
-				player.getComponent(PlayerComponent.class).down();;
+				player.getComponent(PlayerComponent.class).down();
+				;
 			}
 		}, KeyCode.S);
 
@@ -103,7 +103,7 @@ public class BombermanApp extends GameApplication {
 				player.getComponent(PlayerComponent.class).placeBomb();
 			}
 		}, KeyCode.SPACE);
-		
+
 		getInput().addAction(new UserAction("Move Up2") {
 			@Override
 			protected void onAction() {
@@ -139,66 +139,63 @@ public class BombermanApp extends GameApplication {
 			}
 		}, KeyCode.ENTER);
 
-
 	}
 
 	@Override
 	protected void initGame() {
 		GenerateMap.newMap(lvl);
 		getGameWorld().addEntityFactory(new BombermanFactory(theme));
-		
+
 //		getGameWorld().spawn("f");
-		Texture texture = getAssetLoader().loadTexture("bg"+theme+".gif");
-		//ScrollingBackgroundView bg = new ScrollingBackgroundView(texture, Orientation.HORIZONTAL);
-		//ScrollingBackgroundView bg = new ScrollingBackgroundView(texture);
+		Texture texture = getAssetLoader().loadTexture("bg" + theme + ".gif");
+		// ScrollingBackgroundView bg = new ScrollingBackgroundView(texture,
+		// Orientation.HORIZONTAL);
+		// ScrollingBackgroundView bg = new ScrollingBackgroundView(texture);
 
 		GameView vista = new GameView(texture, 0);
 		getGameScene().addGameView(vista);
 
 		Level level = getAssetLoader().loadLevel("map.txt", new TextLevelLoader(TILE_SIZE, TILE_SIZE, '0'));
 		getGameWorld().setLevel(level);
-		  
-		AStarGrid grid = AStarGrid.fromWorld(getGameWorld(),  19, 19, 30, 30, (type) -> {
 
-			  if(type==BombermanType.FLOOR || type==BombermanType.ENEMY) {
-				  return CellState.WALKABLE;
-			  }else {
-				
-				  return CellState.NOT_WALKABLE;
-			  }
-	        });
-	
-	        set("grid", grid);
-	        
-	 
-	        player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
-	        player.getComponent(PlayerComponent.class).setName("Player");
-			player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
-			player2.getComponent(PlayerComponent.class).setName("PLayer2");
+		AStarGrid grid = AStarGrid.fromWorld(getGameWorld(), 19, 19, 30, 30, (type) -> {
 
-	
-		
-	
+			if (type == BombermanType.FLOOR || type == BombermanType.ENEMY) {
+				return CellState.WALKABLE;
+			} else {
+				return CellState.NOT_WALKABLE;
+			}
+		});
 
+		set("grid", grid);
+
+		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
+		player.getComponent(PlayerComponent.class).setName("Player");
+		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
+		player2.getComponent(PlayerComponent.class).setName("PLayer2");
 
 	}
-	
-
 
 	@Override
 	protected void initPhysics() {
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPMAXBOMBS) {
 			@Override
 			protected void onCollision(Entity pl, Entity powerup) {
-				powerup.removeFromWorld();
-				pl.getComponent(PlayerComponent.class).increaseMaxBombs();
+				if (powerup.getPosition().equals(pl.getPosition())) {
+					powerup.removeFromWorld();
+					pl.getComponent(PlayerComponent.class).increaseMaxBombs();
+				}
 			}
+			
+			
 		});
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPPOWER) {
 			@Override
 			protected void onCollision(Entity pl, Entity powerup) {
-				powerup.removeFromWorld();
-				pl.getComponent(PlayerComponent.class).increasePower();
+				if (powerup.getPosition().equals(pl.getPosition())) {
+					powerup.removeFromWorld();
+					pl.getComponent(PlayerComponent.class).increasePower();
+				}
 			}
 		});
 	}
@@ -214,17 +211,13 @@ public class BombermanApp extends GameApplication {
 
 	@Override
 	protected void onUpdate(double tpf) {
-
 		if (requestNewGame) {
 			requestNewGame = false;
 			getGameController().startNewGame();
-		
+
 		}
-		
+
 	}
-
-
-
 
 	public void onDestroyed(Entity e) {
 		if (e.isType(BombermanType.PLAYER)) {
@@ -235,25 +228,21 @@ public class BombermanApp extends GameApplication {
 			} else {
 				playerHit.setVidas(playerHit.getVidas() - 1);
 				if (playerHit.getName().equals("Player")) {
-					
+
 					playerHit.resetMaxBombs();
 				} else {
-				
+
 					playerHit.resetMaxBombs();
 				}
 				e.getComponent(PlayerComponent.class).playFadeAnimation();
 			}
 		} else if (e.isType(BombermanType.BRICK)) {
-			
+
 			e.removeFromWorld();
-			//Cambiar el estado de la entidad BRICK a "WALKABLE" cuando desaparece
-			e.getComponent(AStarMoveComponent.class)
-			.getGrid()
-			.get(
-			e.getComponent(CellMoveComponent.class).getCellX(), 
-			e.getComponent(CellMoveComponent.class).getCellY())
-			.setState(CellState.WALKABLE);
-			
+			// Cambiar el estado de la entidad BRICK a "WALKABLE" cuando desaparece
+			e.getComponent(AStarMoveComponent.class).getGrid().get(e.getComponent(CellMoveComponent.class).getCellX(),
+					e.getComponent(CellMoveComponent.class).getCellY()).setState(CellState.WALKABLE);
+
 			Entity f = getGameWorld().spawn("f", e.getX(), e.getY());
 			f.getViewComponent().setOpacity(0);
 
@@ -268,13 +257,10 @@ public class BombermanApp extends GameApplication {
 					getGameWorld().spawn("PUPower", x, y);
 				}
 			}
-		}else if (e.isType(BombermanType.ENEMY)) {
+		} else if (e.isType(BombermanType.ENEMY)) {
 			e.removeFromWorld();
-		} 
+		}
 	}
-	
-	
-
 
 	public static void main(String[] args) {
 		launch(args);
