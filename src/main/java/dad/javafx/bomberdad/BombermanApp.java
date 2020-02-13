@@ -26,6 +26,7 @@ import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.menu.CustomMenu;
+import dad.javafx.bomberdad.online.ClienteTCP;
 import javafx.scene.input.KeyCode;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -38,6 +39,7 @@ public class BombermanApp extends GameApplication {
 	private int lvl = 0;
 	private boolean requestNewGame = false;
 	public static String theme;
+	private ClienteTCP cliente;
 
 	@Override
 	protected void initSettings(GameSettings settings) {
@@ -62,6 +64,7 @@ public class BombermanApp extends GameApplication {
 				return new CustomMenu(MenuType.GAME_MENU);
 			}
 		});
+		
 	}
 
 	@Override
@@ -69,38 +72,40 @@ public class BombermanApp extends GameApplication {
 		getInput().addAction(new UserAction("Move Up") {
 			@Override
 			protected void onAction() {
-//				playerComponent.up();
-				player.getComponent(PlayerComponent.class).up();
+//				player.getComponent(PlayerComponent.class).up();
+				cliente.writeOS("w",1);
 			}
 		}, KeyCode.W);
 
 		getInput().addAction(new UserAction("Move Left") {
 			@Override
 			protected void onAction() {
-				player.getComponent(PlayerComponent.class).left();
-				;
+//				player.getComponent(PlayerComponent.class).up();
+				cliente.writeOS("a",1);
 			}
 		}, KeyCode.A);
 
 		getInput().addAction(new UserAction("Move Down") {
 			@Override
 			protected void onAction() {
-				player.getComponent(PlayerComponent.class).down();
-				;
+//				player.getComponent(PlayerComponent.class).up();
+				cliente.writeOS("s",1);
 			}
 		}, KeyCode.S);
 
 		getInput().addAction(new UserAction("Move Right") {
 			@Override
 			protected void onAction() {
-				player.getComponent(PlayerComponent.class).right();
+//				player.getComponent(PlayerComponent.class).up();
+				cliente.writeOS("d",1);
 			}
 		}, KeyCode.D);
 
 		getInput().addAction(new UserAction("Place Bomb") {
 			@Override
 			protected void onActionBegin() {
-				player.getComponent(PlayerComponent.class).placeBomb();
+//				player.getComponent(PlayerComponent.class).placeBomb();
+				cliente.writeOS("e",1);
 			}
 		}, KeyCode.SPACE);
 
@@ -138,11 +143,11 @@ public class BombermanApp extends GameApplication {
 				player2.getComponent(PlayerComponent.class).placeBomb();
 			}
 		}, KeyCode.ENTER);
-
 	}
 
 	@Override
 	protected void initGame() {
+		cliente = new ClienteTCP();
 		GenerateMap.newMap(lvl);
 		getGameWorld().addEntityFactory(new BombermanFactory(theme));
 
@@ -186,8 +191,7 @@ public class BombermanApp extends GameApplication {
 					pl.getComponent(PlayerComponent.class).increaseMaxBombs();
 				}
 			}
-			
-			
+
 		});
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPPOWER) {
 			@Override
