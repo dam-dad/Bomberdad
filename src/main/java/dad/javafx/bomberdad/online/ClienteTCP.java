@@ -54,7 +54,6 @@ public class ClienteTCP {
 	}
 
 	public DataOutputStream getOs() {
-		
 		return os;
 	}
 
@@ -77,7 +76,6 @@ class Recibir extends Thread {
 		super.run();
 		while (continuar) {
 			try {
-				
 				String letra = is.readUTF() + "";
 				int id = Integer.parseInt(letra.charAt(1) + "");
 				switch (letra.charAt(0) + "") {
