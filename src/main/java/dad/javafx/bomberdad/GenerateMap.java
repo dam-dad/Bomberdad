@@ -27,7 +27,7 @@ public class GenerateMap {
 						if (FXGLMath.randomBoolean()) {
 							line = replace(line,i,'f');
 						} else {
-							line = replace(line,i,'b');
+							line = replace(line,i,'f');
 						}
 					}
 				}
