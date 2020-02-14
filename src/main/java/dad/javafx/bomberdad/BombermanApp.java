@@ -14,106 +14,122 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.GameView;
 import com.almasb.fxgl.app.MenuType;
-import com.almasb.fxgl.app.PauseMenu;
 import com.almasb.fxgl.app.SceneFactory;
 import com.almasb.fxgl.core.math.FXGLMath;
-import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.views.ScrollingBackgroundView;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.entity.level.text.TextLevelLoader;
-import com.almasb.fxgl.event.EventBus;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
-import com.almasb.fxgl.saving.DataFile;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
 import com.almasb.fxgl.pathfinding.CellState;
-import com.almasb.fxgl.pathfinding.astar.AStarCell;
 import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
-import dad.javafx.bomberdad.components.EnemyComponent;
 import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.menu.CustomMenu;
 import dad.javafx.bomberdad.online.ClienteTCP;
 import dad.javafx.bomberdad.online.Server;
 import javafx.geometry.Orientation;
 import javafx.scene.input.KeyCode;
+
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class BombermanApp extends GameApplication {
 
 	public static final int TILE_SIZE = 30;
 
-	public static Entity player,player2;
+	public static Entity player, player2;
 	private int lvl = 0;
 	private boolean requestNewGame = false;
+	public static String theme;
 	private ClienteTCP cliente;
-	
+	public static boolean multiplayer = false;
+	public static boolean fullScreen = false;
 
 	@Override
 	protected void initSettings(GameSettings settings) {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
 
-
-
-		settings.setWidth(TILE_SIZE * 19);
-		settings.setHeight(TILE_SIZE * 19);
-
+		settings.setWidth(19 * TILE_SIZE);
+		settings.setHeight(19 * TILE_SIZE);
+		settings.setManualResizeEnabled(true);
 		settings.setMenuEnabled(true);
 
-//		settings.setFullScreenAllowed(true);
-//		settings.setFullScreenFromStart(true);
+		settings.setFullScreenAllowed(fullScreen);
+		settings.setFullScreenFromStart(fullScreen);
 		settings.setSceneFactory(new SceneFactory() {
 			@Override
 			public FXGLMenu newMainMenu() {
 				return new CustomMenu(MenuType.MAIN_MENU);
 			}
+
 			@Override
 			public FXGLMenu newGameMenu() {
 				return new CustomMenu(MenuType.GAME_MENU);
 			}
 		});
+
 	}
-	
+
 		
-	
-	
+	}
+
 	@Override
 	protected void initInput() {
 		getInput().addAction(new UserAction("Move Up") {
 			@Override
 			protected void onAction() {
-	
-				player.getComponent(PlayerComponent.class).up();
+
+				if (multiplayer) {
+					cliente.writeOS("w",1);
+				} else {
+					player.getComponent(PlayerComponent.class).up();
+				}
+
 			}
 		}, KeyCode.W);
 
 		getInput().addAction(new UserAction("Move Left") {
 			@Override
 			protected void onAction() {
-				player.getComponent(PlayerComponent.class).left();
+				if (multiplayer) {
+					cliente.writeOS("a",1);
+				} else {
+					player.getComponent(PlayerComponent.class).left();
+				}
+
 			}
 		}, KeyCode.A);
 
 		getInput().addAction(new UserAction("Move Down") {
 			@Override
 			protected void onAction() {
-				player.getComponent(PlayerComponent.class).down();
-				
+
+				if (multiplayer) {
+					cliente.writeOS("s",1);
+				} else {
+					player.getComponent(PlayerComponent.class).down();
+				}
 			}
 		}, KeyCode.S);
 
 		getInput().addAction(new UserAction("Move Right") {
 			@Override
 			protected void onAction() {
-//				player.getComponent(PlayerComponent.class).right();
-				try {
+
+				if (multiplayer) {
+					try {
 					cliente.getOs().writeUTF("d0");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+										}
+				} else {
+				
+				player.getComponent(PlayerComponent.class).right();
+
 				}
 			}
 		}, KeyCode.D);
@@ -121,16 +137,20 @@ public class BombermanApp extends GameApplication {
 		getInput().addAction(new UserAction("Place Bomb") {
 			@Override
 			protected void onActionBegin() {
-//				player.getComponent(PlayerComponent.class).placeBomb();
-				try {
+
+				if (multiplayer) {
+					try {
 					cliente.getOs().writeUTF("e0");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				} else {
+					player.getComponent(PlayerComponent.class).placeBomb();
+				}
 			}
 		}, KeyCode.SPACE);
-		
+
 		getInput().addAction(new UserAction("Move Up2") {
 			@Override
 			protected void onAction() {
@@ -165,71 +185,67 @@ public class BombermanApp extends GameApplication {
 				player2.getComponent(PlayerComponent.class).placeBomb();
 			}
 		}, KeyCode.ENTER);
-
-
 	}
 
 	@Override
 	protected void initGame() {
-	
-		cliente= new ClienteTCP();
+
+		if (multiplayer) {
+			cliente = new ClienteTCP();
+		}
+
 		GenerateMap.newMap(lvl);
-		getGameWorld().addEntityFactory(new BombermanFactory());
-		
-//		getGameWorld().spawn("f");
-//		Texture texture = getAssetLoader().loadTexture("trump.png");
-//		ScrollingBackgroundView bg = new ScrollingBackgroundView(texture, Orientation.HORIZONTAL);
-//
-//		GameView vista = new GameView(bg, 0);
-//		getGameScene().addGameView(vista);
+		getGameWorld().addEntityFactory(new BombermanFactory(theme));
+
+
+		Texture texture = getAssetLoader().loadTexture("bg" + theme + ".gif");
+		// ScrollingBackgroundView bg = new ScrollingBackgroundView(texture,
+		// Orientation.HORIZONTAL);
+		// ScrollingBackgroundView bg = new ScrollingBackgroundView(texture);
+
+		GameView vista = new GameView(texture, 0);
+		getGameScene().addGameView(vista);
 
 		Level level = getAssetLoader().loadLevel("map.txt", new TextLevelLoader(TILE_SIZE, TILE_SIZE, '0'));
 		getGameWorld().setLevel(level);
-		  
-		AStarGrid grid = AStarGrid.fromWorld(getGameWorld(),  19, 19, 30, 30, (type) -> {
 
-			  if(type==BombermanType.FLOOR || type==BombermanType.ENEMY) {
-				  return CellState.WALKABLE;
-			  }else {
-				
-				  return CellState.NOT_WALKABLE;
-			  }
-	        });
-	
-	        set("grid", grid);
-	        
-	 
-	        player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
-	        player.getComponent(PlayerComponent.class).setName("Player");
-			player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
-			player2.getComponent(PlayerComponent.class).setName("PLayer2");
-			
-	
+		AStarGrid grid = AStarGrid.fromWorld(getGameWorld(), 19, 19, 30, 30, (type) -> {
 
+			if (type == BombermanType.FLOOR || type == BombermanType.ENEMY) {
+				return CellState.WALKABLE;
+			} else {
+				return CellState.NOT_WALKABLE;
+			}
+		});
 
-	
-		
-	
+		set("grid", grid);
 
+		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
+		player.getComponent(PlayerComponent.class).setName("Player");
+		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
+		player2.getComponent(PlayerComponent.class).setName("PLayer2");
 
 	}
-	
-
 
 	@Override
 	protected void initPhysics() {
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPMAXBOMBS) {
 			@Override
 			protected void onCollision(Entity pl, Entity powerup) {
-				powerup.removeFromWorld();
-				pl.getComponent(PlayerComponent.class).increaseMaxBombs();
+				if (powerup.getPosition().equals(pl.getPosition())) {
+					powerup.removeFromWorld();
+					pl.getComponent(PlayerComponent.class).increaseMaxBombs();
+				}
 			}
+
 		});
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPPOWER) {
 			@Override
 			protected void onCollision(Entity pl, Entity powerup) {
-				powerup.removeFromWorld();
-				pl.getComponent(PlayerComponent.class).increasePower();
+				if (powerup.getPosition().equals(pl.getPosition())) {
+					powerup.removeFromWorld();
+					pl.getComponent(PlayerComponent.class).increasePower();
+				}
 			}
 		});
 	}
@@ -249,12 +265,12 @@ public class BombermanApp extends GameApplication {
 
 	@Override
 	protected void onUpdate(double tpf) {
-	//System.out.println(ClienteTCP.colocada);
+
 		if (requestNewGame) {
 			requestNewGame = false;
 			getGameController().startNewGame();
-		
 		}
+
 		if(ClienteTCP.bombaPuesta && ClienteTCP.colocada==1) {
 			placeBomb(player.getComponent(PlayerComponent.class));
 			ClienteTCP.colocada=0;
@@ -271,10 +287,8 @@ public class BombermanApp extends GameApplication {
 //			//e.printStackTrace();
 //		}
 		
+
 	}
-
-
-
 
 	public void onDestroyed(Entity e) {
 		if (e.isType(BombermanType.PLAYER)) {
@@ -285,25 +299,21 @@ public class BombermanApp extends GameApplication {
 			} else {
 				playerHit.setVidas(playerHit.getVidas() - 1);
 				if (playerHit.getName().equals("Player")) {
-					
+
 					playerHit.resetMaxBombs();
 				} else {
-				
+
 					playerHit.resetMaxBombs();
 				}
 				e.getComponent(PlayerComponent.class).playFadeAnimation();
 			}
 		} else if (e.isType(BombermanType.BRICK)) {
-			
+
 			e.removeFromWorld();
-			//Cambiar el estado de la entidad BRICK a "WALKABLE" cuando desaparece
-			e.getComponent(AStarMoveComponent.class)
-			.getGrid()
-			.get(
-			e.getComponent(CellMoveComponent.class).getCellX(), 
-			e.getComponent(CellMoveComponent.class).getCellY())
-			.setState(CellState.WALKABLE);
-			
+			// Cambiar el estado de la entidad BRICK a "WALKABLE" cuando desaparece
+			e.getComponent(AStarMoveComponent.class).getGrid().get(e.getComponent(CellMoveComponent.class).getCellX(),
+					e.getComponent(CellMoveComponent.class).getCellY()).setState(CellState.WALKABLE);
+
 			Entity f = getGameWorld().spawn("f", e.getX(), e.getY());
 			f.getViewComponent().setOpacity(0);
 
@@ -318,17 +328,13 @@ public class BombermanApp extends GameApplication {
 					getGameWorld().spawn("PUPower", x, y);
 				}
 			}
-		}else if (e.isType(BombermanType.ENEMY)) {
+		} else if (e.isType(BombermanType.ENEMY)) {
 			e.removeFromWorld();
-		} 
+		}
 	}
-	
-	
 
-	public void placeBomb(PlayerComponent player) {
-		player.placeBomb();
-	}
 	public static void main(String[] args) {
 		launch(args);
 	}
+
 }

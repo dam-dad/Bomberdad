@@ -9,6 +9,7 @@ import com.almasb.fxgl.core.util.Supplier;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.ui.FXGLButton;
 
+import dad.javafx.bomberdad.BombermanApp;
 import dad.javafx.bomberdad.menu.components.BackgroundController;
 import dad.javafx.bomberdad.menu.components.ControlsController;
 import dad.javafx.bomberdad.menu.components.TitleController;
@@ -17,12 +18,14 @@ import javafx.animation.Interpolator;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.binding.StringBinding;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.HBox;
@@ -34,20 +37,21 @@ import javafx.util.Duration;
 
 public class CustomMenu extends FXGLMenu {
 
+	private BackgroundController bg;
 	private TitleController titleC;
 	private MediaPlayer mediaPlayerMusic;
 	private MenuBox menu = null;
 	private TranslateTransition transicionTrans;
 	private ScaleTransition transicionScale;
-	private FadeTransition transicionFade;
-	private String title;
+	private FadeTransition transicionFade, transicionFadeBG;
 	boolean hidden = true;
 	boolean showControls = true;
+	private SimpleStringProperty theme = new SimpleStringProperty();
 
 	public CustomMenu(MenuType type) {
 		super(type);
 		Media mediaMusic = new Media(
-				new File(BackgroundController.class.getClassLoader().getResource("./media/musicMenu.mp3").getFile())
+				new File(BackgroundController.class.getClassLoader().getResource("./media/musicedit.mp3").getFile())
 						.toURI().toString());
 		mediaPlayerMusic = new MediaPlayer(mediaMusic);
 		if (type == MenuType.MAIN_MENU) {
@@ -79,33 +83,41 @@ public class CustomMenu extends FXGLMenu {
 		transicionTrans.playFromStart();
 		transicionScale.playFromStart();
 		transicionFade.playFromStart();
+		theme.set("CRAB");
 		FXGL.getEngineTimer().runOnceAfter(() -> {
-			titleC.setText1(null);
-			titleC.setText2(null);
-			titleC.setTextMiddle(null);
-			titleC.setTextLess(null);
+			bg.setImage(new Image("./imgs/" + theme.get() + ".gif"));
+			transicionFadeBG.playFromStart();
+			titleC.setTextLess(theme.get());
+		}, Duration.seconds(7));
+
+		theme.addListener((o, ov, nv) -> {
+			titleC.animation(2);
 			FXGL.getEngineTimer().runOnceAfter(() -> {
-				titleC.setStackPane(null);
-				titleC.setText1(title.substring(0, 6));
-				titleC.setTextLess(title.substring(6, 9));
-			}, Duration.seconds(0.75));
-		}, Duration.seconds(6));
+				bg.setImage(new Image("./imgs/" + nv + ".gif"));
+				transicionFadeBG.playFromStart();
+				titleC.setTextLess(theme.get());
+			}, Duration.seconds(4));
+		});
 	}
 
 	@Override
 	protected Node createBackground(double width, double height) {
-		BackgroundController bg = new BackgroundController();
+		bg = new BackgroundController();
 		bg.setS(FXGL.getAppWidth(), FXGL.getAppHeight());
+
+		transicionFadeBG = new FadeTransition();
+		transicionFadeBG.setFromValue(0.0);
+		transicionFadeBG.setToValue(1.0);
+		transicionFadeBG.setRate(1.0);
+		transicionFadeBG.setNode(bg);
+		transicionFadeBG.setInterpolator(Interpolator.LINEAR);
+
 		return bg;
 	}
 
 	@Override
 	protected Node createTitleView(String title) {
 		titleC = new TitleController();
-		this.title = title;
-		titleC.setText1("B");
-		titleC.setText2("o");
-		titleC.setTextMiddle("mber");
 		titleC.setTextLess("MAN");
 		titleC.setW(FXGL.getAppWidth());
 		titleC.setTranslateY(FXGL.getAppHeight() / 2 - 100);
@@ -150,24 +162,45 @@ public class CustomMenu extends FXGLMenu {
 		MenuBox box = new MenuBox();
 
 		MenuButton itemNewGame = new MenuButton("Nueva Partida");
-		itemNewGame.setOnAction(e -> {
-			mediaPlayerMusic.stop();
-			fireNewGame();
-		});
+		itemNewGame.setOnAction(e -> switchMenuTo(createMenuNewGame()));
 		itemNewGame.getStyleClass().add("btn");
 		box.getChildren().add(itemNewGame);
-		MenuButton itemOptions = new MenuButton("Controles");
+		
+		MenuButton itemOptions = new MenuButton("Opciones");
+		itemOptions.setOnAction(e -> switchMenuTo(createOptionsMenu()));
+		itemOptions.getStyleClass().add("btn");
+		box.getChildren().add(itemOptions);
+		
+		MenuButton itemThemes = new MenuButton("Temas");
+		itemThemes.setOnAction(e -> switchMenuTo(createMenuThemes()));
+		itemThemes.getStyleClass().add("btn");
+		box.getChildren().add(itemThemes);
 
+		MenuButton itemExit = new MenuButton("Salir");
+		itemExit.setOnAction(e -> exit());
+		itemExit.getStyleClass().add("btn");
+		box.getChildren().add(itemExit);
+
+		return box;
+	}
+	
+	private MenuBox createOptionsMenu() {
+		MenuBox box = new MenuBox();
+		MenuButton itemBack = new MenuButton("Volver");
+		itemBack.setOnAction(e -> switchMenuTo(createMenuBodyMainMenu()));
+		box.getChildren().add(itemBack);
+
+		MenuButton itemControls = new MenuButton("Controles");
 		Supplier<MenuContent> s = new Supplier<FXGLMenu.MenuContent>() {
 			@Override
 			public MenuContent get() {
 				return createContentControl(false);
 			}
 		};
-		itemOptions.setMenuContent(s);
-		itemOptions.getStyleClass().add("btn");
-		box.getChildren().add(itemOptions);
-		itemOptions.setOnAction(e -> {
+		itemControls.setMenuContent(s);
+		itemControls.getStyleClass().add("btn");
+		box.getChildren().add(itemControls);
+		itemControls.setOnAction(e -> {
 			if (showControls) {
 				showControls = false;
 				switchMenuContentTo(createContentControl(false));
@@ -177,10 +210,42 @@ public class CustomMenu extends FXGLMenu {
 			}
 		});
 
-		MenuButton itemExit = new MenuButton("Salir");
-		itemExit.setOnAction(e -> exit());
-		itemExit.getStyleClass().add("btn");
-		box.getChildren().add(itemExit);
+		MenuButton itemFullScreen = new MenuButton("Pantalla Completa");
+		itemFullScreen.setOnAction(e -> {
+			if (BombermanApp.fullScreen) {
+				BombermanApp.fullScreen = false;
+			} else {
+				BombermanApp.fullScreen = true;
+			}
+		});
+		box.getChildren().add(itemFullScreen);
+
+		return box;
+	}
+
+	private MenuBox createMenuNewGame() {
+		MenuBox box = new MenuBox();
+		MenuButton itemBack = new MenuButton("Volver");
+		itemBack.setOnAction(e -> switchMenuTo(createMenuBodyMainMenu()));
+		box.getChildren().add(itemBack);
+
+		MenuButton itemMultiPlayer = new MenuButton("Online (2 a 4 jugadores)");
+		itemMultiPlayer.setOnAction(e -> {
+			mediaPlayerMusic.stop();
+			BombermanApp.theme = theme.get();
+			BombermanApp.multiplayer = true;
+			fireNewGame();
+		});
+		box.getChildren().add(itemMultiPlayer);
+
+		MenuButton itemSinglePlayer = new MenuButton("Offline (1vs1)");
+		itemSinglePlayer.setOnAction(e -> {
+			mediaPlayerMusic.stop();
+			BombermanApp.theme = theme.get();
+			BombermanApp.multiplayer = false;
+			fireNewGame();
+		});
+		box.getChildren().add(itemSinglePlayer);
 
 		return box;
 	}
@@ -233,6 +298,23 @@ public class CustomMenu extends FXGLMenu {
 		return box;
 	}
 
+	private MenuBox createMenuThemes() {
+		MenuBox box = new MenuBox();
+		MenuButton itemBack = new MenuButton("Volver");
+		itemBack.setOnAction(e -> switchMenuTo(createMenuBodyMainMenu()));
+		box.getChildren().add(itemBack);
+
+		MenuButton itemLava = new MenuButton("Fire");
+		itemLava.setOnAction(e -> theme.set("FIRE"));
+		box.getChildren().add(itemLava);
+
+		MenuButton itemCrab = new MenuButton("Crab");
+		itemCrab.setOnAction(e -> theme.set("CRAB"));
+		box.getChildren().add(itemCrab);
+
+		return box;
+	}
+
 	private void goToMenu() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Confirmacion");
@@ -271,7 +353,7 @@ public class CustomMenu extends FXGLMenu {
 		double layoutHeight;
 
 		public MenuBox() {
-			this.setPrefWidth(FXGL.getAppWidth() / 3);
+			this.setPrefWidth(FXGL.getAppWidth() / 2);
 			this.setOpacity(0.0);
 			this.setAlignment(Pos.CENTER_LEFT);
 			transicionFade = new FadeTransition();
@@ -301,39 +383,21 @@ public class CustomMenu extends FXGLMenu {
 
 	public class MenuButton extends Pane {
 
-		@SuppressWarnings("unused")
 		private MenuBox parent = null;
 		private MenuContent cachedContent = null;
-
-//		private Polygon p = new Polygon(0.0, 0.0, 220.0, 0.0, 250.0, 35.0, 0.0, 35.0);
 
 		FXGLButton btn;
 
 		String stringKey;
 
 		public MenuButton(String stringKey) {
-			this.setPrefWidth(FXGL.getAppWidth() / 3);
+			this.setPrefWidth(FXGL.getAppWidth() / 2);
 			btn = new FXGLButton();
 			btn.setText(stringKey);
 			btn.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
 			btn.getStyleClass().add("btn");
 			btn.setAlignment(Pos.CENTER_LEFT);
-			btn.setPrefWidth(FXGL.getAppWidth() / 3);
-//			btn.setStyle("-fx-background-color: transparent");
-//
-//			p.setMouseTransparent(true);
-//
-//			LinearGradient g = new LinearGradient(0.0, 1.0, 1.0, 0.2, true, CycleMethod.NO_CYCLE,
-//					new Stop(0.6, Color.color(1.0, 0.8, 0.0, 0.34)), new Stop(0.85, Color.color(1.0, 0.8, 0.0, 0.74)),
-//					new Stop(1.0, Color.WHITE));
-//
-//			p.fillProperty().bind(
-//					Bindings.when(btn.pressedProperty()).then((Paint) Color.color(1.0, 0.8, 0.0, 0.75)).otherwise(g));
-//
-//			p.setStroke(Color.color(0.1, 0.1, 0.1, 0.15));
-//			p.setEffect(new GaussianBlur());
-//
-//			p.visibleProperty().bind(btn.hoverProperty());
+			btn.setPrefWidth(FXGL.getAppWidth() / 2);
 
 			getChildren().addAll(btn);
 		}
@@ -356,17 +420,17 @@ public class CustomMenu extends FXGLMenu {
 			});
 		}
 
-//		@SuppressWarnings("unused")
-//		private void setChild(MenuBox menu) {
-//			MenuButton back = new MenuButton("menu.back");
-//			menu.getChildren().add(0, back);
-//			back.addEventHandler(ActionEvent.ACTION, event -> {
-//				switchMenuTo(this.parent);
-//			});
-//			btn.addEventHandler(ActionEvent.ACTION, event -> {
-//				switchMenuTo(menu);
-//			});
-//		}
+		@SuppressWarnings("unused")
+		private void setChild(MenuBox menu) {
+			MenuButton back = new MenuButton("menu.back");
+			menu.getChildren().add(0, back);
+			back.addEventHandler(ActionEvent.ACTION, event -> {
+				switchMenuTo(this.parent);
+			});
+			btn.addEventHandler(ActionEvent.ACTION, event -> {
+				switchMenuTo(menu);
+			});
+		}
 
 		public FXGLButton getBtn() {
 			return btn;

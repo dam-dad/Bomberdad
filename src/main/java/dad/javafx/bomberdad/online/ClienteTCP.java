@@ -5,9 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-
 import com.almasb.fxgl.dsl.FXGL;
-
 import dad.javafx.bomberdad.BombermanType;
 import dad.javafx.bomberdad.components.PlayerComponent;
 
@@ -76,5 +74,4 @@ class Recibir extends Thread {
 		
 		}
 	}
-	
 }

@@ -19,27 +19,29 @@ import dad.javafx.bomberdad.ia.ChasePlayer;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.entity.*;
-import com.almasb.fxgl.entity.component.Component;
-import java.util.Map;
-import java.util.function.Supplier;
 import javafx.geometry.Point2D;
 //---
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 
 public class BombermanFactory implements EntityFactory {
-
+	
+	private String theme = "crab";
+	
+	public BombermanFactory(String theme) {
+		this.theme = theme;
+	}
+	
     @Spawns("f")
     public Entity newBackground(SpawnData data) {
         return FXGL.entityBuilder()
         		.type(BombermanType.FLOOR)
                 .from(data)
                 .opacity(0)
-                .viewWithBBox(FXGL.getAssetLoader().loadTexture("floor.png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
+               .viewWithBBox(FXGL.getAssetLoader().loadTexture("bg"+theme+".gif", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
                 .with(new CellMoveComponent(30, 30,0))
                 .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
                 .build();
@@ -50,7 +52,7 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .type(BombermanType.WALL)
                 .from(data)
-                .viewWithBBox(FXGL.getAssetLoader().loadTexture("wall.png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("rock"+theme+".png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
                 .build();
     }
 
@@ -59,7 +61,7 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .type(BombermanType.BRICK)
                 .from(data)
-                .viewWithBBox(FXGL.getAssetLoader().loadTexture("brick.png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("brick"+theme+".png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
                 .with(new CellMoveComponent(30, 30,0))
                 .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
                 .build();
@@ -83,7 +85,7 @@ public class BombermanFactory implements EntityFactory {
                 .from(data)
                 .type(BombermanType.PLAYER)
                 .bbox(new HitBox(new Point2D(2, 2), BoundingShape.box(30, 30)))
-                .viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.BLUE))
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("py"+theme+".gif", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
                 .with(new CollidableComponent(true))
                 .with(new CellMoveComponent(30, 30, 175))
                 .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
@@ -103,7 +105,7 @@ public class BombermanFactory implements EntityFactory {
        Entity bombBuilder= entityBuilder()
                 .type(BombermanType.BOMB)
                 .from(data)
-                .viewWithBBox(new Circle(BombermanApp.TILE_SIZE / 2, BombermanApp.TILE_SIZE / 2, BombermanApp.TILE_SIZE / 2, Color.BLACK))
+                .viewWithBBox(texture("bomb.png").toAnimatedTexture(14, Duration.seconds(2.0)).play())
                 .with(new CellMoveComponent(30, 30,0))
                 .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
                 .with(new BombComponent(data.get("radius")))
@@ -118,7 +120,7 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .type(BombermanType.UPMAXBOMBS)
                 .from(data)
-                .viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.YELLOW))
+                .viewWithBBox(texture("MoreBombsBottle.gif"))
                 .with(new CollidableComponent(true))
                 .build();
     }
@@ -128,10 +130,11 @@ public class BombermanFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .type(BombermanType.UPPOWER)
                 .from(data)
-                .viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.RED))
+                .viewWithBBox(texture("PowerBottle.gif"))
                 .with(new CollidableComponent(true))
                 .build();
     }
+    
     @Spawns("explosion")
     public Entity newExplosion(SpawnData data) {
         return FXGL.entityBuilder()

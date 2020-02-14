@@ -52,6 +52,7 @@ public class BombComponent extends Component {
 		entities.clear();
 		entitiesToDelete.clear();
 		floorEntities.clear();
+		
 		// Explosion vertical
  
 		FXGL.getGameWorld().getEntitiesInRange(bbox.range(0, radius)).stream()
@@ -85,7 +86,7 @@ public class BombComponent extends Component {
 
 			List<Entity> ent = new SimpleListProperty<Entity>();
 			boolean isWall = false;
-			boolean isFloor= false;
+//			boolean isFloor= false;
 			if (st.getX() < this.getEntity().getX()) {
 				for (int i = (int) (st.getX() + BombermanApp.TILE_SIZE); i < this.getEntity().getX(); i = i + BombermanApp.TILE_SIZE) {
 					ent = FXGL.getGameWorld().getEntitiesAt(new Point2D(i, st.getY()));

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 
@@ -9,14 +10,11 @@
    <children>
       <HBox fx:id="hbox" alignment="CENTER">
          <children>
-            <Label fx:id="lbFirst" styleClass="titulo" />
-            <Label fx:id="lbSec" styleClass="titulo" />
-            <StackPane fx:id="stackPane">
-               <padding>
-                  <Insets right="5.0" top="20.0" />
-               </padding>
-            </StackPane>
-            <Label fx:id="lbMiddle" styleClass="titulo" />
+            <ImageView fx:id="image" fitHeight="200.0" fitWidth="310.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/textures/TitleStatic.png" />
+               </image>
+            </ImageView>
             <Label fx:id="lbLess" styleClass="titulo" />
          </children>
       </HBox>
