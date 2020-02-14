@@ -19,7 +19,7 @@ public class ConnectionClient extends Thread {
 	Socket client;
 	DataOutputStream dataOut;
 	DataInputStream dataIn;
-	int id;
+
 	public DataOutputStream getDataOut() {
 		return dataOut;
 	}
@@ -28,21 +28,28 @@ public class ConnectionClient extends Thread {
 		this.dataOut = dataOut;
 	}
 
-
-	public ConnectionClient(Socket client,int id,BombermanApp game) throws IOException {
+	public ConnectionClient(Socket client) throws IOException {
 		this.client = client;
-		this.id=id;
+
 		dataIn = new DataInputStream(client.getInputStream());
-		dataOut= new DataOutputStream(client.getOutputStream());
+		dataOut = new DataOutputStream(client.getOutputStream());
 	}
 
 	@Override
 	public void run() {
+		String letra;
+		int id;
+		String cadena;
 		while (true) {
-			String letra;
+
 			try {
-				letra = ""+dataIn.readUTF().charAt(0);
+				cadena = dataIn.readUTF();
+				letra = cadena.charAt(0) + "";
+				id = Integer.parseInt(cadena.charAt(1) + "");
 				switch (letra) {
+				case "l":
+					procesaLista(letra, id);
+					break;
 				case "w":
 					procesaDato(letra, id);
 					break;
@@ -69,17 +76,31 @@ public class ConnectionClient extends Thread {
 
 		}
 	}
-	
-	private void procesaDato(String accion,int id) {
-		for(int i = 0; i< Server.clientes.size(); i ++) {
-			
-		try {
-			Server.clientes.get(i).getDataOut().writeUTF(accion+""+id);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
+	private void procesaDato(String accion, int id) {
+		
+		for (int i = 0; i < Server.clientes.size(); i++) {
+
+			try {
+				Server.clientes.get(i).getDataOut().writeUTF(accion + "" + id);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 		}
 		
+	}
+
+	private void procesaLista(String accion, int id) {
+		for (int i = 0; i < Server.clientes.size(); i++) {
+
+			try {
+				Server.clientes.get(i).getDataOut().writeUTF(Server.listaSize() + "");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 }

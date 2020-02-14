@@ -24,6 +24,7 @@ public ClienteTCP() {
 		is= new DataInputStream(clientSocket.getInputStream());
 		os= new DataOutputStream(clientSocket.getOutputStream());
 		System.out.println("Conectado");
+		
 		Recibir recibir= new Recibir(is);
 		recibir.start();
 		
@@ -59,6 +60,7 @@ class Recibir extends Thread {
 			try {
 				String letra= is.readUTF().charAt(0)+"";
 				System.out.println(letra);
+				
 				if(letra.equals("d")) {
 					
 					FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(0).getComponent(PlayerComponent.class).getAstar().moveToRightCell();

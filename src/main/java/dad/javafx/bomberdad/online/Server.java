@@ -21,18 +21,22 @@ public class Server {
 	public static ArrayList<ConnectionClient> clientes = new ArrayList<>();
 	public static void iniciar() throws IOException {
 		ServerSocket listener = new ServerSocket(PORT);
-		while (clientes.size()<1) {
+		while (clientes.size()<2) {
 			System.out.println("[SERVER] Esperando clientes");
 			Socket client = listener.accept();
 			System.out.println("Conectando cliente");
-			ConnectionClient clientThread = new ConnectionClient(client,id,game);
+			ConnectionClient clientThread = new ConnectionClient(client);
 			//ConnectionClientTask<Void> cliente= new ConnectionClientTask<Void>(client, id);
 			clientes.add(clientThread);
 			clientThread.start();
 			id++;
 		}
+		
 
 
+	}
+	public static int listaSize() {
+		return clientes.size();
 	}
 	public static void main(String[] args) {
 		try {
