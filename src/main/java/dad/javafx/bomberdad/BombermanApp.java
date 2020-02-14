@@ -40,6 +40,8 @@ public class BombermanApp extends GameApplication {
 	private boolean requestNewGame = false;
 	public static String theme;
 	private ClienteTCP cliente;
+	public static boolean multiplayer = false;
+	public static boolean fullScreen = false;
 
 	@Override
 	protected void initSettings(GameSettings settings) {
@@ -51,8 +53,8 @@ public class BombermanApp extends GameApplication {
 		settings.setManualResizeEnabled(true);
 		settings.setMenuEnabled(true);
 
-//		settings.setFullScreenAllowed(true);
-//		settings.setFullScreenFromStart(true);
+		settings.setFullScreenAllowed(fullScreen);
+		settings.setFullScreenFromStart(fullScreen);
 		settings.setSceneFactory(new SceneFactory() {
 			@Override
 			public FXGLMenu newMainMenu() {
@@ -72,40 +74,55 @@ public class BombermanApp extends GameApplication {
 		getInput().addAction(new UserAction("Move Up") {
 			@Override
 			protected void onAction() {
-//				player.getComponent(PlayerComponent.class).up();
-				cliente.writeOS("w",1);
+				if (multiplayer) {
+					cliente.writeOS("w",1);
+				} else {
+					player.getComponent(PlayerComponent.class).up();
+				}
 			}
 		}, KeyCode.W);
 
 		getInput().addAction(new UserAction("Move Left") {
 			@Override
 			protected void onAction() {
-//				player.getComponent(PlayerComponent.class).up();
-				cliente.writeOS("a",1);
+				if (multiplayer) {
+					cliente.writeOS("a",1);
+				} else {
+					player.getComponent(PlayerComponent.class).left();
+				}
 			}
 		}, KeyCode.A);
 
 		getInput().addAction(new UserAction("Move Down") {
 			@Override
 			protected void onAction() {
-//				player.getComponent(PlayerComponent.class).up();
-				cliente.writeOS("s",1);
+				if (multiplayer) {
+					cliente.writeOS("s",1);
+				} else {
+					player.getComponent(PlayerComponent.class).down();
+				}
 			}
 		}, KeyCode.S);
 
 		getInput().addAction(new UserAction("Move Right") {
 			@Override
 			protected void onAction() {
-//				player.getComponent(PlayerComponent.class).up();
-				cliente.writeOS("d",1);
+				if (multiplayer) {
+					cliente.writeOS("d",1);
+				} else {
+					player.getComponent(PlayerComponent.class).right();
+				}
 			}
 		}, KeyCode.D);
 
 		getInput().addAction(new UserAction("Place Bomb") {
 			@Override
 			protected void onActionBegin() {
-//				player.getComponent(PlayerComponent.class).placeBomb();
-				cliente.writeOS("e",1);
+				if (multiplayer) {
+					cliente.writeOS("e",1);
+				} else {
+					player.getComponent(PlayerComponent.class).placeBomb();
+				}
 			}
 		}, KeyCode.SPACE);
 
@@ -147,7 +164,9 @@ public class BombermanApp extends GameApplication {
 
 	@Override
 	protected void initGame() {
-		cliente = new ClienteTCP();
+		if (multiplayer) {
+			cliente = new ClienteTCP();
+		}
 		GenerateMap.newMap(lvl);
 		getGameWorld().addEntityFactory(new BombermanFactory(theme));
 
@@ -218,7 +237,6 @@ public class BombermanApp extends GameApplication {
 		if (requestNewGame) {
 			requestNewGame = false;
 			getGameController().startNewGame();
-
 		}
 	}
 

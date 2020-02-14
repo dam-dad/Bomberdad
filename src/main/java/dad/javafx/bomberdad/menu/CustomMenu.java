@@ -162,34 +162,15 @@ public class CustomMenu extends FXGLMenu {
 		MenuBox box = new MenuBox();
 
 		MenuButton itemNewGame = new MenuButton("Nueva Partida");
-		itemNewGame.setOnAction(e -> {
-			mediaPlayerMusic.stop();
-			BombermanApp.theme = theme.get().toLowerCase();
-			fireNewGame();
-		});
+		itemNewGame.setOnAction(e -> switchMenuTo(createMenuNewGame()));
 		itemNewGame.getStyleClass().add("btn");
 		box.getChildren().add(itemNewGame);
-		MenuButton itemOptions = new MenuButton("Controles");
-
-		Supplier<MenuContent> s = new Supplier<FXGLMenu.MenuContent>() {
-			@Override
-			public MenuContent get() {
-				return createContentControl(false);
-			}
-		};
-		itemOptions.setMenuContent(s);
+		
+		MenuButton itemOptions = new MenuButton("Opciones");
+		itemOptions.setOnAction(e -> switchMenuTo(createOptionsMenu()));
 		itemOptions.getStyleClass().add("btn");
 		box.getChildren().add(itemOptions);
-		itemOptions.setOnAction(e -> {
-			if (showControls) {
-				showControls = false;
-				switchMenuContentTo(createContentControl(false));
-			} else {
-				showControls = true;
-				switchMenuContentTo(createContentControl(true));
-			}
-		});
-
+		
 		MenuButton itemThemes = new MenuButton("Temas");
 		itemThemes.setOnAction(e -> switchMenuTo(createMenuThemes()));
 		itemThemes.getStyleClass().add("btn");
@@ -199,6 +180,72 @@ public class CustomMenu extends FXGLMenu {
 		itemExit.setOnAction(e -> exit());
 		itemExit.getStyleClass().add("btn");
 		box.getChildren().add(itemExit);
+
+		return box;
+	}
+	
+	private MenuBox createOptionsMenu() {
+		MenuBox box = new MenuBox();
+		MenuButton itemBack = new MenuButton("Volver");
+		itemBack.setOnAction(e -> switchMenuTo(createMenuBodyMainMenu()));
+		box.getChildren().add(itemBack);
+
+		MenuButton itemControls = new MenuButton("Controles");
+		Supplier<MenuContent> s = new Supplier<FXGLMenu.MenuContent>() {
+			@Override
+			public MenuContent get() {
+				return createContentControl(false);
+			}
+		};
+		itemControls.setMenuContent(s);
+		itemControls.getStyleClass().add("btn");
+		box.getChildren().add(itemControls);
+		itemControls.setOnAction(e -> {
+			if (showControls) {
+				showControls = false;
+				switchMenuContentTo(createContentControl(false));
+			} else {
+				showControls = true;
+				switchMenuContentTo(createContentControl(true));
+			}
+		});
+
+		MenuButton itemFullScreen = new MenuButton("Pantalla Completa");
+		itemFullScreen.setOnAction(e -> {
+			if (BombermanApp.fullScreen) {
+				BombermanApp.fullScreen = false;
+			} else {
+				BombermanApp.fullScreen = true;
+			}
+		});
+		box.getChildren().add(itemFullScreen);
+
+		return box;
+	}
+
+	private MenuBox createMenuNewGame() {
+		MenuBox box = new MenuBox();
+		MenuButton itemBack = new MenuButton("Volver");
+		itemBack.setOnAction(e -> switchMenuTo(createMenuBodyMainMenu()));
+		box.getChildren().add(itemBack);
+
+		MenuButton itemMultiPlayer = new MenuButton("Online (2 a 4 jugadores)");
+		itemMultiPlayer.setOnAction(e -> {
+			mediaPlayerMusic.stop();
+			BombermanApp.theme = theme.get();
+			BombermanApp.multiplayer = true;
+			fireNewGame();
+		});
+		box.getChildren().add(itemMultiPlayer);
+
+		MenuButton itemSinglePlayer = new MenuButton("Offline (1vs1)");
+		itemSinglePlayer.setOnAction(e -> {
+			mediaPlayerMusic.stop();
+			BombermanApp.theme = theme.get();
+			BombermanApp.multiplayer = false;
+			fireNewGame();
+		});
+		box.getChildren().add(itemSinglePlayer);
 
 		return box;
 	}
@@ -306,7 +353,7 @@ public class CustomMenu extends FXGLMenu {
 		double layoutHeight;
 
 		public MenuBox() {
-			this.setPrefWidth(FXGL.getAppWidth() / 3);
+			this.setPrefWidth(FXGL.getAppWidth() / 2);
 			this.setOpacity(0.0);
 			this.setAlignment(Pos.CENTER_LEFT);
 			transicionFade = new FadeTransition();
@@ -344,13 +391,13 @@ public class CustomMenu extends FXGLMenu {
 		String stringKey;
 
 		public MenuButton(String stringKey) {
-			this.setPrefWidth(FXGL.getAppWidth() / 3);
+			this.setPrefWidth(FXGL.getAppWidth() / 2);
 			btn = new FXGLButton();
 			btn.setText(stringKey);
 			btn.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
 			btn.getStyleClass().add("btn");
 			btn.setAlignment(Pos.CENTER_LEFT);
-			btn.setPrefWidth(FXGL.getAppWidth() / 3);
+			btn.setPrefWidth(FXGL.getAppWidth() / 2);
 
 			getChildren().addAll(btn);
 		}
