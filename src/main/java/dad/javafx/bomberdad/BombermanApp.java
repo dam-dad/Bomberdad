@@ -73,9 +73,6 @@ public class BombermanApp extends GameApplication {
 
 	}
 
-		
-	}
-
 	@Override
 	protected void initInput() {
 		getInput().addAction(new UserAction("Move Up") {
@@ -83,7 +80,12 @@ public class BombermanApp extends GameApplication {
 			protected void onAction() {
 
 				if (multiplayer) {
-					cliente.writeOS("w",1);
+					try {
+						cliente.getOs().writeUTF("w0");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				} else {
 					player.getComponent(PlayerComponent.class).up();
 				}
@@ -95,7 +97,12 @@ public class BombermanApp extends GameApplication {
 			@Override
 			protected void onAction() {
 				if (multiplayer) {
-					cliente.writeOS("a",1);
+					try {
+						cliente.getOs().writeUTF("a0");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				} else {
 					player.getComponent(PlayerComponent.class).left();
 				}
@@ -108,7 +115,12 @@ public class BombermanApp extends GameApplication {
 			protected void onAction() {
 
 				if (multiplayer) {
-					cliente.writeOS("s",1);
+					try {
+						cliente.getOs().writeUTF("s0");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				} else {
 					player.getComponent(PlayerComponent.class).down();
 				}
@@ -120,15 +132,17 @@ public class BombermanApp extends GameApplication {
 			protected void onAction() {
 
 				if (multiplayer) {
+
 					try {
-					cliente.getOs().writeUTF("d0");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-										}
+						cliente.getOs().writeUTF("d0");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 				} else {
-				
-				player.getComponent(PlayerComponent.class).right();
+
+					player.getComponent(PlayerComponent.class).right();
 
 				}
 			}
@@ -140,11 +154,11 @@ public class BombermanApp extends GameApplication {
 
 				if (multiplayer) {
 					try {
-					cliente.getOs().writeUTF("e0");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+						cliente.getOs().writeUTF("e0");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				} else {
 					player.getComponent(PlayerComponent.class).placeBomb();
 				}
@@ -196,7 +210,6 @@ public class BombermanApp extends GameApplication {
 
 		GenerateMap.newMap(lvl);
 		getGameWorld().addEntityFactory(new BombermanFactory(theme));
-
 
 		Texture texture = getAssetLoader().loadTexture("bg" + theme + ".gif");
 		// ScrollingBackgroundView bg = new ScrollingBackgroundView(texture,
@@ -259,10 +272,6 @@ public class BombermanApp extends GameApplication {
 		requestNewGame = true;
 	}
 
-
-
-
-
 	@Override
 	protected void onUpdate(double tpf) {
 
@@ -271,9 +280,9 @@ public class BombermanApp extends GameApplication {
 			getGameController().startNewGame();
 		}
 
-		if(ClienteTCP.bombaPuesta && ClienteTCP.colocada==1) {
+		if (ClienteTCP.bombaPuesta && ClienteTCP.colocada == 1) {
 			placeBomb(player.getComponent(PlayerComponent.class));
-			ClienteTCP.colocada=0;
+			ClienteTCP.colocada = 0;
 		}
 //		try {
 //			String cadena=cliente.getIs().readUTF();
@@ -286,7 +295,6 @@ public class BombermanApp extends GameApplication {
 //			System.out.println("error");
 //			//e.printStackTrace();
 //		}
-		
 
 	}
 
@@ -331,6 +339,10 @@ public class BombermanApp extends GameApplication {
 		} else if (e.isType(BombermanType.ENEMY)) {
 			e.removeFromWorld();
 		}
+	}
+
+	private void placeBomb(PlayerComponent player) {
+		player.placeBomb();
 	}
 
 	public static void main(String[] args) {
