@@ -16,6 +16,7 @@ import com.almasb.fxgl.app.GameView;
 import com.almasb.fxgl.app.MenuType;
 import com.almasb.fxgl.app.SceneFactory;
 import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.entity.level.text.TextLevelLoader;
@@ -29,8 +30,6 @@ import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.menu.CustomMenu;
 import dad.javafx.bomberdad.online.ClienteTCP;
-import dad.javafx.bomberdad.online.Server;
-import javafx.geometry.Orientation;
 import javafx.scene.input.KeyCode;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -81,7 +80,9 @@ public class BombermanApp extends GameApplication {
 
 				if (multiplayer) {
 					try {
-						cliente.getOs().writeUTF("w0");
+						if (!FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(1)
+								.getComponent(PlayerComponent.class).getAstar().isMoving())
+							cliente.getOs().writeUTF("w1");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -98,7 +99,9 @@ public class BombermanApp extends GameApplication {
 			protected void onAction() {
 				if (multiplayer) {
 					try {
-						cliente.getOs().writeUTF("a0");
+						if (!FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(1)
+								.getComponent(PlayerComponent.class).getAstar().isMoving())
+							cliente.getOs().writeUTF("a1");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -116,7 +119,9 @@ public class BombermanApp extends GameApplication {
 
 				if (multiplayer) {
 					try {
-						cliente.getOs().writeUTF("s0");
+						if (!FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(1)
+								.getComponent(PlayerComponent.class).getAstar().isMoving())
+							cliente.getOs().writeUTF("s1");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -134,7 +139,9 @@ public class BombermanApp extends GameApplication {
 				if (multiplayer) {
 
 					try {
-						cliente.getOs().writeUTF("d0");
+						if (!FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(1)
+								.getComponent(PlayerComponent.class).getAstar().isMoving())
+							cliente.getOs().writeUTF("d1");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -154,7 +161,7 @@ public class BombermanApp extends GameApplication {
 
 				if (multiplayer) {
 					try {
-						cliente.getOs().writeUTF("e0");
+						cliente.getOs().writeUTF("e1");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -168,42 +175,46 @@ public class BombermanApp extends GameApplication {
 		getInput().addAction(new UserAction("Move Up2") {
 			@Override
 			protected void onAction() {
-				player2.getComponent(PlayerComponent.class).up();
+				if (!multiplayer)
+					player2.getComponent(PlayerComponent.class).up();
 			}
 		}, KeyCode.UP);
 
 		getInput().addAction(new UserAction("Move Left2") {
 			@Override
 			protected void onAction() {
-				player2.getComponent(PlayerComponent.class).left();
+				if (!multiplayer)
+					player2.getComponent(PlayerComponent.class).left();
 			}
 		}, KeyCode.LEFT);
 
 		getInput().addAction(new UserAction("Move Down2") {
 			@Override
 			protected void onAction() {
-				player2.getComponent(PlayerComponent.class).down();
+				if (!multiplayer)
+					player2.getComponent(PlayerComponent.class).down();
 			}
 		}, KeyCode.DOWN);
 
 		getInput().addAction(new UserAction("Move Right2") {
 			@Override
 			protected void onAction() {
-				player2.getComponent(PlayerComponent.class).right();
+				if (!multiplayer)
+					player2.getComponent(PlayerComponent.class).right();
 			}
 		}, KeyCode.RIGHT);
 
 		getInput().addAction(new UserAction("Place Bomb2S") {
 			@Override
 			protected void onActionBegin() {
-				player2.getComponent(PlayerComponent.class).placeBomb();
+				if (!multiplayer)
+					player2.getComponent(PlayerComponent.class).placeBomb();
 			}
 		}, KeyCode.ENTER);
 	}
 
 	@Override
 	protected void initGame() {
-
 		if (multiplayer) {
 			cliente = new ClienteTCP();
 		}
