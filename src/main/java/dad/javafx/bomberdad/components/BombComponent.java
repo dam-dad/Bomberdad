@@ -1,18 +1,28 @@
 package dad.javafx.bomberdad.components;
 
+import static com.almasb.fxgl.dsl.FXGL.texture;
+
+
+import java.awt.TexturePaint;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.entity.component.Required;
 import com.almasb.fxgl.entity.components.BoundingBoxComponent;
+import com.almasb.fxgl.pathfinding.CellMoveComponent;
+import com.almasb.fxgl.pathfinding.CellState;
+import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
+import com.almasb.fxgl.texture.Texture;
 
 import dad.javafx.bomberdad.BombermanApp;
 import dad.javafx.bomberdad.BombermanType;
 import javafx.beans.property.SimpleListProperty;
 import javafx.geometry.Point2D;
-
+import javafx.util.Duration;
+@Required(AStarMoveComponent.class)
 public class BombComponent extends Component {
 
 	private int radius;
@@ -20,10 +30,21 @@ public class BombComponent extends Component {
 
 	ArrayList<Entity> entitiesToDelete = new ArrayList<Entity>();
 	ArrayList<Entity> floorEntities= new ArrayList<Entity>();
-
 	public BombComponent(int radius) {
 		this.radius = radius;
 	}
+
+	@Override
+	public void onAdded() {
+		
+		this.getEntity().getComponent(AStarMoveComponent.class)
+		.getGrid()
+		.get(
+				this.getEntity().getComponent(CellMoveComponent.class).getCellX(), 
+				this.getEntity().getComponent(CellMoveComponent.class).getCellY())
+		.setState(CellState.NOT_WALKABLE);
+	}
+
 
 	public void explode(int power) {
 		BoundingBoxComponent bbox = getEntity().getBoundingBoxComponent();
@@ -142,9 +163,16 @@ public class BombComponent extends Component {
 				FXGL.<BombermanApp>getAppCast().onDestroyed(st);
 			}
 		}
-
+		getEntity().getComponent(AStarMoveComponent.class)
+		.getGrid()
+		.get(
+				this.getEntity().getComponent(CellMoveComponent.class).getCellX(), 
+				this.getEntity().getComponent(CellMoveComponent.class).getCellY())
+		.setState(CellState.WALKABLE);
 		getEntity().removeFromWorld();
 		FXGL.spawn("explosion", getEntity().getPosition());
 	}
+
+	
 
 }

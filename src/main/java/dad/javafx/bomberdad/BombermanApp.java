@@ -7,6 +7,8 @@ import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
 
+import java.io.IOException;
+
 import com.almasb.fxgl.app.FXGLMenu;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
@@ -33,6 +35,8 @@ import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import dad.javafx.bomberdad.components.EnemyComponent;
 import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.menu.CustomMenu;
+import dad.javafx.bomberdad.online.ClienteTCP;
+import dad.javafx.bomberdad.online.Server;
 import javafx.geometry.Orientation;
 import javafx.scene.input.KeyCode;
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -44,6 +48,7 @@ public class BombermanApp extends GameApplication {
 	public static Entity player,player2;
 	private int lvl = 0;
 	private boolean requestNewGame = false;
+	private ClienteTCP cliente;
 	
 
 	@Override
@@ -70,6 +75,7 @@ public class BombermanApp extends GameApplication {
 				return new CustomMenu(MenuType.GAME_MENU);
 			}
 		});
+	}
 	
 		
 	
@@ -79,7 +85,7 @@ public class BombermanApp extends GameApplication {
 		getInput().addAction(new UserAction("Move Up") {
 			@Override
 			protected void onAction() {
-//				playerComponent.up();
+	
 				player.getComponent(PlayerComponent.class).up();
 			}
 		}, KeyCode.W);
@@ -87,28 +93,41 @@ public class BombermanApp extends GameApplication {
 		getInput().addAction(new UserAction("Move Left") {
 			@Override
 			protected void onAction() {
-				player.getComponent(PlayerComponent.class).left();;
+				player.getComponent(PlayerComponent.class).left();
 			}
 		}, KeyCode.A);
 
 		getInput().addAction(new UserAction("Move Down") {
 			@Override
 			protected void onAction() {
-				player.getComponent(PlayerComponent.class).down();;
+				player.getComponent(PlayerComponent.class).down();
+				
 			}
 		}, KeyCode.S);
 
 		getInput().addAction(new UserAction("Move Right") {
 			@Override
 			protected void onAction() {
-				player.getComponent(PlayerComponent.class).right();
+//				player.getComponent(PlayerComponent.class).right();
+				try {
+					cliente.getOs().writeUTF("d0");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}, KeyCode.D);
 
 		getInput().addAction(new UserAction("Place Bomb") {
 			@Override
 			protected void onActionBegin() {
-				player.getComponent(PlayerComponent.class).placeBomb();
+//				player.getComponent(PlayerComponent.class).placeBomb();
+				try {
+					cliente.getOs().writeUTF("e0");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}, KeyCode.SPACE);
 		
@@ -152,15 +171,17 @@ public class BombermanApp extends GameApplication {
 
 	@Override
 	protected void initGame() {
+	
+		cliente= new ClienteTCP();
 		GenerateMap.newMap(lvl);
 		getGameWorld().addEntityFactory(new BombermanFactory());
 		
 //		getGameWorld().spawn("f");
-		Texture texture = getAssetLoader().loadTexture("trump.png");
-		ScrollingBackgroundView bg = new ScrollingBackgroundView(texture, Orientation.HORIZONTAL);
-
-		GameView vista = new GameView(bg, 0);
-		getGameScene().addGameView(vista);
+//		Texture texture = getAssetLoader().loadTexture("trump.png");
+//		ScrollingBackgroundView bg = new ScrollingBackgroundView(texture, Orientation.HORIZONTAL);
+//
+//		GameView vista = new GameView(bg, 0);
+//		getGameScene().addGameView(vista);
 
 		Level level = getAssetLoader().loadLevel("map.txt", new TextLevelLoader(TILE_SIZE, TILE_SIZE, '0'));
 		getGameWorld().setLevel(level);
@@ -182,6 +203,9 @@ public class BombermanApp extends GameApplication {
 	        player.getComponent(PlayerComponent.class).setName("Player");
 			player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
 			player2.getComponent(PlayerComponent.class).setName("PLayer2");
+			
+	
+
 
 	
 		
@@ -219,14 +243,33 @@ public class BombermanApp extends GameApplication {
 		requestNewGame = true;
 	}
 
+
+
+
+
 	@Override
 	protected void onUpdate(double tpf) {
-
+	//System.out.println(ClienteTCP.colocada);
 		if (requestNewGame) {
 			requestNewGame = false;
 			getGameController().startNewGame();
 		
 		}
+		if(ClienteTCP.bombaPuesta && ClienteTCP.colocada==1) {
+			placeBomb(player.getComponent(PlayerComponent.class));
+			ClienteTCP.colocada=0;
+		}
+//		try {
+//			String cadena=cliente.getIs().readUTF();
+//			char movimiento = cadena.charAt(0);
+//			char id = cadena.charAt(1);
+//			FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(0).getComponent(PlayerComponent.class).getAstar().moveToRightCell();
+//			
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			System.out.println("error");
+//			//e.printStackTrace();
+//		}
 		
 	}
 
@@ -282,7 +325,9 @@ public class BombermanApp extends GameApplication {
 	
 	
 
-
+	public void placeBomb(PlayerComponent player) {
+		player.placeBomb();
+	}
 	public static void main(String[] args) {
 		launch(args);
 	}
