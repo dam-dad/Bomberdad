@@ -4,13 +4,18 @@
 
 .root {
 	-fx-font-family: 'PixelarRegularW01-Regular';
-	-fx-background-color: transparent;
+	-fx-background-color: gray;
+}
+
+.bum {
+	-fx-font-family: 'PixelarRegularW01-Regular';
+	-fx-background-color: white;
 }
 
 .titulo {
 	-fx-font-size: 90.0pt;
 	-fx-text-fill: #122857;
-	-fx-effect: dropshadow(gaussian, white, 2, 0.8, 3, 3);
+	-fx-effect: dropshadow(gaussian, white, 2.0, 0.8, 3.0, 3.0);
 	-fx-background-color: transparent;
 }
 .controls {
@@ -21,15 +26,22 @@
 
 .btn {
 	-fx-font-size: 20.0pt;
-	-fx-text-fill: red;
+	-fx-text-fill: green;
 	-fx-font-family: 'PixelarRegularW01-Regular';
-	-fx-background-color: transparent;
+	-fx-background-color: lightgreen;
 }
 
 .btn:hover {
-	-fx-background-color: rgba(255, 0, 0, 0.1);
+	-fx-background-color: rgba(2.0, 72.0, 247.0, 0.53);
+	-fx-effect: dropshadow(gaussian, black, 2.0, 0.8, 3.0, 3.0);
+	-fx-translate-x: 10px;
 }
 
 .lbless {
-	-fx-text-fill: red;
+	-fx-text-fill: green;
+}
+
+.finalText {
+	-fx-font-family: 'PixelarRegularW01-Regular';
+	-fx-effect: dropshadow(gaussian, white, 2.0, 0.8, 3.0, 3.0);
 }
