@@ -11,13 +11,8 @@ import dad.javafx.bomberdad.BombermanApp;
 public class Server {
 	private static final int PORT = 5555;
 	private static int id=0;
-	private static BombermanApp game;
 
-	public void setGame(BombermanApp game) {
-		this.game = game;
-	}
 
-	//public static ArrayList<ConnectionClient> clientes = new ArrayList<>();
 	public static ArrayList<ConnectionClient> clientes = new ArrayList<>();
 	public static void iniciar() throws IOException {
 		ServerSocket listener = new ServerSocket(PORT);
@@ -26,7 +21,6 @@ public class Server {
 			Socket client = listener.accept();
 			System.out.println("Conectando cliente");
 			ConnectionClient clientThread = new ConnectionClient(client);
-			//ConnectionClientTask<Void> cliente= new ConnectionClientTask<Void>(client, id);
 			clientes.add(clientThread);
 			clientThread.start();
 			id++;

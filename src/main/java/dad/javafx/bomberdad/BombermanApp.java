@@ -8,6 +8,9 @@ import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.almasb.fxgl.app.FXGLMenu;
 import com.almasb.fxgl.app.GameApplication;
@@ -16,6 +19,7 @@ import com.almasb.fxgl.app.GameView;
 import com.almasb.fxgl.app.MenuType;
 import com.almasb.fxgl.app.SceneFactory;
 import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.entity.level.text.TextLevelLoader;
@@ -46,6 +50,7 @@ public class BombermanApp extends GameApplication {
 	private ClienteTCP cliente;
 	public static boolean multiplayer = false;
 	public static boolean fullScreen = false;
+	public int tam=0;
 
 	@Override
 	protected void initSettings(GameSettings settings) {
@@ -77,11 +82,11 @@ public class BombermanApp extends GameApplication {
 	protected void initInput() {
 		getInput().addAction(new UserAction("Move Up") {
 			@Override
-			protected void onAction() {
+			protected void onActionBegin() {
 
 				if (multiplayer) {
 					try {
-						cliente.getOs().writeUTF("w0");
+						cliente.getOs().writeUTF("w1");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -95,10 +100,10 @@ public class BombermanApp extends GameApplication {
 
 		getInput().addAction(new UserAction("Move Left") {
 			@Override
-			protected void onAction() {
+			protected void onActionBegin() {
 				if (multiplayer) {
 					try {
-						cliente.getOs().writeUTF("a0");
+						cliente.getOs().writeUTF("a1");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -112,11 +117,11 @@ public class BombermanApp extends GameApplication {
 
 		getInput().addAction(new UserAction("Move Down") {
 			@Override
-			protected void onAction() {
+			protected void onActionBegin() {
 
 				if (multiplayer) {
 					try {
-						cliente.getOs().writeUTF("s0");
+						cliente.getOs().writeUTF("s1");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -129,12 +134,12 @@ public class BombermanApp extends GameApplication {
 
 		getInput().addAction(new UserAction("Move Right") {
 			@Override
-			protected void onAction() {
+			protected void onActionBegin() {
 
 				if (multiplayer) {
 
 					try {
-						cliente.getOs().writeUTF("d0");
+						cliente.getOs().writeUTF("d1");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -154,7 +159,7 @@ public class BombermanApp extends GameApplication {
 
 				if (multiplayer) {
 					try {
-						cliente.getOs().writeUTF("e0");
+						cliente.getOs().writeUTF("e1");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -204,9 +209,7 @@ public class BombermanApp extends GameApplication {
 	@Override
 	protected void initGame() {
 
-		if (multiplayer) {
-			cliente = new ClienteTCP();
-		}
+	
 
 		GenerateMap.newMap(lvl);
 		getGameWorld().addEntityFactory(new BombermanFactory(theme));
@@ -237,7 +240,9 @@ public class BombermanApp extends GameApplication {
 		player.getComponent(PlayerComponent.class).setName("Player");
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
 		player2.getComponent(PlayerComponent.class).setName("PLayer2");
-
+		if (multiplayer) {
+			cliente = new ClienteTCP();
+		}
 	}
 
 	@Override
@@ -279,11 +284,55 @@ public class BombermanApp extends GameApplication {
 			requestNewGame = false;
 			getGameController().startNewGame();
 		}
+		if(ClienteTCP.listaMovimientos.size()>0) {
+			tam++;
+			DateFormat dateFormat= new SimpleDateFormat("HH:mm:ss");
+			Date date= new Date();
+			String primeraPos=ClienteTCP.listaMovimientos.get(0);
+			System.out.println("Tamaño lista: "+ClienteTCP.listaMovimientos.size() + "****tam "+ tam +primeraPos.charAt(0) + "");
 
-		if (ClienteTCP.bombaPuesta && ClienteTCP.colocada == 1) {
-			placeBomb(player.getComponent(PlayerComponent.class));
-			ClienteTCP.colocada = 0;
+			int id = Integer.parseInt(primeraPos.charAt(1)+"");
+			
+			switch (primeraPos.charAt(0) + "") {
+			case "w":
+				
+				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id)
+						.getComponent(PlayerComponent.class).getAstar().moveToUpCell();
+				
+				break;
+			case "a":
+				
+						FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id)
+								.getComponent(PlayerComponent.class).getAstar().moveToLeftCell();
+						
+				break;
+			case "s":
+				
+						FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id)
+								.getComponent(PlayerComponent.class).getAstar().moveToDownCell();
+						
+				break;
+			case "d":
+				
+						FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id)
+								.getComponent(PlayerComponent.class).getAstar().moveToRightCell();
+						
+				break;
+			case "e":
+				ClienteTCP.bombaPuesta = true;
+				ClienteTCP.colocada = 1;
+				break;
+			default:
+				break;
+			}
+			ClienteTCP.listaMovimientos.remove(0);
 		}
+
+//		if (ClienteTCP.bombaPuesta && ClienteTCP.colocada == 1) {
+//			placeBomb(player.getComponent(PlayerComponent.class));
+//			ClienteTCP.colocada = 0;
+//		}
+//		System.out.println(tpf);
 //		try {
 //			String cadena=cliente.getIs().readUTF();
 //			char movimiento = cadena.charAt(0);
