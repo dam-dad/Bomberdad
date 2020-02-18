@@ -8,6 +8,11 @@ import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 
 import com.almasb.fxgl.app.FXGLMenu;
 import com.almasb.fxgl.app.GameApplication;
@@ -16,6 +21,7 @@ import com.almasb.fxgl.app.GameView;
 import com.almasb.fxgl.app.MenuType;
 import com.almasb.fxgl.app.SceneFactory;
 import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.entity.level.text.TextLevelLoader;
@@ -46,6 +52,8 @@ public class BombermanApp extends GameApplication {
 	private ClienteTCP cliente;
 	public static boolean multiplayer = false;
 	public static boolean fullScreen = false;
+	private Puntuaciones ratings = new Puntuaciones();
+	int i = 0;
 
 	@Override
 	protected void initSettings(GameSettings settings) {
@@ -77,11 +85,14 @@ public class BombermanApp extends GameApplication {
 	protected void initInput() {
 		getInput().addAction(new UserAction("Move Up") {
 			@Override
-			protected void onAction() {
+			protected void onActionBegin() {
 
 				if (multiplayer) {
 					try {
-						cliente.getOs().writeUTF("w0");
+						if (!FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(0)
+								.getComponent(PlayerComponent.class).getAstar().isMoving()) {
+							cliente.getOs().writeUTF("w0");
+						}
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -95,10 +106,13 @@ public class BombermanApp extends GameApplication {
 
 		getInput().addAction(new UserAction("Move Left") {
 			@Override
-			protected void onAction() {
+			protected void onActionBegin() {
 				if (multiplayer) {
 					try {
-						cliente.getOs().writeUTF("a0");
+						if (!FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(0)
+								.getComponent(PlayerComponent.class).getAstar().isMoving()) {
+							cliente.getOs().writeUTF("a0");
+						}
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -112,11 +126,14 @@ public class BombermanApp extends GameApplication {
 
 		getInput().addAction(new UserAction("Move Down") {
 			@Override
-			protected void onAction() {
+			protected void onActionBegin() {
 
 				if (multiplayer) {
 					try {
-						cliente.getOs().writeUTF("s0");
+						if (!FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(0)
+								.getComponent(PlayerComponent.class).getAstar().isMoving()) {
+							cliente.getOs().writeUTF("s0");
+						}
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -129,12 +146,15 @@ public class BombermanApp extends GameApplication {
 
 		getInput().addAction(new UserAction("Move Right") {
 			@Override
-			protected void onAction() {
+			protected void onActionBegin() {
 
 				if (multiplayer) {
 
 					try {
-						cliente.getOs().writeUTF("d0");
+						if (!FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(0)
+								.getComponent(PlayerComponent.class).getAstar().isMoving()) {
+							cliente.getOs().writeUTF("d0");
+						}
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -168,45 +188,51 @@ public class BombermanApp extends GameApplication {
 		getInput().addAction(new UserAction("Move Up2") {
 			@Override
 			protected void onAction() {
-				player2.getComponent(PlayerComponent.class).up();
+				if (!multiplayer) {
+					player2.getComponent(PlayerComponent.class).up();
+				}
 			}
 		}, KeyCode.UP);
 
 		getInput().addAction(new UserAction("Move Left2") {
 			@Override
 			protected void onAction() {
-				player2.getComponent(PlayerComponent.class).left();
+				if (!multiplayer) {
+					player2.getComponent(PlayerComponent.class).left();
+				}
 			}
 		}, KeyCode.LEFT);
 
 		getInput().addAction(new UserAction("Move Down2") {
 			@Override
 			protected void onAction() {
-				player2.getComponent(PlayerComponent.class).down();
+				if (!multiplayer) {
+					player2.getComponent(PlayerComponent.class).down();
+				}
 			}
 		}, KeyCode.DOWN);
 
 		getInput().addAction(new UserAction("Move Right2") {
 			@Override
 			protected void onAction() {
-				player2.getComponent(PlayerComponent.class).right();
+				if (!multiplayer) {
+					player2.getComponent(PlayerComponent.class).right();
+				}
 			}
 		}, KeyCode.RIGHT);
 
 		getInput().addAction(new UserAction("Place Bomb2S") {
 			@Override
 			protected void onActionBegin() {
-				player2.getComponent(PlayerComponent.class).placeBomb();
+				if (!multiplayer) {
+					player2.getComponent(PlayerComponent.class).placeBomb();
+				}
 			}
 		}, KeyCode.ENTER);
 	}
 
 	@Override
 	protected void initGame() {
-
-		if (multiplayer) {
-			cliente = new ClienteTCP();
-		}
 
 		GenerateMap.newMap(lvl);
 		getGameWorld().addEntityFactory(new BombermanFactory(theme));
@@ -236,8 +262,13 @@ public class BombermanApp extends GameApplication {
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
 		player.getComponent(PlayerComponent.class).setName("Player");
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
-		player2.getComponent(PlayerComponent.class).setName("PLayer2");
-
+		player2.getComponent(PlayerComponent.class).setName("Player2");
+		ratings.getPoints().get(0).set(0, player.getComponent(PlayerComponent.class).getName());
+		ratings.getPoints().get(1).set(0, player2.getComponent(PlayerComponent.class).getName());
+		
+		if (multiplayer) {
+			cliente = new ClienteTCP();
+		}
 	}
 
 	@Override
@@ -280,10 +311,45 @@ public class BombermanApp extends GameApplication {
 			getGameController().startNewGame();
 		}
 
-		if (ClienteTCP.bombaPuesta && ClienteTCP.colocada == 1) {
-			placeBomb(player.getComponent(PlayerComponent.class));
-			ClienteTCP.colocada = 0;
+//		if (ClienteTCP.bombaPuesta && ClienteTCP.colocada == 1) {
+//			placeBomb(player.getComponent(PlayerComponent.class));
+//			ClienteTCP.colocada = 0;
+//		}
+		if (ClienteTCP.listaMovimientos.size() > 0) {
+			String cadena = ClienteTCP.listaMovimientos.get(0);
+			String letra = cadena.charAt(0)+"";
+			int id = Integer.parseInt(cadena.charAt(1)+"");
+			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+			Date date = new Date();
+			i++;
+			System.out.println(letra +"    "+ i);
+			switch (letra) {
+			case "w":
+				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id)
+						.getComponent(PlayerComponent.class).getAstar().moveToUpCell();
+				break;
+			case "a":
+				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id)
+						.getComponent(PlayerComponent.class).getAstar().moveToLeftCell();
+				break;
+			case "s":
+				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id)
+						.getComponent(PlayerComponent.class).getAstar().moveToDownCell();
+				break;
+			case "d":
+				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id)
+						.getComponent(PlayerComponent.class).getAstar().moveToRightCell();
+				break;
+			case "e":
+				ClienteTCP.bombaPuesta = true;
+				ClienteTCP.colocada = 1;
+				break;
+			default:
+				break;
+			}
+			ClienteTCP.listaMovimientos.remove(0);
 		}
+		
 //		try {
 //			String cadena=cliente.getIs().readUTF();
 //			char movimiento = cadena.charAt(0);
@@ -298,8 +364,20 @@ public class BombermanApp extends GameApplication {
 
 	}
 
-	public void onDestroyed(Entity e) {
+	public void onDestroyed(Entity e, PlayerComponent owned) {
 		if (e.isType(BombermanType.PLAYER)) {
+			if (owned != null && !owned.equals(e.getComponent(PlayerComponent.class))) {
+				int pl = 0;
+				if (owned.getName().equals("Player")) {
+					pl = 0;
+				} else if(owned.getName().equals("Player2")) {
+					pl = 1;
+				}
+				int pOld = Integer.parseInt(ratings.getPoints().get(pl).get(1));
+				int pNew = pOld + 100;
+				ratings.getPoints().get(pl).set(1, ""+pNew);
+				System.out.println(ratings.getPoints().get(pl).get(0)+" points: "+ratings.getPoints().get(pl).get(1));
+			}
 			PlayerComponent playerHit = e.getComponent(PlayerComponent.class);
 			if (playerHit.getVidas() == 0) {
 				e.removeFromWorld();
@@ -316,7 +394,18 @@ public class BombermanApp extends GameApplication {
 				e.getComponent(PlayerComponent.class).playFadeAnimation();
 			}
 		} else if (e.isType(BombermanType.BRICK)) {
-
+			if (owned != null) {
+				int pl = 0;
+				if (owned.getName().equals("Player")) {
+					pl = 0;
+				} else if(owned.getName().equals("Player2")) {
+					pl = 1;
+				}
+				int pOld = Integer.parseInt(ratings.getPoints().get(pl).get(1));
+				int pNew = pOld + 5;
+				ratings.getPoints().get(pl).set(1, ""+pNew);
+				System.out.println(ratings.getPoints().get(pl).get(0)+" points: "+ratings.getPoints().get(pl).get(1));
+			}
 			e.removeFromWorld();
 			// Cambiar el estado de la entidad BRICK a "WALKABLE" cuando desaparece
 			e.getComponent(AStarMoveComponent.class).getGrid().get(e.getComponent(CellMoveComponent.class).getCellX(),

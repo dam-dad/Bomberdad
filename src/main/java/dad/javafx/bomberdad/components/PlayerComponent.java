@@ -89,7 +89,7 @@ public class PlayerComponent extends Component {
 			
 			FXGL.getGameTimer().runOnceAfter(() -> {
 				
-				bomb.getComponent(BombComponent.class).explode(power);
+				bomb.getComponent(BombComponent.class).explode(power, this);
 				bombsPlaced--;
 			}, Duration.seconds(2));
 	
