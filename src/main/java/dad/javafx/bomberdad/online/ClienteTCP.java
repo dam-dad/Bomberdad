@@ -29,7 +29,7 @@ public class ClienteTCP {
 	public ClienteTCP() {
 		try {
 			clientSocket = new Socket();
-			InetSocketAddress addr = new InetSocketAddress("10.1.2.127", 5555);
+			InetSocketAddress addr = new InetSocketAddress("127.0.0.1", 5555);
 			clientSocket.connect(addr);
 			is = new DataInputStream(clientSocket.getInputStream());
 			os = new DataOutputStream(clientSocket.getOutputStream());

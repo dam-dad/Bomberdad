@@ -78,6 +78,8 @@ public class BombermanApp extends GameApplication {
 
 	@Override
 	protected void initInput() {
+		final int id = 1;
+		
 		getInput().addAction(new UserAction("Move Up") {
 			@Override
 			protected void onActionBegin() {
@@ -85,9 +87,7 @@ public class BombermanApp extends GameApplication {
 				if (multiplayer) {
 					try {
 
-						if (!FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(1)
-								.getComponent(PlayerComponent.class).getAstar().isMoving())
-							cliente.getOs().writeUTF("w1");
+						cliente.getOs().writeUTF("w" + id);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -104,10 +104,7 @@ public class BombermanApp extends GameApplication {
 			protected void onActionBegin() {
 				if (multiplayer) {
 					try {
-
-						if (!FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(1)
-								.getComponent(PlayerComponent.class).getAstar().isMoving())
-							cliente.getOs().writeUTF("a1");
+							cliente.getOs().writeUTF("a" + id);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -125,10 +122,7 @@ public class BombermanApp extends GameApplication {
 
 				if (multiplayer) {
 					try {
-
-						if (!FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(1)
-								.getComponent(PlayerComponent.class).getAstar().isMoving())
-							cliente.getOs().writeUTF("s1");
+							cliente.getOs().writeUTF("s" + id);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -146,10 +140,7 @@ public class BombermanApp extends GameApplication {
 				if (multiplayer) {
 
 					try {
-
-						if (!FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(1)
-								.getComponent(PlayerComponent.class).getAstar().isMoving())
-							cliente.getOs().writeUTF("d1");
+							cliente.getOs().writeUTF("d" + id);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -169,7 +160,7 @@ public class BombermanApp extends GameApplication {
 
 				if (multiplayer) {
 					try {
-						cliente.getOs().writeUTF("e1");
+						cliente.getOs().writeUTF("e" + id);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -303,33 +294,32 @@ public class BombermanApp extends GameApplication {
 			DateFormat dateFormat= new SimpleDateFormat("HH:mm:ss");
 			Date date= new Date();
 			String primeraPos=ClienteTCP.listaMovimientos.get(0);
-			System.out.println("Tamaño lista: "+ClienteTCP.listaMovimientos.size() + "****tam "+ tam +primeraPos.charAt(0) + "");
 
 			int id = Integer.parseInt(primeraPos.charAt(1)+"");
+
+			System.out.println("Tamaño lista: "+ClienteTCP.listaMovimientos.size() + "****tam "+ tam +primeraPos.charAt(0) + "-" + id);
+
+			Entity player = FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id);
 			
 			switch (primeraPos.charAt(0) + "") {
 			case "w":
 				
-				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id)
-						.getComponent(PlayerComponent.class).getAstar().moveToUpCell();
+				player.getComponent(PlayerComponent.class).up();
 				
 				break;
 			case "a":
 				
-						FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id)
-								.getComponent(PlayerComponent.class).getAstar().moveToLeftCell();
+				player.getComponent(PlayerComponent.class).left();
 						
 				break;
 			case "s":
 				
-						FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id)
-								.getComponent(PlayerComponent.class).getAstar().moveToDownCell();
+				player.getComponent(PlayerComponent.class).right();
 						
 				break;
 			case "d":
 				
-						FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id)
-								.getComponent(PlayerComponent.class).getAstar().moveToRightCell();
+				player.getComponent(PlayerComponent.class).down();
 						
 				break;
 			case "e":

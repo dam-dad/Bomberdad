@@ -29,8 +29,7 @@ public class PlayerComponent extends Component {
 	private AStarMoveComponent astar;
 
 	public void up() {
-	
-		astar.moveToUpCell();
+		if (!astar.isMoving()) astar.moveToUpCell();
 	}
 
 	public AStarMoveComponent getAstar() {
@@ -42,16 +41,16 @@ public class PlayerComponent extends Component {
 	}
 
 	public void down() {
-		astar.moveToDownCell();
+		if (!astar.isMoving()) astar.moveToDownCell();
 
 	}
 
 	public void left() {
-		astar.moveToLeftCell();
+		if (!astar.isMoving()) astar.moveToLeftCell();
 	}
 
 	public void right() {
-		astar.moveToRightCell();
+		if (!astar.isMoving()) astar.moveToRightCell();
 	}
 
 	public void increaseMaxBombs() {
