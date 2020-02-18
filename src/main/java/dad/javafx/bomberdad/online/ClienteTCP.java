@@ -22,7 +22,9 @@ public class ClienteTCP {
 	private Socket clientSocket;
 	public static boolean bombaPuesta = false;
 	public static int colocada = 0;
+
 	public static ArrayList<String>listaMovimientos= new ArrayList<String>();
+
 
 	public ClienteTCP() {
 		try {
@@ -48,13 +50,6 @@ public class ClienteTCP {
 		}
 	}
 
-	public ArrayList<String> getListaMovimientos() {
-		return listaMovimientos;
-	}
-
-	public void setListaMovimientos(ArrayList<String> listaMovimientos) {
-		this.listaMovimientos = listaMovimientos;
-	}
 
 	public DataInputStream getIs() {
 		return is;
@@ -87,10 +82,12 @@ class Recibir extends Thread {
 		super.run();
 		while (continuar) {
 			try {
+
 				ClienteTCP.listaMovimientos.add(is.readUTF());
 				
 				//ClienteTCP.colocada = 1;
 					
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
