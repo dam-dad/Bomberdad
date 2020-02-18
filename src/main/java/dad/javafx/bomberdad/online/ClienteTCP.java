@@ -1,9 +1,19 @@
 package dad.javafx.bomberdad.online;
 
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
+
+import com.almasb.fxgl.dsl.FXGL;
+import dad.javafx.bomberdad.BombermanType;
+import dad.javafx.bomberdad.components.PlayerComponent;
 
 public class ClienteTCP {
 	private DataInputStream is;
@@ -13,6 +23,9 @@ public class ClienteTCP {
 	public static boolean bombaPuesta = false;
 	public static int colocada = 0;
 	public Recibir recibir;
+
+	public static ArrayList<String>listaMovimientos= new ArrayList<String>();
+
 
 	public ClienteTCP() {
 		try {
@@ -37,6 +50,7 @@ public class ClienteTCP {
 			// TODO: handle exception
 		}
 	}
+
 
 	public DataInputStream getIs() {
 		return is;

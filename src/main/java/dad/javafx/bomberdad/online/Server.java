@@ -20,7 +20,7 @@ public class Server {
 			System.out.println("Conectando cliente");
 			ConnectionClient clientThread = new ConnectionClient(client,id);
 			// ConnectionClientTask<Void> cliente= new ConnectionClientTask<Void>(client,
-			// id);
+			// id);ectionClient(client);
 			clientes.add(clientThread);
 			clientThread.start();
 			id++;

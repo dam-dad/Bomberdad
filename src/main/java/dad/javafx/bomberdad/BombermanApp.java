@@ -8,6 +8,9 @@ import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.almasb.fxgl.app.FXGLMenu;
 import com.almasb.fxgl.app.GameApplication;
@@ -43,8 +46,9 @@ public class BombermanApp extends GameApplication {
 	public static String theme = "crab";
 	private ClienteTCP cliente;
 	public static boolean multiplayer = false;
-	public static boolean fullScreen = true;
 	public static boolean moving = false;
+	public static boolean fullScreen = false;
+	public int tam=0;
 
 	@Override
 	protected void initSettings(GameSettings settings) {
@@ -82,7 +86,7 @@ public class BombermanApp extends GameApplication {
 	protected void initInput() {
 		getInput().addAction(new UserAction("Move Up") {
 			@Override
-			protected void onAction() {
+			protected void onActionBegin() {
 
 				if (multiplayer) {
 					try {
@@ -103,7 +107,7 @@ public class BombermanApp extends GameApplication {
 
 		getInput().addAction(new UserAction("Move Left") {
 			@Override
-			protected void onAction() {
+			protected void onActionBegin() {
 				if (multiplayer) {
 					try {
 						if (!moving) {
@@ -123,7 +127,7 @@ public class BombermanApp extends GameApplication {
 
 		getInput().addAction(new UserAction("Move Down") {
 			@Override
-			protected void onAction() {
+			protected void onActionBegin() {
 
 				if (multiplayer) {
 					try {
@@ -143,7 +147,7 @@ public class BombermanApp extends GameApplication {
 
 		getInput().addAction(new UserAction("Move Right") {
 			@Override
-			protected void onAction() {
+			protected void onActionBegin() {
 
 				if (multiplayer) {
 					try {
@@ -224,9 +228,7 @@ public class BombermanApp extends GameApplication {
 
 	@Override
 	protected void initGame() {
-		if (multiplayer) {
-			cliente = new ClienteTCP();
-		}
+
 
 		GenerateMap.newMap(lvl);
 		getGameWorld().addEntityFactory(new BombermanFactory(theme));
@@ -257,7 +259,9 @@ public class BombermanApp extends GameApplication {
 		player.getComponent(PlayerComponent.class).setName("Player");
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
 		player2.getComponent(PlayerComponent.class).setName("PLayer2");
-
+		if (multiplayer) {
+			cliente = new ClienteTCP();
+		}
 	}
 
 	@Override
@@ -299,7 +303,6 @@ public class BombermanApp extends GameApplication {
 			requestNewGame = false;
 			getGameController().startNewGame();
 		}
-
 //		if (multiplayer) {
 //			if (cliente.bombaPuesta && cliente.colocada == 1) {
 //				placeBomb(getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(cliente.recibir.id)
@@ -311,7 +314,6 @@ public class BombermanApp extends GameApplication {
 //						.getComponent(PlayerComponent.class), cliente.recibir.accion);
 //			}
 //		}
-
 	}
 
 	public void onDestroyed(Entity e) {
