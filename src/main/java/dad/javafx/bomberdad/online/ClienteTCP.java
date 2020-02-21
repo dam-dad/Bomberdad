@@ -3,6 +3,7 @@ package dad.javafx.bomberdad.online;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
@@ -26,10 +27,53 @@ public class ClienteTCP {
 	public static boolean bombaPuesta = false;
 	public static int colocada = 0;
 	public Recibir recibir;
-	private int id=1;
+	private int id;
 
 	public static ArrayList<String>listaMovimientos= new ArrayList<String>();
 
+	public ClienteTCP() {
+		try {
+			clientSocket = new Socket();
+			addr = new InetSocketAddress(5555);
+			clientSocket.connect(addr);
+			is = new ObjectInputStream(clientSocket.getInputStream());
+			os = new ObjectOutputStream(clientSocket.getOutputStream());
+			inicializarPartida();
+			recibir = new Recibir(this);
+			recibir.start();
+		
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+
+
+	private void inicializarPartida() {
+			DynamicObject dOsolicitarId= new DynamicObject("getId", "getId");
+		try {
+			System.out.println("Solicitar id");
+			os.writeObject(dOsolicitarId);
+			System.out.println("Recibiendo id");
+			DynamicObject leidO=(DynamicObject)is.readObject();
+			this.id=leidO.getIdJugador();
+			System.out.println("ID OBTENIDA" + id);
+			System.out.println("Solicitar lista");
+			DynamicObject dOsolicitaLista= new DynamicObject("getLista","getLista");
+			os.writeObject(dOsolicitaLista);
+			System.out.println("Leyendo lista");
+			DynamicObject leedOlista=(DynamicObject)is.readObject();
+			while (!leedOlista.getTipoObjeto().equals("2")) {
+				os.writeObject(dOsolicitaLista);
+				leedOlista=(DynamicObject)is.readObject();
+			}
+			
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Finalizando inicializarS");
+		
+	}
 	public int getId() {
 		return id;
 	}
@@ -56,38 +100,5 @@ public class ClienteTCP {
 	public void setOs(ObjectOutputStream os) {
 		this.os = os;
 	}
-	public ClienteTCP() {
-		try {
-			clientSocket = new Socket();
-			addr = new InetSocketAddress(5555);
-			clientSocket.connect(addr);
-			is = new ObjectInputStream(clientSocket.getInputStream());
-			os = new ObjectOutputStream(clientSocket.getOutputStream());
-//			System.out.println("Conectado");
-//			//coge id
-//			os.writeUTF("i");
-//			id=Integer.parseInt((String)is.readUTF());
-//			//Espera jugadores
-//			os.writeUTF("l");
-//			@SuppressWarnings("unused")
-//			String line;
-//			while (!(line = is.readUTF()).equals("2")) {
-//				// waiting
-//				os.writeUTF("l");
-//			}
-//			is.readUTF();
-			recibir = new Recibir(this);
-			recibir.start();
-		
-
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-	}
-
-
-
-	
-	
 
 }
