@@ -3,6 +3,9 @@ package dad.javafx.bomberdad.menu;
 
 import com.almasb.fxgl.app.FXGLMenu;
 import com.almasb.fxgl.app.MenuType;
+import com.almasb.fxgl.audio.Music;
+import com.almasb.fxgl.dsl.FXGL;
+
 import dad.javafx.bomberdad.menu.components.MenuController;
 import javafx.beans.binding.StringBinding;
 import javafx.scene.Node;

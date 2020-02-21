@@ -8,14 +8,14 @@ import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Map;
 
 import com.almasb.fxgl.app.FXGLMenu;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.GameView;
+import com.almasb.fxgl.app.IntroScene;
+import com.almasb.fxgl.app.LoadingScene;
 import com.almasb.fxgl.app.MenuType;
 import com.almasb.fxgl.app.SceneFactory;
 import com.almasb.fxgl.core.math.FXGLMath;
@@ -24,13 +24,17 @@ import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.entity.level.text.TextLevelLoader;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
+import com.almasb.fxgl.saving.DataFile;
 import com.almasb.fxgl.texture.Texture;
+import com.almasb.fxgl.ui.UI;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
 import com.almasb.fxgl.pathfinding.CellState;
 import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.menu.CustomMenu;
+import dad.javafx.bomberdad.menu.IntroSceneController;
+import dad.javafx.bomberdad.menu.LoadingSceneController;
 import dad.javafx.bomberdad.online.ClienteTCP;
 import javafx.scene.input.KeyCode;
 
@@ -48,7 +52,7 @@ public class BombermanApp extends GameApplication {
 	public static boolean multiplayer = false;
 	public static boolean moving = false;
 	public static boolean fullScreen = false;
-	public int tam=0;
+	public int tam = 0;
 
 	@Override
 	protected void initSettings(GameSettings settings) {
@@ -59,6 +63,7 @@ public class BombermanApp extends GameApplication {
 //		settings.setHeight(19 * TILE_SIZE);
 		settings.setManualResizeEnabled(true);
 		settings.setMenuEnabled(true);
+		settings.setIntroEnabled(true);
 		settings.setFullScreenAllowed(fullScreen);
 		settings.setFullScreenFromStart(fullScreen);
 		settings.setSceneFactory(new SceneFactory() {
@@ -66,36 +71,42 @@ public class BombermanApp extends GameApplication {
 			public FXGLMenu newMainMenu() {
 				return new CustomMenu(MenuType.MAIN_MENU);
 			}
+
 			@Override
 			public FXGLMenu newGameMenu() {
 				return new CustomMenu(MenuType.GAME_MENU);
+			}
+			
+			@Override
+			public LoadingScene newLoadingScene() {
+				return new LoadingSceneController();
+			}
+			
+			@Override
+			public IntroScene newIntro() {
+				return new IntroSceneController();
 			}
 		});
 
 	}
 
-//	@Override
-//	protected void initUI() {
-//		getGameScene().getRoot().setTranslateX(100);
-//		UI ui = getAssetLoader().loadUI("BomberAppView.fxml", new BombermanAppUIController());
-//		ui.getRoot().setTranslateX(-100);
-//		getGameScene().addUI(ui);
-//	}
+	@Override
+	public void initUI() {
+		getGameScene().getRoot().setTranslateX(100);
+		UI ui = getAssetLoader().loadUI("BomberAppView.fxml", new BombermanAppUIController());
+		ui.getRoot().setTranslateX(-100);
+		getGameScene().addUI(ui);
+	}
 
 	@Override
 	protected void initInput() {
-		final int id = 1;
-		
 		getInput().addAction(new UserAction("Move Up") {
 			@Override
 			protected void onActionBegin() {
 
 				if (multiplayer) {
 					try {
-						if (!moving) {
-							moving = true;
-							cliente.getOs().writeUTF("w");
-						}
+						cliente.getOs().writeUTF("w");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -112,10 +123,7 @@ public class BombermanApp extends GameApplication {
 			protected void onActionBegin() {
 				if (multiplayer) {
 					try {
-						if (!moving) {
-							moving = true;
-							cliente.getOs().writeUTF("a");
-						}
+						cliente.getOs().writeUTF("a");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -133,10 +141,7 @@ public class BombermanApp extends GameApplication {
 
 				if (multiplayer) {
 					try {
-						if (!moving) {
-							moving = true;
-							cliente.getOs().writeUTF("s");
-						}
+						cliente.getOs().writeUTF("s");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -153,10 +158,7 @@ public class BombermanApp extends GameApplication {
 
 				if (multiplayer) {
 					try {
-						if (!moving) {
-							moving = true;
-							cliente.getOs().writeUTF("d");
-						}
+						cliente.getOs().writeUTF("d");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -229,9 +231,7 @@ public class BombermanApp extends GameApplication {
 	}
 
 	@Override
-	protected void initGame() {
-
-
+	public void initGame() {
 		GenerateMap.newMap(lvl);
 		getGameWorld().addEntityFactory(new BombermanFactory(theme));
 
@@ -265,9 +265,19 @@ public class BombermanApp extends GameApplication {
 			cliente = new ClienteTCP();
 		}
 	}
+	
+	@Override
+	public void loadState(DataFile dataFile) {
+		super.loadState(dataFile);
+	}
+	
+	@Override
+	public void initGameVars(Map<String, Object> vars) {
+		super.initGameVars(vars);
+	}
 
 	@Override
-	protected void initPhysics() {
+	public void initPhysics() {
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPMAXBOMBS) {
 			@Override
 			protected void onCollision(Entity pl, Entity powerup) {
@@ -388,7 +398,8 @@ public class BombermanApp extends GameApplication {
 			default:
 				break;
 			}
-		} catch (Exception e) { }
+		} catch (Exception e) {
+		}
 	}
 
 	public static void main(String[] args) {

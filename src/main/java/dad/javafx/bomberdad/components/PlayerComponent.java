@@ -29,28 +29,24 @@ public class PlayerComponent extends Component {
 	private AStarMoveComponent astar;
 
 	public void up() {
-		if (!astar.isMoving()) astar.moveToUpCell();
-	}
-
-	public AStarMoveComponent getAstar() {
-		return astar;
-	}
-
-	public void setAstar(AStarMoveComponent astar) {
-		this.astar = astar;
+		if (!astar.isMoving())
+			astar.moveToUpCell();
 	}
 
 	public void down() {
-		if (!astar.isMoving()) astar.moveToDownCell();
+		if (!astar.isMoving())
+			astar.moveToDownCell();
 
 	}
 
 	public void left() {
-		if (!astar.isMoving()) astar.moveToLeftCell();
+		if (!astar.isMoving())
+			astar.moveToLeftCell();
 	}
 
 	public void right() {
-		if (!astar.isMoving()) astar.moveToRightCell();
+		if (!astar.isMoving())
+			astar.moveToRightCell();
 	}
 
 	public void increaseMaxBombs() {
@@ -68,8 +64,16 @@ public class PlayerComponent extends Component {
 	}
 
 	public void resetPower() {
-		
+
 		power = 0;
+	}
+
+	public AStarMoveComponent getAstar() {
+		return astar;
+	}
+
+	public void setAstar(AStarMoveComponent astar) {
+		this.astar = astar;
 	}
 
 	public void placeBomb() {
@@ -85,19 +89,19 @@ public class PlayerComponent extends Component {
 			Entity bomb = FXGL.getGameWorld().spawn("Bomb",
 					new SpawnData(x * BombermanApp.TILE_SIZE, y * BombermanApp.TILE_SIZE).put("radius",
 							(BombermanApp.TILE_SIZE / 2) + power));
-			
+
 			FXGL.getGameTimer().runOnceAfter(() -> {
-				
+
 				bomb.getComponent(BombComponent.class).explode(power);
 				bombsPlaced--;
 			}, Duration.seconds(2));
-	
+
 		}
 	}
 
 	// getters & setters
 	public void playFadeAnimation() {
-		
+
 		FadeTransition ft = new FadeTransition(Duration.seconds(0.5),
 				this.getEntity().getViewComponent().getChildren().get(0));
 		ft.setFromValue(1);
@@ -105,7 +109,7 @@ public class PlayerComponent extends Component {
 		ft.setAutoReverse(true);
 		ft.setCycleCount(4);
 		ft.play();
-	
+
 	}
 
 	public int getVidas() {

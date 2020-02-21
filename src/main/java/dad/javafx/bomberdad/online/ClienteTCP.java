@@ -36,13 +36,13 @@ public class ClienteTCP {
 			os = new DataOutputStream(clientSocket.getOutputStream());
 			System.out.println("Conectado");
 			os.writeUTF("l");
-//			@SuppressWarnings("unused")
-//			String line;
-//			while (!(line = is.readUTF()).equals("2")) {
-//				// waiting
-//				os.writeUTF("l");
-//			}
-//			is.readUTF();
+			@SuppressWarnings("unused")
+			String line;
+			while (!(line = is.readUTF()).equals("2")) {
+				// waiting
+				os.writeUTF("l");
+			}
+			is.readUTF();
 			recibir = new Recibir(this);
 			recibir.start();
 

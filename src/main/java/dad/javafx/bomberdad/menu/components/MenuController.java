@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import com.almasb.fxgl.dsl.FXGL;
 
 import dad.javafx.bomberdad.BombermanApp;
+import dad.javafx.bomberdad.GenerateMap;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -81,6 +82,10 @@ public class MenuController extends BorderPane implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		Media mainmusic = new Media(
+				new File(GenerateMap.class.getClassLoader().getResource("./assets/music/MainMusicdad.mp3").getFile())
+						.toURI().toString());
+		MediaPlayer player = new MediaPlayer(mainmusic);
 		view.setPrefSize(w, h);
 		vBoxBtns.setOpacity(0);
 		conVbox.getChildren().add(new ControlsController());
@@ -121,13 +126,8 @@ public class MenuController extends BorderPane implements Initializable {
 
 		title.setTranslateY(FXGL.getAppHeight() / 2 - 100);
 
-		Media media = new Media(
-				new File(MenuController.class.getClassLoader().getResource("./media/MainMusicdad.mp3").getFile())
-						.toURI().toString());
-		MediaPlayer mp = new MediaPlayer(media);
-		mp.play();
-
 		FXGL.getEngineTimer().runOnceAfter(() -> {
+			player.play();
 			transicionTrans.playFromStart();
 			transicionScale.playFromStart();
 			FXGL.getEngineTimer().runOnceAfter(() -> {
@@ -146,7 +146,7 @@ public class MenuController extends BorderPane implements Initializable {
 					}, Duration.seconds(0.5));
 				}, Duration.seconds(1));
 			}, Duration.seconds(3));
-		}, Duration.seconds(1));
+		}, Duration.seconds(4));
 	}
 
 	@FXML
@@ -425,5 +425,5 @@ public class MenuController extends BorderPane implements Initializable {
 		timeline.setCycleCount(1);
 		timeline.getKeyFrames().addAll(kf1, kf2, kf3, kf4, kf5, kf6);
 	}
-	
+
 }
