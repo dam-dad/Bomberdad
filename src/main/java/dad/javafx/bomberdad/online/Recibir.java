@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import dad.javafx.bomberdad.BombermanApp;
-import dad.javafx.bomberdad.PlayerPosition;
 
 public class Recibir extends Thread {
 	public boolean continuar = true;

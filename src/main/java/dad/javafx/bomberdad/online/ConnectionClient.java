@@ -7,8 +7,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import dad.javafx.bomberdad.PlayerPosition;
-
 public class ConnectionClient extends Thread {
 
 	public Socket client;

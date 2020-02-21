@@ -36,6 +36,7 @@ import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.menu.CustomMenu;
 import dad.javafx.bomberdad.online.ClienteTCP;
+import dad.javafx.bomberdad.online.PlayerPosition;
 import javafx.scene.input.KeyCode;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -206,7 +207,7 @@ public class BombermanApp extends GameApplication {
 
 		set("grid", grid);
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
-		player.getComponent(PlayerComponent.class).setName("Player");
+		player.getComponent(PlayerComponent.class).setName("Rosmen");
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
 		player2.getComponent(PlayerComponent.class).setName("Player2");
 		ratings.getPoints().get(0).set(0, player.getComponent(PlayerComponent.class).getName());
@@ -265,11 +266,8 @@ public class BombermanApp extends GameApplication {
 			getGameController().startNewGame();
 		}
 		if(multiplayer) {
-			if(FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(CellMoveComponent.class).isMoving()) {
 			actualizaPosicion();
-			envioPosicion();
-			}
-			
+			envioPosicion();			
 		}
 //		if (multiplayer) {
 //			if (cliente.bombaPuesta && cliente.colocada == 1) {
