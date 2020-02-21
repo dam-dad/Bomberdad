@@ -48,21 +48,19 @@ public class BombermanApp extends GameApplication {
 	public static Entity player, player2;
 	private int lvl = 0;
 	private boolean requestNewGame = false;
-	public static String theme = "crab";
+	public static String theme = "dad";
 	private ClienteTCP cliente;
 	private PlayerPosition playerPosition;
 	public static boolean multiplayer = false;
 	public static boolean moving = false;
 	public static boolean fullScreen = false;
 	public int tam = 0;
-	public int tam=0;
 	public int id;
 
 	@Override
 	protected void initSettings(GameSettings settings) {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
-
 //		settings.setWidth(19 * TILE_SIZE);
 //		settings.setHeight(19 * TILE_SIZE);
 		settings.setManualResizeEnabled(true);
@@ -93,7 +91,7 @@ public class BombermanApp extends GameApplication {
 		});
 
 	}
-
+	
 	@Override
 	public void initUI() {
 		getGameScene().getRoot().setTranslateX(100);
