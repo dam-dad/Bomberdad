@@ -1,11 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 
-<VBox fx:id="vbox" prefHeight="570.0" prefWidth="100.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1">
+<HBox fx:id="view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label text="HIJUEPUTA CRISTAIN" />
+      <VBox fx:id="vbox" prefHeight="570.0" prefWidth="100.0">
+         <children>
+            <VBox prefHeight="285.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="player1Lbl" />
+                  <Label fx:id="points1Lbl" />
+                  <Label fx:id="vidas1Lbl" />
+               </children>
+            </VBox>
+            <VBox prefHeight="285.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="player4Lbl" />
+                  <Label fx:id="points4Lbl" />
+                  <Label fx:id="vidas4Lbl" />
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+      <HBox fx:id="hboxApp" prefHeight="100.0" prefWidth="570.0" />
+      <VBox fx:id="vbox1" prefHeight="570.0" prefWidth="100.0">
+         <children>
+            <VBox prefHeight="285.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="player3Lbl" />
+                  <Label fx:id="points3Lbl" />
+                  <Label fx:id="vidas3Lbl" />
+               </children>
+            </VBox>
+            <VBox prefHeight="285.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="player2Lbl" />
+                  <Label fx:id="points2Lbl" />
+                  <Label fx:id="vidas2Lbl" />
+               </children>
+            </VBox>
+         </children>
+      </VBox>
    </children>
-</VBox>
+</HBox>

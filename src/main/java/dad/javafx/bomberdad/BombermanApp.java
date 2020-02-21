@@ -28,6 +28,7 @@ import com.almasb.fxgl.entity.level.text.TextLevelLoader;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.texture.Texture;
+import com.almasb.fxgl.ui.UI;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
 import com.almasb.fxgl.pathfinding.CellState;
 import com.almasb.fxgl.pathfinding.astar.AStarGrid;
@@ -42,6 +43,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class BombermanApp extends GameApplication {
 
 	public static final int TILE_SIZE = 30;
+	public static final int UI_SIZE = 200;
 
 	public static Entity player, player2;
 	private int lvl = 0;
@@ -51,17 +53,19 @@ public class BombermanApp extends GameApplication {
 	public static boolean multiplayer = false;
 	public static boolean moving = false;
 	public static boolean fullScreen = false;
-	private Puntuaciones ratings = new Puntuaciones();
+	public static Puntuaciones ratings = new Puntuaciones();
 	int i = 0;
 	public int tam=0;
+	private BombermanAppUIController uiController = new BombermanAppUIController();
+	private BombermanAppUIController uiController2 = new BombermanAppUIController();
 
 	@Override
 	protected void initSettings(GameSettings settings) {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
 
-//		settings.setWidth(19 * TILE_SIZE);
-//		settings.setHeight(19 * TILE_SIZE);
+		settings.setWidth(19 * TILE_SIZE+(UI_SIZE*2));
+		settings.setHeight(19 * TILE_SIZE);
 		settings.setManualResizeEnabled(true);
 		settings.setMenuEnabled(true);
 		settings.setFullScreenAllowed(fullScreen);
@@ -79,19 +83,22 @@ public class BombermanApp extends GameApplication {
 
 	}
 
-//	@Override
-//	protected void initUI() {
-//		getGameScene().getRoot().setTranslateX(100);
-//		UI ui = getAssetLoader().loadUI("BomberAppView.fxml", new BombermanAppUIController());
-//		ui.getRoot().setTranslateX(-100);
-//		getGameScene().addUI(ui);
-//	}
+	@Override
+	protected void initUI() {
+		getGameScene().getRoot().setTranslateX(UI_SIZE);
+		UI ui = getAssetLoader().loadUI("BomberAppView.fxml", uiController);
+		ui.getRoot().setTranslateX(-UI_SIZE);
+		getGameScene().addUI(ui);
+		UI ui2 = getAssetLoader().loadUI("BomberAppView.fxml", uiController2);
+		ui2.getRoot().setTranslateX(19 * TILE_SIZE);
+		getGameScene().addUI(ui2);
+	}
 
 	@Override
 	protected void initInput() {
 		getInput().addAction(new UserAction("Move Up") {
 			@Override
-			protected void onActionBegin() {
+			protected void onAction() {
 
 				if (multiplayer) {
 					try {
@@ -113,7 +120,7 @@ public class BombermanApp extends GameApplication {
 
 		getInput().addAction(new UserAction("Move Left") {
 			@Override
-			protected void onActionBegin() {
+			protected void onAction() {
 				if (multiplayer) {
 					try {
 						if (!moving) {
@@ -133,7 +140,7 @@ public class BombermanApp extends GameApplication {
 
 		getInput().addAction(new UserAction("Move Down") {
 			@Override
-			protected void onActionBegin() {
+			protected void onAction() {
 
 				if (multiplayer) {
 					try {
@@ -153,7 +160,7 @@ public class BombermanApp extends GameApplication {
 
 		getInput().addAction(new UserAction("Move Right") {
 			@Override
-			protected void onActionBegin() {
+			protected void onAction() {
 
 				if (multiplayer) {
 					try {
@@ -176,7 +183,7 @@ public class BombermanApp extends GameApplication {
 
 		getInput().addAction(new UserAction("Place Bomb") {
 			@Override
-			protected void onActionBegin() {
+			protected void onAction() {
 
 				if (multiplayer) {
 					try {
@@ -340,6 +347,7 @@ public class BombermanApp extends GameApplication {
 				}
 				int pOld = Integer.parseInt(ratings.getPoints().get(pl).get(1));
 				int pNew = pOld + 100;
+				uiController.setPointsLbl(pNew+"", pl);
 				ratings.getPoints().get(pl).set(1, ""+pNew);
 				System.out.println(ratings.getPoints().get(pl).get(0)+" points: "+ratings.getPoints().get(pl).get(1));
 			}
@@ -368,6 +376,7 @@ public class BombermanApp extends GameApplication {
 				}
 				int pOld = Integer.parseInt(ratings.getPoints().get(pl).get(1));
 				int pNew = pOld + 5;
+				uiController.setPointsLbl(pNew+"", pl);
 				ratings.getPoints().get(pl).set(1, ""+pNew);
 				System.out.println(ratings.getPoints().get(pl).get(0)+" points: "+ratings.getPoints().get(pl).get(1));
 			}
