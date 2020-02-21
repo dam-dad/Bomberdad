@@ -1,4 +1,4 @@
-package dad.javafx.bomberdad;
+package dad.javafx.bomberdad.online;
 
 import java.io.Serializable;
 

@@ -7,27 +7,19 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import dad.javafx.bomberdad.PlayerPosition;
-
 public class ConnectionClient extends Thread {
 
 	public Socket client;
-	DataOutputStream dataOut;
-	DataInputStream dataIn;
+
 	ObjectOutputStream objectOut;
 	ObjectInputStream objectIn;
-	private PlayerPosition playerPos;
+	DynamicObject objetoDinamico;
 	private int idPlayer;
-
-
 
 	public ConnectionClient(Socket client, int id) throws IOException {
 		super();
 		this.client = client;
 		this.idPlayer = id;
-
-		dataIn = new DataInputStream(client.getInputStream());
-		dataOut = new DataOutputStream(client.getOutputStream());
 		objectOut = new ObjectOutputStream(client.getOutputStream());
 		objectIn = new ObjectInputStream(client.getInputStream());
 	}
@@ -37,19 +29,14 @@ public class ConnectionClient extends Thread {
 //		String letra;
 		while (true) {
 			try {
-//				letra = dataIn.readUTF();
-//				switch (letra) {
-//				case "i":
-//					dataOut.writeUTF(this.id +"");
-//				case "l":
-//					procesaLista(letra, id);
-//					break;
-//				default:
-//					break;
-//				}
-				this.playerPos=(PlayerPosition)objectIn.readObject();
-				objectIn.readObject();
-				procesaDato(this.playerPos);
+
+				// lo actual
+//				this.playerPos=(PlayerPosition)objectIn.readObject();
+				// objectIn.readObject();
+//				procesaDato(this.playerPos);
+				this.objetoDinamico = (DynamicObject) objectIn.readObject();
+				procesaDynamicObject(this.objetoDinamico);
+
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -57,22 +44,64 @@ public class ConnectionClient extends Thread {
 		}
 	}
 
-	private void procesaDato(PlayerPosition playerPos) {
+	private void procesaDynamicObject(DynamicObject dO) {
 
-		PlayerPosition objetoEnviar= new PlayerPosition(playerPos.getPositionX(),playerPos.getPositionY(),playerPos.getIdEntity());
-		for (int i = 0; i < Server.clientes.size(); i++) {
+		DynamicObject nDo = new DynamicObject(dO.getTipoObjeto(), dO.getObjeto());
+
+		switch (nDo.getTipoObjeto()) {
+
+		case "getId":
+			
+			nDo.setIdJugador(idPlayer);
 			try {
-				if(playerPos.getIdEntity()!= Server.clientes.get(i).getIdPlayer()) {
-					Server.clientes.get(i).getObjectOut().writeObject(objetoEnviar);
-				}
+				this.objectOut.writeObject(nDo);
 			} catch (IOException e) {
+
 				e.printStackTrace();
 			}
+			break;
+			
+		case "getLista":
+			
+			nDo.setTipoObjeto(Server.listaSize() + "");
+			try {
+				this.objectOut.writeObject(nDo);
+			} catch (IOException e) {
 
+				e.printStackTrace();
+			}
+			break;
+			
+		case "PlayerPosition":
+			nDo.setIdJugador(dO.getIdJugador());
+			procesaPosicion(dO);
+			break;
+		case "PlaceBomb":
+
+			break;
+
+		case "PowerUpp":
+
+			break;
+
+		default:
+			break;
 		}
-		
+
 	}
 
+	public void procesaPosicion(DynamicObject dO) {
+		for (int i = 0; i < Server.clientes.size(); i++) {
+			if (this.idPlayer != Server.clientes.get(i).getIdPlayer()) {
+				try {
+					Server.clientes.get(i).getObjectOut().writeObject(dO);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+	}
 
 	public ObjectOutputStream getObjectOut() {
 		return objectOut;
@@ -89,26 +118,9 @@ public class ConnectionClient extends Thread {
 	public void setObjectIn(ObjectInputStream objectIn) {
 		this.objectIn = objectIn;
 	}
+
 	public int getIdPlayer() {
 		return idPlayer;
-	}
-
-	public DataOutputStream getDataOut() {
-		return dataOut;
-	}
-
-	public void setDataOut(DataOutputStream dataOut) {
-		this.dataOut = dataOut;
-	}
-	private void procesaLista(String accion, int id) {
-		for (int i = 0; i < Server.clientes.size(); i++) {
-			try {
-				Server.clientes.get(i).getDataOut().writeUTF(Server.listaSize() + "");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
 	}
 
 }

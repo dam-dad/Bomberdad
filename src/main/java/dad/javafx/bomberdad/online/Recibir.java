@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import dad.javafx.bomberdad.BombermanApp;
-import dad.javafx.bomberdad.PlayerPosition;
 
 public class Recibir extends Thread {
 	public boolean continuar = true;
@@ -23,17 +22,31 @@ public class Recibir extends Thread {
 		super.run();
 		while (continuar) {
 			try {
-				PlayerPosition p = new PlayerPosition();
-				p= (PlayerPosition)is.readObject();
-				//System.out.println(p.getPositionX());
-	
-				BombermanApp.actualizarPlayer(p);
-//				String letra = is.readUTF();
-//				System.out.println(letra);
-//				try {
-//					id = Integer.parseInt(letra.charAt(1) + "");
-//				} catch (Exception e) {}
-				//BombermanApp.movePlayer(id, letra.charAt(0)+"");
+//				PlayerPosition p = new PlayerPosition();
+//				p= (PlayerPosition)is.readObject();
+//				BombermanApp.actualizarPlayer(p);
+				DynamicObject dO= (DynamicObject) is.readObject();
+				String tipoObjeto=dO.getTipoObjeto();
+				switch (tipoObjeto) {
+				
+				case "PlayerPosition":
+				PlayerPosition p=(PlayerPosition) dO.getObjeto();
+					BombermanApp.actualizarPlayer(p);
+					break;
+				case "PlaceBomb":
+					
+					break;
+
+				case "PowerUpp":
+					
+					break;
+				
+				default:
+					break;
+				}
+
+
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ClassNotFoundException e1) {
