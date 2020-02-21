@@ -19,6 +19,7 @@ import com.almasb.fxgl.app.LoadingScene;
 import com.almasb.fxgl.app.MenuType;
 import com.almasb.fxgl.app.SceneFactory;
 import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.entity.level.text.TextLevelLoader;
@@ -49,10 +50,13 @@ public class BombermanApp extends GameApplication {
 	private boolean requestNewGame = false;
 	public static String theme = "crab";
 	private ClienteTCP cliente;
+	private PlayerPosition playerPosition;
 	public static boolean multiplayer = false;
 	public static boolean moving = false;
 	public static boolean fullScreen = false;
 	public int tam = 0;
+	public int tam=0;
+	public int id;
 
 	@Override
 	protected void initSettings(GameSettings settings) {
@@ -102,90 +106,36 @@ public class BombermanApp extends GameApplication {
 	protected void initInput() {
 		getInput().addAction(new UserAction("Move Up") {
 			@Override
-			protected void onActionBegin() {
-
-				if (multiplayer) {
-					try {
-						cliente.getOs().writeUTF("w");
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				} else {
-					player.getComponent(PlayerComponent.class).up();
-				}
-
+			protected void onAction() {
+				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class).up();
 			}
 		}, KeyCode.W);
 
 		getInput().addAction(new UserAction("Move Left") {
 			@Override
-			protected void onActionBegin() {
-				if (multiplayer) {
-					try {
-						cliente.getOs().writeUTF("a");
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				} else {
-					player.getComponent(PlayerComponent.class).left();
-				}
-
+			protected void onAction() {
+					FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class).left();
 			}
 		}, KeyCode.A);
 
 		getInput().addAction(new UserAction("Move Down") {
 			@Override
-			protected void onActionBegin() {
-
-				if (multiplayer) {
-					try {
-						cliente.getOs().writeUTF("s");
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				} else {
-					player.getComponent(PlayerComponent.class).down();
-				}
+			protected void onAction() {
+				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class).down();
 			}
 		}, KeyCode.S);
 
 		getInput().addAction(new UserAction("Move Right") {
 			@Override
-			protected void onActionBegin() {
-
-				if (multiplayer) {
-					try {
-						cliente.getOs().writeUTF("d");
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-				} else {
-
-					player.getComponent(PlayerComponent.class).right();
-
-				}
+			protected void onAction() {
+				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class).right();
 			}
 		}, KeyCode.D);
 
 		getInput().addAction(new UserAction("Place Bomb") {
 			@Override
-			protected void onActionBegin() {
-
-				if (multiplayer) {
-					try {
-						cliente.getOs().writeUTF("e");
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				} else {
-					player.getComponent(PlayerComponent.class).placeBomb();
-				}
+			protected void onAction() {
+				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class).placeBomb();
 			}
 		}, KeyCode.SPACE);
 
@@ -234,7 +184,6 @@ public class BombermanApp extends GameApplication {
 	public void initGame() {
 		GenerateMap.newMap(lvl);
 		getGameWorld().addEntityFactory(new BombermanFactory(theme));
-
 		Texture texture = getAssetLoader().loadTexture("bg" + theme + ".gif");
 		// ScrollingBackgroundView bg = new ScrollingBackgroundView(texture,
 		// Orientation.HORIZONTAL);
@@ -256,14 +205,21 @@ public class BombermanApp extends GameApplication {
 		});
 
 		set("grid", grid);
-
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
 		player.getComponent(PlayerComponent.class).setName("Player");
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
 		player2.getComponent(PlayerComponent.class).setName("PLayer2");
 		if (multiplayer) {
 			cliente = new ClienteTCP();
+			id=cliente.getId();
+			playerPosition= new PlayerPosition(
+					0.0,
+					0.0,
+					id	
+					);
+			
 		}
+		
 	}
 	
 	@Override
@@ -315,6 +271,13 @@ public class BombermanApp extends GameApplication {
 			requestNewGame = false;
 			getGameController().startNewGame();
 		}
+		if(multiplayer) {
+			if(FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(CellMoveComponent.class).isMoving()) {
+			actualizaPosicion();
+			envioPosicion();
+			}
+			
+		}
 //		if (multiplayer) {
 //			if (cliente.bombaPuesta && cliente.colocada == 1) {
 //				placeBomb(getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(cliente.recibir.id)
@@ -326,6 +289,25 @@ public class BombermanApp extends GameApplication {
 //						.getComponent(PlayerComponent.class), cliente.recibir.accion);
 //			}
 //		}
+	}
+
+	private void actualizaPosicion() {
+		playerPosition.setPositionX(FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getPosition().getX());
+		playerPosition.setPositionY(FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getPosition().getY());
+		
+	}
+
+	private void envioPosicion() {
+		
+		try {
+			PlayerPosition objetoEnviar= new PlayerPosition(playerPosition.getPositionX(),playerPosition.getPositionY(),playerPosition.getIdEntity());
+			cliente.getOs().writeObject(objetoEnviar);
+			
+		
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void onDestroyed(Entity e) {
@@ -374,7 +356,12 @@ public class BombermanApp extends GameApplication {
 	private static void placeBomb(PlayerComponent player) {
 		player.placeBomb();
 	}
-
+	public static void actualizarPlayer(PlayerPosition player) {
+		Entity playerToMove = getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(player.getIdEntity());
+		playerToMove.setX(player.getPositionX());
+		playerToMove.setY(player.getPositionY());
+		
+	}
 	public static void movePlayer(int id, String accion) {
 		try {
 			PlayerComponent playerToMove = getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id)
