@@ -33,6 +33,8 @@ import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.menu.CustomMenu;
 import dad.javafx.bomberdad.online.ClienteTCP;
+import dad.javafx.bomberdad.online.DynamicObject;
+import dad.javafx.bomberdad.online.PlayerPosition;
 import javafx.scene.input.KeyCode;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -106,7 +108,6 @@ public class BombermanApp extends GameApplication {
 			@Override
 			protected void onAction() {
 
-			
 				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class).down();
 				
 			}
@@ -115,8 +116,6 @@ public class BombermanApp extends GameApplication {
 		getInput().addAction(new UserAction("Move Right") {
 			@Override
 			protected void onAction() {
-
-				
 
 				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class).right();
 
@@ -128,7 +127,6 @@ public class BombermanApp extends GameApplication {
 			@Override
 			protected void onAction() {
 
-			
 				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class).placeBomb();
 				
 			}
@@ -259,10 +257,9 @@ public class BombermanApp extends GameApplication {
 			getGameController().startNewGame();
 		}
 		if(multiplayer) {
-			if(FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(CellMoveComponent.class).isMoving()) {
 			actualizaPosicion();
 			envioPosicion();
-			}
+			
 			
 		}
 //		if (multiplayer) {
@@ -288,8 +285,9 @@ public class BombermanApp extends GameApplication {
 		
 		try {
 			PlayerPosition objetoEnviar= new PlayerPosition(playerPosition.getPositionX(),playerPosition.getPositionY(),playerPosition.getIdEntity());
-			cliente.getOs().writeObject(objetoEnviar);
-			
+			DynamicObject dO=new DynamicObject("PlayerPosition", objetoEnviar);
+//			cliente.getOs().writeObject(objetoEnviar);
+			cliente.getOs().writeObject(dO);
 		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
