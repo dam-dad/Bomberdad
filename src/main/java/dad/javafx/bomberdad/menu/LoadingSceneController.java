@@ -3,54 +3,33 @@ package dad.javafx.bomberdad.menu;
 import com.almasb.fxgl.app.LoadingScene;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.saving.DataFile;
-import com.almasb.fxgl.ui.ProgressBar;
 
+import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 public class LoadingSceneController extends LoadingScene {
 
-	private ProgressBar progress = new ProgressBar();
-	private Text text = new Text();
-
 	private boolean loadingFinished = false;
 	private DataFile dataFile = DataFile.getEMPTY();
+	
+	private ProgressBar progress;
+	protected Text text;
+	private Rectangle rec;
 
 	public LoadingSceneController() {
 		super();
-//			    	GameSettings settings = FXGL.getSettings();
-//
-//			        with(progress) {
-//			            setPrefSize(settings.width - 200.0, 10.0)
-//			            translateX = 100.0
-//			            translateY = settings.height - 100.0
-//			        }
-//
-//			        with(text) {
-//			            if (!settings.isExperimentalNative) {
-//			                font = FXGL.getUIFactory().newFont(24.0)
-//			            }
-//
-//			            fill = Color.WHITE
-//			        }
-//
-//			        FXGL.centerTextBind(
-//			                text,
-//			                settings.width / 2.0,
-//			                settings.height * 4 / 5.0
-//			        )
-//
-//			        contentRoot.children.addAll(
-//			                Rectangle(settings.width.toDouble(),
-//			                        settings.height.toDouble(),
-//			                        Color.rgb(0, 0, 10)),
-//			                progress, text)
-//			    }
-//
-//			    open fun
-//
-//	bind(task: Task<*>) {
-//			        progress.progressProperty().bind(task.progressProperty())
-//			        text.textProperty().bind(task.messageProperty())
+//		progress = (ProgressBar) getContentRoot().getChildren().get(1);
+//		text = (Text) getContentRoot().getChildren().get(2);
+//		getContentRoot().getChildren().clear();
+//		VBox vbox = new VBox();
+//		vbox.setPrefSize(200, 200);
+//		vbox.getChildren().add(new Rectangle(FXGL.getAppWidth(),FXGL.getAppHeight(),Color.DARKRED));
+//		getContentRoot().getChildren().addAll(vbox,progress,text);
+//		rec = (Rectangle) getContentRoot().getChildren().get(0);
+//		rec = new Rectangle(FXGL.getAppWidth(),FXGL.getAppHeight(),Color.DARKRED);
 	}
 
 	@Override

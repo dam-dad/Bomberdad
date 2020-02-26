@@ -1,7 +1,6 @@
 package dad.javafx.bomberdad.menu;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.dsl.FXGL;
@@ -23,7 +22,6 @@ public class InitTaskLoading extends Task<Void> {
 
 	@Override
 	protected Void call() throws Exception {
-		long start = System.nanoTime();
 		clearPreviousGame();
 
 		initGame();
@@ -45,7 +43,7 @@ public class InitTaskLoading extends Task<Void> {
 	}
 
 	private void initGame() {
-		update("Comienza el dududud duelo", 0);
+		update("Iniciando partida", 0);
 
 		HashMap<String, Object> vars = new HashMap<String, Object>();
 		app.initGameVars(vars);
@@ -62,26 +60,26 @@ public class InitTaskLoading extends Task<Void> {
 	}
 
 	private void initPhysics() {
-		update("Initializing Physics", 1);
+		update("Inciando físicas", 1);
 		app.initPhysics();
 	}
 
 	private void initUI() {
-		update("Initializing UI", 2);
+		update("Iniciando UI", 2);
 		app.initUI();
 	}
 
 	private void initComplete() {
-		update("Initialization Complete", 3);
+		update("Carga completada", 3);
 		FXGL.getGameController().onGameReady(FXGL.getGameState().getProperties());
 	}
 
 	private void update(String message, int step) {
 		// log.debug(message);
 		FXGL.getEngineTimer().runOnceAfter(() -> {
-		}, Duration.seconds(5));
 		updateMessage(message);
 		updateProgress((long) step, 3);
+		}, Duration.seconds(2));
 	}
 
 //	@Override
