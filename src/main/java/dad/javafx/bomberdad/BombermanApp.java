@@ -50,7 +50,7 @@ public class BombermanApp extends GameApplication {
 	public static Entity player, player2;
 	private int lvl = 0;
 	private boolean requestNewGame = false;
-	public static String theme = "dad";
+	public static String theme = "crab";
 	private ClienteTCP cliente;
 	private PlayerPosition playerPosition;
 	public static boolean multiplayer = false;
@@ -81,26 +81,26 @@ public class BombermanApp extends GameApplication {
 				return new CustomMenu(MenuType.GAME_MENU);
 			}
 			
-			@Override
-			public LoadingScene newLoadingScene() {
-				return new LoadingSceneController();
-			}
+//			@Override
+//			public LoadingScene newLoadingScene() {
+//				return new LoadingSceneController();
+//			}
 			
-			@Override
-			public IntroScene newIntro() {
-				return new IntroSceneController();
-			}
+//			@Override
+//			public IntroScene newIntro() {
+//				return new IntroSceneController();
+//			}
 		});
 
 	}
 	
-	@Override
-	public void initUI() {
-		getGameScene().getRoot().setTranslateX(100);
-		UI ui = getAssetLoader().loadUI("BomberAppView.fxml", new BombermanAppUIController());
-		ui.getRoot().setTranslateX(-100);
-		getGameScene().addUI(ui);
-	}
+//	@Override
+//	public void initUI() {
+//		getGameScene().getRoot().setTranslateX(100);
+//		UI ui = getAssetLoader().loadUI("BomberAppView.fxml", new BombermanAppUIController());
+//		ui.getRoot().setTranslateX(-100);
+//		getGameScene().addUI(ui);
+//	}
 
 	@Override
 	protected void initInput() {
