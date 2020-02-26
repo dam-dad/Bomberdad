@@ -22,6 +22,7 @@ public class ClienteTCP {
 	private ObjectInputStream is;
 	private ObjectOutputStream os;
 	private Socket clientSocket;
+
 	public InetSocketAddress addr;
 	public static boolean bombaPuesta = false;
 	public static int colocada = 0;
@@ -29,8 +30,6 @@ public class ClienteTCP {
 	private int id;
 
 	public static ArrayList<String>listaMovimientos= new ArrayList<String>();
-
-
 
 	public ClienteTCP() {
 		try {
@@ -75,8 +74,6 @@ public class ClienteTCP {
 		System.out.println("Finalizando inicializarS");
 		
 	}
-	
-
 	public int getId() {
 		return id;
 	}
@@ -103,10 +100,5 @@ public class ClienteTCP {
 	public void setOs(ObjectOutputStream os) {
 		this.os = os;
 	}
-
-
-
-	
-	
 
 }

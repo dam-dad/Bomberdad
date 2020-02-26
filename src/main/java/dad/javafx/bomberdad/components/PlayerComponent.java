@@ -91,8 +91,7 @@ public class PlayerComponent extends Component {
 							(BombermanApp.TILE_SIZE / 2) + power));
 
 			FXGL.getGameTimer().runOnceAfter(() -> {
-
-				bomb.getComponent(BombComponent.class).explode(power);
+				bomb.getComponent(BombComponent.class).explode(power, this);
 				bombsPlaced--;
 			}, Duration.seconds(2));
 

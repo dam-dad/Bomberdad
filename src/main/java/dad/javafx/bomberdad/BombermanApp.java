@@ -9,6 +9,11 @@ import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
 
 import java.io.IOException;
 import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 
 import com.almasb.fxgl.app.FXGLMenu;
 import com.almasb.fxgl.app.GameApplication;
@@ -46,6 +51,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class BombermanApp extends GameApplication {
 
 	public static final int TILE_SIZE = 30;
+	public static final int UI_SIZE = 200;
 
 	public static Entity player, player2;
 	private int lvl = 0;
@@ -56,15 +62,19 @@ public class BombermanApp extends GameApplication {
 	public static boolean multiplayer = false;
 	public static boolean moving = false;
 	public static boolean fullScreen = false;
-	public int tam = 0;
+	public static Puntuaciones ratings = new Puntuaciones();
+	int i = 0;
+	public int tam=0;
+	private BombermanAppUIController uiController = new BombermanAppUIController();
+	private BombermanAppUIController uiController2 = new BombermanAppUIController();
 	public int id;
 
 	@Override
 	protected void initSettings(GameSettings settings) {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
-//		settings.setWidth(19 * TILE_SIZE);
-//		settings.setHeight(19 * TILE_SIZE);
+		settings.setWidth(19 * TILE_SIZE+(UI_SIZE*2));
+		settings.setHeight(19 * TILE_SIZE);
 		settings.setManualResizeEnabled(true);
 		settings.setMenuEnabled(true);
 		settings.setIntroEnabled(true);
@@ -100,6 +110,17 @@ public class BombermanApp extends GameApplication {
 		UI ui = getAssetLoader().loadUI("BomberAppView.fxml", new BombermanAppUIController());
 		ui.getRoot().setTranslateX(-100);
 		getGameScene().addUI(ui);
+	}
+
+	@Override
+	protected void initUI() {
+		getGameScene().getRoot().setTranslateX(UI_SIZE);
+		UI ui = getAssetLoader().loadUI("BomberAppView.fxml", uiController);
+		ui.getRoot().setTranslateX(-UI_SIZE);
+		getGameScene().addUI(ui);
+		UI ui2 = getAssetLoader().loadUI("BomberAppView.fxml", uiController2);
+		ui2.getRoot().setTranslateX(19 * TILE_SIZE);
+		getGameScene().addUI(ui2);
 	}
 
 	@Override
@@ -142,32 +163,36 @@ public class BombermanApp extends GameApplication {
 		getInput().addAction(new UserAction("Move Up2") {
 			@Override
 			protected void onAction() {
-				if (!multiplayer)
+				if (!multiplayer) {
 					player2.getComponent(PlayerComponent.class).up();
+				}
 			}
 		}, KeyCode.UP);
 
 		getInput().addAction(new UserAction("Move Left2") {
 			@Override
 			protected void onAction() {
-				if (!multiplayer)
+				if (!multiplayer) {
 					player2.getComponent(PlayerComponent.class).left();
+				}
 			}
 		}, KeyCode.LEFT);
 
 		getInput().addAction(new UserAction("Move Down2") {
 			@Override
 			protected void onAction() {
-				if (!multiplayer)
+				if (!multiplayer) {
 					player2.getComponent(PlayerComponent.class).down();
+				}
 			}
 		}, KeyCode.DOWN);
 
 		getInput().addAction(new UserAction("Move Right2") {
 			@Override
 			protected void onAction() {
-				if (!multiplayer)
+				if (!multiplayer) {
 					player2.getComponent(PlayerComponent.class).right();
+				}
 			}
 		}, KeyCode.RIGHT);
 
@@ -181,7 +206,7 @@ public class BombermanApp extends GameApplication {
 	}
 
 	@Override
-	public void initGame() {
+	protected void initGame() {
 		GenerateMap.newMap(lvl);
 		getGameWorld().addEntityFactory(new BombermanFactory(theme));
 		Texture texture = getAssetLoader().loadTexture("bg" + theme + ".gif");
@@ -206,9 +231,12 @@ public class BombermanApp extends GameApplication {
 
 		set("grid", grid);
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
-		player.getComponent(PlayerComponent.class).setName("Player");
+		player.getComponent(PlayerComponent.class).setName("Rosmen");
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
-		player2.getComponent(PlayerComponent.class).setName("PLayer2");
+		player2.getComponent(PlayerComponent.class).setName("Player2");
+		ratings.getPoints().get(0).set(0, player.getComponent(PlayerComponent.class).getName());
+		ratings.getPoints().get(1).set(0, player2.getComponent(PlayerComponent.class).getName());
+
 		if (multiplayer) {
 			cliente = new ClienteTCP();
 			id=cliente.getId();
@@ -274,8 +302,6 @@ public class BombermanApp extends GameApplication {
 		if(multiplayer) {
 			actualizaPosicion();
 			envioPosicion();
-			
-			
 		}
 //		if (multiplayer) {
 //			if (cliente.bombaPuesta && cliente.colocada == 1) {
@@ -289,7 +315,6 @@ public class BombermanApp extends GameApplication {
 //			}
 //		}
 	}
-
 	private void actualizaPosicion() {
 		playerPosition.setPositionX(FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getPosition().getX());
 		playerPosition.setPositionY(FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getPosition().getY());
@@ -310,8 +335,21 @@ public class BombermanApp extends GameApplication {
 		}
 	}
 
-	public void onDestroyed(Entity e) {
+	public void onDestroyed(Entity e, PlayerComponent owned) {
 		if (e.isType(BombermanType.PLAYER)) {
+			if (owned != null && !owned.equals(e.getComponent(PlayerComponent.class))) {
+				int pl = 0;
+				if (owned.getName().equals("Player")) {
+					pl = 0;
+				} else if(owned.getName().equals("Player2")) {
+					pl = 1;
+				}
+				int pOld = Integer.parseInt(ratings.getPoints().get(pl).get(1));
+				int pNew = pOld + 100;
+				uiController.setPointsLbl(pNew+"", pl);
+				ratings.getPoints().get(pl).set(1, ""+pNew);
+				System.out.println(ratings.getPoints().get(pl).get(0)+" points: "+ratings.getPoints().get(pl).get(1));
+			}
 			PlayerComponent playerHit = e.getComponent(PlayerComponent.class);
 			if (playerHit.getVidas() == 0) {
 				e.removeFromWorld();
@@ -328,7 +366,19 @@ public class BombermanApp extends GameApplication {
 				e.getComponent(PlayerComponent.class).playFadeAnimation();
 			}
 		} else if (e.isType(BombermanType.BRICK)) {
-
+			if (owned != null) {
+				int pl = 0;
+				if (owned.getName().equals("Player")) {
+					pl = 0;
+				} else if(owned.getName().equals("Player2")) {
+					pl = 1;
+				}
+				int pOld = Integer.parseInt(ratings.getPoints().get(pl).get(1));
+				int pNew = pOld + 5;
+				uiController.setPointsLbl(pNew+"", pl);
+				ratings.getPoints().get(pl).set(1, ""+pNew);
+				System.out.println(ratings.getPoints().get(pl).get(0)+" points: "+ratings.getPoints().get(pl).get(1));
+			}
 			e.removeFromWorld();
 			// Cambiar el estado de la entidad BRICK a "WALKABLE" cuando desaparece
 			e.getComponent(AStarMoveComponent.class).getGrid().get(e.getComponent(CellMoveComponent.class).getCellX(),
