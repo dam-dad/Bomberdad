@@ -2,7 +2,6 @@ package dad.javafx.bomberdad.components;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
-import com.almasb.fxgl.entity.components.BoundingBoxComponent;
 import com.almasb.fxgl.entity.components.TransformComponent;
 import dad.javafx.bomberdad.BombermanApp;
 import com.almasb.fxgl.entity.Entity;
@@ -10,8 +9,6 @@ import com.almasb.fxgl.entity.SpawnData;
 import javafx.animation.FadeTransition;
 import javafx.util.Duration;
 import com.almasb.fxgl.entity.component.Required;
-import com.almasb.fxgl.pathfinding.CellMoveComponent;
-import com.almasb.fxgl.pathfinding.CellState;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 //import static dad.javafx.bomberdad.components.MoveDirection.*;
 

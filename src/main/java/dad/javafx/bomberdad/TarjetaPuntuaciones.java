@@ -14,9 +14,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class TarjetaPuntuaciones extends StackPane implements Initializable {
-
-	// model
-
 	// view
 
 	@FXML
@@ -186,7 +183,61 @@ public class TarjetaPuntuaciones extends StackPane implements Initializable {
 	public void setNumberPointsLb(Label numberPointsLb) {
 		this.numberPointsLb = numberPointsLb;
 	}
-	
-	
+
+	public StackPane getStackPane() {
+		return stackPane;
+	}
+
+	public void setStackPane(StackPane stackPane) {
+		this.stackPane = stackPane;
+	}
+
+	public VBox getVbox() {
+		return vbox;
+	}
+
+	public void setVbox(VBox vbox) {
+		this.vbox = vbox;
+	}
+
+	public ImageView getHeartpos1() {
+		return heartpos1;
+	}
+
+	public void setHeartpos1(ImageView heartpos1) {
+		this.heartpos1 = heartpos1;
+	}
+
+	public ImageView getHeartpos2() {
+		return heartpos2;
+	}
+
+	public void setHeartpos2(ImageView heartpos2) {
+		this.heartpos2 = heartpos2;
+	}
+
+	public ImageView getHeartpos3() {
+		return heartpos3;
+	}
+
+	public void setHeartpos3(ImageView heartpos3) {
+		this.heartpos3 = heartpos3;
+	}
+
+	public ImageView getHeartpos4() {
+		return heartpos4;
+	}
+
+	public void setHeartpos4(ImageView heartpos4) {
+		this.heartpos4 = heartpos4;
+	}
+
+	public Label getPointsTextLb() {
+		return pointsTextLb;
+	}
+
+	public void setPointsTextLb(Label pointsTextLb) {
+		this.pointsTextLb = pointsTextLb;
+	}
 
 }
