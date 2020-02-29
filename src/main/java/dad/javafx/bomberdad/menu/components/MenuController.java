@@ -82,10 +82,10 @@ public class MenuController extends BorderPane implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		Media mainmusic = new Media(
-				new File(GenerateMap.class.getClassLoader().getResource("./assets/music/MainMusicdad.mp3").getFile())
-						.toURI().toString());
-		MediaPlayer player = new MediaPlayer(mainmusic);
+//		Media mainmusic = new Media(
+//				new File(GenerateMap.class.getClassLoader().getResource("./assets/music/MainMusicdad.mp3").getFile())
+//						.toURI().toString());
+//		MediaPlayer player = new MediaPlayer(mainmusic);
 		view.setPrefSize(w, h);
 		vBoxBtns.setOpacity(0);
 		conVbox.getChildren().add(new ControlsController());
@@ -127,7 +127,7 @@ public class MenuController extends BorderPane implements Initializable {
 		title.setTranslateY(FXGL.getAppHeight() / 2 - 100);
 
 		FXGL.getEngineTimer().runOnceAfter(() -> {
-			player.play();
+//			player.play();
 			transicionTrans.playFromStart();
 			transicionScale.playFromStart();
 			FXGL.getEngineTimer().runOnceAfter(() -> {

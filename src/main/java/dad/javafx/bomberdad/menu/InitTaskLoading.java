@@ -8,7 +8,6 @@ import com.almasb.fxgl.saving.DataFile;
 
 import dad.javafx.bomberdad.BombermanApp;
 import javafx.concurrent.Task;
-import javafx.util.Duration;
 
 public class InitTaskLoading extends Task<Void> {
 
@@ -76,10 +75,8 @@ public class InitTaskLoading extends Task<Void> {
 
 	private void update(String message, int step) {
 		// log.debug(message);
-		FXGL.getEngineTimer().runOnceAfter(() -> {
 		updateMessage(message);
 		updateProgress((long) step, 3);
-		}, Duration.seconds(2));
 	}
 
 //	@Override
