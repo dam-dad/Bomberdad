@@ -1,22 +1,11 @@
 package dad.javafx.bomberdad.online;
 
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
-
-import com.almasb.fxgl.dsl.FXGL;
-import dad.javafx.bomberdad.BombermanType;
-import dad.javafx.bomberdad.components.PlayerComponent;
 
 public class ClienteTCP {
 	private ObjectInputStream is;
@@ -27,6 +16,10 @@ public class ClienteTCP {
 	public static int colocada = 0;
 	public Recibir recibir;
 	private int id;
+	private String mapa;
+
+	
+
 
 	public static ArrayList<String>listaMovimientos= new ArrayList<String>();
 
@@ -40,7 +33,7 @@ public class ClienteTCP {
 			is = new ObjectInputStream(clientSocket.getInputStream());
 			os = new ObjectOutputStream(clientSocket.getOutputStream());
 			inicializarPartida();
-			recibir = new Recibir(this);
+			recibir=new Recibir(this);
 			recibir.start();
 		
 
@@ -50,33 +43,48 @@ public class ClienteTCP {
 	}
 
 
+	public Recibir getRecibir() {
+		return recibir;
+	}
+
+
 	private void inicializarPartida() {
 			DynamicObject dOsolicitarId= new DynamicObject("getId", "getId");
 		try {
-			System.out.println("Solicitar id");
 			os.writeObject(dOsolicitarId);
-			System.out.println("Recibiendo id");
 			DynamicObject leidO=(DynamicObject)is.readObject();
 			this.id=leidO.getIdJugador();
-			System.out.println("ID OBTENIDA" + id);
-			System.out.println("Solicitar lista");
 			DynamicObject dOsolicitaLista= new DynamicObject("getLista","getLista");
 			os.writeObject(dOsolicitaLista);
-			System.out.println("Leyendo lista");
 			DynamicObject leedOlista=(DynamicObject)is.readObject();
 			while (!leedOlista.getTipoObjeto().equals("2")) {
 				os.writeObject(dOsolicitaLista);
 				leedOlista=(DynamicObject)is.readObject();
 			}
+			//nuevo
+			if(id == 0) {
+				DynamicObject dOSolicitaMapa= new DynamicObject("RequestNewMap", "0");
+				os.writeObject(dOSolicitaMapa);
+			}
+				DynamicObject leeMapa=(DynamicObject)is.readObject();
+				setMapa((String)leeMapa.getObjeto());
+		
+			
 			
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Finalizando inicializarS");
 		
 	}
 	
+	public String getMapa() {
+		return mapa;
+	}
 
+
+	public void setMapa(String mapa) {
+		this.mapa = mapa;
+	}
 	public int getId() {
 		return id;
 	}
@@ -103,10 +111,5 @@ public class ClienteTCP {
 	public void setOs(ObjectOutputStream os) {
 		this.os = os;
 	}
-
-
-
-	
-	
 
 }

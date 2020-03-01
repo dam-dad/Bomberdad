@@ -7,6 +7,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import dad.javafx.bomberdad.GenerateMap;
+
 public class ConnectionClient extends Thread {
 
 	public Socket client;
@@ -26,14 +28,9 @@ public class ConnectionClient extends Thread {
 
 	@Override
 	public void run() {
-//		String letra;
+
 		while (true) {
 			try {
-
-				// lo actual
-//				this.playerPos=(PlayerPosition)objectIn.readObject();
-				// objectIn.readObject();
-//				procesaDato(this.playerPos);
 				this.objetoDinamico = (DynamicObject) objectIn.readObject();
 				procesaDynamicObject(this.objetoDinamico);
 
@@ -71,10 +68,15 @@ public class ConnectionClient extends Thread {
 				e.printStackTrace();
 			}
 			break;
-			
+			//nuevo
+		case "PlacePlayerBomb":	
 		case "PlayerPosition":
 			nDo.setIdJugador(dO.getIdJugador());
-			procesaPosicion(dO);
+			procesaPosicion(nDo);
+			break;
+			
+		case "RequestNewMap":
+			procesaMapa(dO);
 			break;
 		case "PlaceBomb":
 
@@ -89,6 +91,22 @@ public class ConnectionClient extends Thread {
 		}
 
 	}
+//nuevo
+	private void procesaMapa(DynamicObject dO) {
+	
+		int lvl= Integer.parseInt((String)dO.getObjeto());
+		String map= generaMapa(lvl);
+		System.out.println(lvl);
+		System.out.println(map);
+		DynamicObject dOenvio= new DynamicObject("RequestNewMap",map);
+		for (int i = 0; i < Server.clientes.size(); i++) {
+			try {
+				Server.clientes.get(i).getObjectOut().writeObject(dOenvio);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	public void procesaPosicion(DynamicObject dO) {
 		for (int i = 0; i < Server.clientes.size(); i++) {
@@ -101,6 +119,10 @@ public class ConnectionClient extends Thread {
 			}
 		}
 
+	}
+	private String generaMapa(int lvl) {
+		GenerateMap.newMap(lvl);
+		return GenerateMap.getMap();
 	}
 
 	public ObjectOutputStream getObjectOut() {

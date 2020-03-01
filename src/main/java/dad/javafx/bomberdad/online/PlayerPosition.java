@@ -11,6 +11,7 @@ public class PlayerPosition implements Serializable {
 	private double positionX;
 	private double positionY;
 	private int idEntity;
+
 	public PlayerPosition() {
 	}
 	public PlayerPosition(double positionX, double positionY, int idEntity) {
