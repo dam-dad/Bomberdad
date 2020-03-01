@@ -62,6 +62,7 @@ public class BombermanApp extends GameApplication {
 	public int tam=0;
 	private BombermanAppUIController uiController = new BombermanAppUIController();
 	public int id;
+	public static int numberPalyers = 3;
 
 	@Override
 	protected void initSettings(GameSettings settings) {
@@ -216,7 +217,7 @@ public class BombermanApp extends GameApplication {
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
 		player.getComponent(PlayerComponent.class).setName("Rosmen");
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
-		player2.getComponent(PlayerComponent.class).setName("Player2");
+		player2.getComponent(PlayerComponent.class).setName("Pablo");
 		ratings.getPoints().get(0).set(0, player.getComponent(PlayerComponent.class).getName());
 		ratings.getPoints().get(1).set(0, player2.getComponent(PlayerComponent.class).getName());
 
@@ -228,7 +229,16 @@ public class BombermanApp extends GameApplication {
 					0.0,
 					id	
 					);
-			
+			if (numberPalyers >= 3) {
+				player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
+				player2.getComponent(PlayerComponent.class).setName("Alejandro");
+				ratings.getPoints().get(2).set(0, player.getComponent(PlayerComponent.class).getName());
+			}
+			if (numberPalyers == 4) {
+				player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
+				player2.getComponent(PlayerComponent.class).setName("Alejandro");
+				ratings.getPoints().get(2).set(0, player.getComponent(PlayerComponent.class).getName());
+			}
 		}
 		
 	}

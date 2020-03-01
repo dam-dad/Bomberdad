@@ -17,7 +17,7 @@
          </image></ImageView>
       <VBox fx:id="vbox" alignment="BOTTOM_LEFT" maxHeight="-Infinity" prefHeight="50.0" prefWidth="100.0" StackPane.alignment="CENTER_LEFT">
          <children>
-            <Label fx:id="playerNameLb" text="PlayerName" />
+            <Label fx:id="playerNameLb" style="-fx-font-size: 20; -fx-font-family: PixelarRegularW01-Regular;" text="PlayerName" />
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
                   <ImageView fx:id="heartpos1" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
@@ -47,11 +47,11 @@
                      <image>
                         <Image url="@../assets/textures/PowerBottle.gif" />
                      </image></ImageView>
-                  <ProgressBar fx:id="powerBarpos1" prefWidth="200.0" progress="0.0" style="-fx-accent: red; -fx-control-inner-background: lightgray; -fx-text-box-border: red;" />
-                  <ProgressBar fx:id="powerBarpos2" prefWidth="200.0" progress="0.0" style="-fx-accent: red; -fx-control-inner-background: lightgray; -fx-text-box-border: red;" />
-                  <ProgressBar fx:id="powerBarpos3" prefWidth="200.0" progress="0.0" style="-fx-accent: red; -fx-control-inner-background: lightgray; -fx-text-box-border: red;" />
-                  <ProgressBar fx:id="powerBarpos4" prefWidth="200.0" progress="0.0" style="-fx-accent: red; -fx-control-inner-background: lightgray; -fx-text-box-border: red;" />
-                  <ProgressBar fx:id="powerBarpos5" prefWidth="200.0" progress="0.0" style="-fx-accent: red; -fx-control-inner-background: lightgray; -fx-text-box-border: red;" />
+                  <ProgressBar fx:id="powerBarpos1" prefWidth="200.0" progress="0.0" style="-fx-accent: red; -fx-control-inner-background: #de6e66; -fx-text-box-border: red;" />
+                  <ProgressBar fx:id="powerBarpos2" prefWidth="200.0" progress="0.0" style="-fx-accent: red; -fx-control-inner-background: #de6e66; -fx-text-box-border: red;" />
+                  <ProgressBar fx:id="powerBarpos3" prefWidth="200.0" progress="0.0" style="-fx-accent: red; -fx-control-inner-background: #de6e66; -fx-text-box-border: red;" />
+                  <ProgressBar fx:id="powerBarpos4" prefWidth="200.0" progress="0.0" style="-fx-accent: red; -fx-control-inner-background: #de6e66; -fx-text-box-border: red;" />
+                  <ProgressBar fx:id="powerBarpos5" prefWidth="200.0" progress="0.0" style="-fx-accent: red; -fx-control-inner-background: #de6e66; -fx-text-box-border: red;" />
                </children>
                <VBox.margin>
                   <Insets right="25.0" />
@@ -63,11 +63,11 @@
                      <image>
                         <Image url="@../assets/textures/MoreBombsBottle.gif" />
                      </image></ImageView>
-                  <ProgressBar fx:id="maxBBarpos1" prefWidth="200.0" progress="0.0" style="-fx-accent: yellow; -fx-control-inner-background: lightgray; -fx-text-box-border: yellow;" />
-                  <ProgressBar fx:id="maxBBarpos2" prefWidth="200.0" progress="0.0" style="-fx-accent: yellow; -fx-control-inner-background: lightgray; -fx-text-box-border: yellow;" />
-                  <ProgressBar fx:id="maxBBarpos3" prefWidth="200.0" progress="0.0" style="-fx-accent: yellow; -fx-control-inner-background: lightgray; -fx-text-box-border: yellow;" />
-                  <ProgressBar fx:id="maxBBarpos4" prefWidth="200.0" progress="0.0" style="-fx-accent: yellow; -fx-control-inner-background: lightgray; -fx-text-box-border: yellow;" />
-                  <ProgressBar fx:id="maxBBarpos5" prefWidth="200.0" progress="0.0" style="-fx-accent: yellow; -fx-control-inner-background: lightgray; -fx-text-box-border: yellow;" />
+                  <ProgressBar fx:id="maxBBarpos1" prefWidth="200.0" progress="0.0" style="-fx-accent: yellow; -fx-control-inner-background: #dec666; -fx-text-box-border: yellow;" />
+                  <ProgressBar fx:id="maxBBarpos2" prefWidth="200.0" progress="0.0" style="-fx-accent: yellow; -fx-control-inner-background: #dec666; -fx-text-box-border: yellow;" />
+                  <ProgressBar fx:id="maxBBarpos3" prefWidth="200.0" progress="0.0" style="-fx-accent: yellow; -fx-control-inner-background: #dec666; -fx-text-box-border: yellow;" />
+                  <ProgressBar fx:id="maxBBarpos4" prefWidth="200.0" progress="0.0" style="-fx-accent: yellow; -fx-control-inner-background: #dec666; -fx-text-box-border: yellow;" />
+                  <ProgressBar fx:id="maxBBarpos5" prefWidth="200.0" progress="0.0" style="-fx-accent: yellow; -fx-control-inner-background: #dec666; -fx-text-box-border: yellow;" />
                </children>
                <VBox.margin>
                   <Insets right="25.0" />
@@ -75,8 +75,8 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label fx:id="pointsTextLb" text="Puntos:" />
-                  <Label fx:id="numberPointsLb" />
+                  <Label fx:id="pointsTextLb" style="-fx-font-size: 20; -fx-font-family: PixelarRegularW01-Regular;" text="Puntos:" />
+                  <Label fx:id="numberPointsLb" style="-fx-font-size: 20; -fx-font-family: PixelarRegularW01-Regular;" />
                </children>
             </HBox>
          </children>
