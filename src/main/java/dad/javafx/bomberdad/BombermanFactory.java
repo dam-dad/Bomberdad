@@ -6,7 +6,6 @@ import com.almasb.fxgl.dsl.components.ExpireCleanComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
-import com.almasb.fxgl.pathfinding.CellState;
 import com.almasb.fxgl.physics.BoundingShape;
 //import com.sun.javafx.geom.Point2D;
 

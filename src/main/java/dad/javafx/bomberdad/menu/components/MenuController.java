@@ -1,6 +1,5 @@
 package dad.javafx.bomberdad.menu.components;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -8,6 +7,7 @@ import java.util.ResourceBundle;
 import com.almasb.fxgl.dsl.FXGL;
 
 import dad.javafx.bomberdad.BombermanApp;
+import dad.javafx.bomberdad.online.Server;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -29,8 +29,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -44,6 +42,8 @@ public class MenuController extends BorderPane implements Initializable {
 	private FadeTransition transicionFadeVBoxBtns;
 	private FadeTransition transicionFadeBG;
 	private Timeline timeline;
+	private String ip = "192.168.0.167";
+	private int port = 5555;
 
 	// view
 
@@ -81,6 +81,10 @@ public class MenuController extends BorderPane implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+//		Media mainmusic = new Media(
+//				new File(GenerateMap.class.getClassLoader().getResource("./assets/music/MainMusicdad.mp3").getFile())
+//						.toURI().toString());
+//		MediaPlayer player = new MediaPlayer(mainmusic);
 		view.setPrefSize(w, h);
 		vBoxBtns.setOpacity(0);
 		conVbox.getChildren().add(new ControlsController());
@@ -121,13 +125,8 @@ public class MenuController extends BorderPane implements Initializable {
 
 		title.setTranslateY(FXGL.getAppHeight() / 2 - 100);
 
-		Media media = new Media(
-				new File(MenuController.class.getClassLoader().getResource("./media/MainMusicdad.mp3").getFile())
-						.toURI().toString());
-		MediaPlayer mp = new MediaPlayer(media);
-		mp.play();
-
 		FXGL.getEngineTimer().runOnceAfter(() -> {
+//			player.play();
 			transicionTrans.playFromStart();
 			transicionScale.playFromStart();
 			FXGL.getEngineTimer().runOnceAfter(() -> {
@@ -146,7 +145,7 @@ public class MenuController extends BorderPane implements Initializable {
 					}, Duration.seconds(0.5));
 				}, Duration.seconds(1));
 			}, Duration.seconds(3));
-		}, Duration.seconds(1));
+		}, Duration.seconds(4));
 	}
 
 	@FXML
@@ -178,7 +177,7 @@ public class MenuController extends BorderPane implements Initializable {
 				onlineServerModeBtn.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
 				onlineServerModeBtn.setMaxSize(getMaxWidth(), getMaxHeight());
 				onlineServerModeBtn.setOnAction(e -> {
-//					this.setCenter(new LobbyController(new Server()));
+					createServer();
 				});
 				onlineServerModeBtn.setAlignment(Pos.TOP_LEFT);
 
@@ -189,8 +188,7 @@ public class MenuController extends BorderPane implements Initializable {
 				onlineClientMode.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
 				onlineClientMode.setMaxSize(getMaxWidth(), getMaxHeight());
 				onlineClientMode.setOnAction(e -> {
-					BombermanApp.multiplayer = true;
-					FXGL.getGameController().startNewGame();
+					buscarServer();
 				});
 				onlineClientMode.setAlignment(Pos.TOP_LEFT);
 
@@ -198,6 +196,108 @@ public class MenuController extends BorderPane implements Initializable {
 				onlineClientMode.getStyleClass().add("btn");
 
 				vBoxBtns.getChildren().addAll(backBtn, offlineModeBtn, onlineServerModeBtn, onlineClientMode);
+			}, Duration.millis(125));
+		}, Duration.millis(200));
+	}
+
+	private void buscarServer() {
+		RotateTransition flipping = flip(vBoxBtns);
+		flipping.playFromStart();
+		FXGL.getEngineTimer().runOnceAfter(() -> {
+			vBoxBtns.getChildren().clear();
+			FXGL.getEngineTimer().runOnceAfter(() -> {
+				Button backBtn = new Button("Volver");
+				backBtn.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
+				backBtn.setMaxSize(getMaxWidth(), getMaxHeight());
+				backBtn.setOnAction(e -> backtoMainMenu());
+				backBtn.setAlignment(Pos.TOP_LEFT);
+
+				backBtn.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
+				backBtn.getStyleClass().add("btn");
+
+				Button buscar = new Button("Conectarse al Servidor");
+				buscar.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
+				buscar.setMaxSize(getMaxWidth(), getMaxHeight());
+				buscar.setOnAction(e -> {
+					BombermanApp.multiplayer = true;
+					BombermanApp.ip = ip;
+					BombermanApp.port = port;
+					FXGL.getGameController().startNewGame();
+				});
+				buscar.setAlignment(Pos.TOP_LEFT);
+
+				buscar.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
+				buscar.getStyleClass().add("btn");
+
+				vBoxBtns.getChildren().addAll(backBtn, buscar);
+			}, Duration.millis(125));
+		}, Duration.millis(200));
+	}
+
+	private void createServer() {
+		RotateTransition flipping = flip(vBoxBtns);
+		flipping.playFromStart();
+		FXGL.getEngineTimer().runOnceAfter(() -> {
+			vBoxBtns.getChildren().clear();
+			FXGL.getEngineTimer().runOnceAfter(() -> {
+				Button backBtn = new Button("Volver");
+				backBtn.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
+				backBtn.setMaxSize(getMaxWidth(), getMaxHeight());
+				backBtn.setOnAction(e -> backtoMainMenu());
+				backBtn.setAlignment(Pos.TOP_LEFT);
+
+				backBtn.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
+				backBtn.getStyleClass().add("btn");
+
+				Button playersNum4 = new Button("4 Jugadores");
+				playersNum4.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
+				playersNum4.setMaxSize(getMaxWidth(), getMaxHeight());
+				playersNum4.setOnAction(e -> {
+					Server server = new Server(4);
+					server.start();
+					BombermanApp.multiplayer = true;
+					BombermanApp.ip = ip;
+					BombermanApp.port = port;
+					FXGL.getGameController().startNewGame();
+				});
+				playersNum4.setAlignment(Pos.TOP_LEFT);
+
+				playersNum4.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
+				playersNum4.getStyleClass().add("btn");
+
+				Button playersNum3 = new Button("3 Jugadores");
+				playersNum3.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
+				playersNum3.setMaxSize(getMaxWidth(), getMaxHeight());
+				playersNum3.setOnAction(e -> {
+					Server server = new Server(3);
+					server.start();
+					BombermanApp.multiplayer = true;
+					BombermanApp.ip = ip;
+					BombermanApp.port = port;
+					FXGL.getGameController().startNewGame();
+				});
+				playersNum3.setAlignment(Pos.TOP_LEFT);
+
+				playersNum3.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
+				playersNum3.getStyleClass().add("btn");
+
+				Button playersNum2 = new Button("2 Jugadores");
+				playersNum2.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
+				playersNum2.setMaxSize(getMaxWidth(), getMaxHeight());
+				playersNum2.setOnAction(e -> {
+					Server server = new Server(2);
+					server.start();
+					BombermanApp.multiplayer = true;
+					BombermanApp.ip = ip;
+					BombermanApp.port = port;
+					FXGL.getGameController().startNewGame();
+				});
+				playersNum2.setAlignment(Pos.TOP_LEFT);
+
+				playersNum2.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
+				playersNum2.getStyleClass().add("btn");
+
+				vBoxBtns.getChildren().addAll(backBtn, playersNum2, playersNum3, playersNum4);
 			}, Duration.millis(125));
 		}, Duration.millis(200));
 	}
@@ -425,5 +525,5 @@ public class MenuController extends BorderPane implements Initializable {
 		timeline.setCycleCount(1);
 		timeline.getKeyFrames().addAll(kf1, kf2, kf3, kf4, kf5, kf6);
 	}
-	
+
 }
