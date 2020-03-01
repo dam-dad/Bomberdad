@@ -46,7 +46,7 @@ public class BombComponent extends Component {
 	}
 
 
-	public void explode(int power) {
+	public void explode(int power, PlayerComponent owned) {
 		BoundingBoxComponent bbox = getEntity().getBoundingBoxComponent();
 
 		entities.clear();
@@ -155,13 +155,13 @@ public class BombComponent extends Component {
 				FXGL.spawn("explosion",st.getPosition());	
 			}else if (st.isType(BombermanType.BRICK)){
 				Entity aux=st;
-				FXGL.<BombermanApp>getAppCast().onDestroyed(st);
+				FXGL.<BombermanApp>getAppCast().onDestroyed(st, owned);
 				aux.getTypeComponent().setValue(BombermanType.FLOOR);
 			
 	        FXGL.spawn("explosion",st.getPosition());
 			     
 			} else {
-				FXGL.<BombermanApp>getAppCast().onDestroyed(st);
+				FXGL.<BombermanApp>getAppCast().onDestroyed(st, owned);
 			}
 		}
 		getEntity().getComponent(AStarMoveComponent.class)

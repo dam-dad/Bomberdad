@@ -11,6 +11,7 @@ public class ClienteTCP {
 	private ObjectInputStream is;
 	private ObjectOutputStream os;
 	private Socket clientSocket;
+
 	public InetSocketAddress addr;
 	public static boolean bombaPuesta = false;
 	public static int colocada = 0;
@@ -23,12 +24,10 @@ public class ClienteTCP {
 
 	public static ArrayList<String>listaMovimientos= new ArrayList<String>();
 
-
-
 	public ClienteTCP() {
 		try {
 			clientSocket = new Socket();
-			addr = new InetSocketAddress(5555);
+			addr = new InetSocketAddress("10.1.2.127",5555);
 			clientSocket.connect(addr);
 			is = new ObjectInputStream(clientSocket.getInputStream());
 			os = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -76,6 +75,7 @@ public class ClienteTCP {
 		}
 		
 	}
+
 	
 	public String getMapa() {
 		return mapa;
@@ -85,6 +85,7 @@ public class ClienteTCP {
 	public void setMapa(String mapa) {
 		this.mapa = mapa;
 	}
+
 	public int getId() {
 		return id;
 	}
