@@ -27,7 +27,7 @@ public class ClienteTCP {
 	public ClienteTCP() {
 		try {
 			clientSocket = new Socket();
-			addr = new InetSocketAddress("10.1.2.127",5555);
+			addr = new InetSocketAddress(5555);
 			clientSocket.connect(addr);
 			is = new ObjectInputStream(clientSocket.getInputStream());
 			os = new ObjectOutputStream(clientSocket.getOutputStream());

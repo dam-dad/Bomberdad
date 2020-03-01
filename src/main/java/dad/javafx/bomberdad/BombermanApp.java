@@ -253,7 +253,7 @@ public class BombermanApp extends GameApplication {
 //nuevo, hay mucho codigo repetido, hay que pullirlo un poco
 	public void initOnlineMode() {
 
-		if (multiplayer) {
+		if (multiplayer && !onlineActivo) {
 			cliente = new ClienteTCP();
 			id = cliente.getId();
 			onlineActivo = true;
@@ -491,7 +491,8 @@ public class BombermanApp extends GameApplication {
 
 					FXGL.getGameTimer().runOnceAfter(() -> {
 
-						bomb.getComponent(BombComponent.class).explode(power);
+						bomb.getComponent(BombComponent.class).explode(power,FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(player.getIdEntity())
+								.getComponent(PlayerComponent.class));
 
 					}, Duration.seconds(2));
 				} catch (Exception e) {
