@@ -9,12 +9,6 @@ import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
 
 import java.io.IOException;
 import java.util.Map;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 
 import com.almasb.fxgl.app.FXGLMenu;
 import com.almasb.fxgl.app.GameApplication;
@@ -34,7 +28,6 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.saving.DataFile;
 import com.almasb.fxgl.texture.Texture;
-import com.almasb.fxgl.time.Timer;
 import com.almasb.fxgl.ui.UI;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
 import com.almasb.fxgl.pathfinding.CellState;
@@ -64,16 +57,18 @@ public class BombermanApp extends GameApplication {
 	private static boolean requestNewGame = false;
 	public static String theme = "crab";
 	private static ClienteTCP cliente;
+	public static String ip;
+	public static int port;
 	private PlayerPosition playerPosition;
 	public static boolean multiplayer = false, onlineActivo = false;
 	public static boolean moving = false;
 	public static boolean fullScreen = false;
 
-	//nuevo
+	// nuevo
 	private static boolean juegoPreparado = false;
 	public static Puntuaciones ratings = new Puntuaciones();
 	int i = 0;
-	public int tam=0;
+	public int tam = 0;
 	private BombermanAppUIController uiController = new BombermanAppUIController();
 	public int id;
 	public static int numberPalyers = 3;
@@ -82,7 +77,7 @@ public class BombermanApp extends GameApplication {
 	protected void initSettings(GameSettings settings) {
 		settings.setTitle("BomberDAD");
 		settings.setVersion("0.1");
-		settings.setWidth((19 * TILE_SIZE)+(UI_SIZE*2));
+		settings.setWidth((19 * TILE_SIZE) + (UI_SIZE * 2));
 		settings.setHeight(19 * TILE_SIZE);
 		settings.setManualResizeEnabled(true);
 		settings.setMenuEnabled(true);
@@ -99,12 +94,12 @@ public class BombermanApp extends GameApplication {
 			public FXGLMenu newGameMenu() {
 				return new CustomMenu(MenuType.GAME_MENU);
 			}
-			
+
 			@Override
 			public LoadingScene newLoadingScene() {
 				return new LoadingSceneController();
 			}
-						
+
 			@Override
 			public IntroScene newIntro() {
 				return new IntroSceneController();
@@ -127,7 +122,8 @@ public class BombermanApp extends GameApplication {
 			@Override
 			protected void onAction() {
 
-				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class).up();
+				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class)
+						.up();
 			}
 		}, KeyCode.W);
 
@@ -135,7 +131,8 @@ public class BombermanApp extends GameApplication {
 			@Override
 			protected void onAction() {
 
-					FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class).left();
+				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class)
+						.left();
 			}
 		}, KeyCode.A);
 
@@ -143,7 +140,8 @@ public class BombermanApp extends GameApplication {
 			@Override
 			protected void onAction() {
 
-				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class).down();
+				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class)
+						.down();
 
 			}
 		}, KeyCode.S);
@@ -152,8 +150,8 @@ public class BombermanApp extends GameApplication {
 			@Override
 			protected void onAction() {
 
-
-				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class).right();
+				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class)
+						.right();
 
 			}
 		}, KeyCode.D);
@@ -225,10 +223,10 @@ public class BombermanApp extends GameApplication {
 		}
 
 	}
+
 //Nuevo
 	public void initOfflineMode() {
 		GenerateMap.newMap(lvl);
-
 
 		getGameWorld().addEntityFactory(new BombermanFactory(theme));
 		Texture texture = getAssetLoader().loadTexture("bg" + theme + ".gif");
@@ -259,27 +257,14 @@ public class BombermanApp extends GameApplication {
 		ratings.getPoints().get(0).set(0, player.getComponent(PlayerComponent.class).getName());
 		ratings.getPoints().get(1).set(0, player2.getComponent(PlayerComponent.class).getName());
 	}
+
 //nuevo, hay mucho codigo repetido, hay que pullirlo un poco
 	public void initOnlineMode() {
-
-		if (multiplayer) {
-			cliente = new ClienteTCP();
-			id=cliente.getId();
-			playerPosition= new PlayerPosition(
-					0.0,
-					0.0,
-					id	
-					);
-			if (numberPalyers >= 3) {
-				player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
-				player2.getComponent(PlayerComponent.class).setName("Alejandro");
-				ratings.getPoints().get(2).set(0, player.getComponent(PlayerComponent.class).getName());
-			}
-			if (numberPalyers == 4) {
-				player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
-				player2.getComponent(PlayerComponent.class).setName("Alejandro");
-				ratings.getPoints().get(2).set(0, player.getComponent(PlayerComponent.class).getName());
-			}
+		if (multiplayer && !onlineActivo) {
+			cliente = new ClienteTCP(ip, port);
+			id = cliente.getId();
+			playerPosition = new PlayerPosition(0.0, 0.0, id);
+			onlineActivo = true;
 		}
 		playerPosition = new PlayerPosition(0.0, 0.0, id);
 		GenerateMap.createMap(cliente.getMapa());
@@ -311,12 +296,12 @@ public class BombermanApp extends GameApplication {
 		juegoPreparado = true;
 
 	}
-	
+
 	@Override
 	public void loadState(DataFile dataFile) {
 		super.loadState(dataFile);
 	}
-	
+
 	@Override
 	public void initGameVars(Map<String, Object> vars) {
 		super.initGameVars(vars);
@@ -333,7 +318,7 @@ public class BombermanApp extends GameApplication {
 					int id = 0;
 					if (pl.getComponent(PlayerComponent.class).getName().equals("Player")) {
 						id = 0;
-					} else if(pl.getComponent(PlayerComponent.class).getName().equals("Player2")) {
+					} else if (pl.getComponent(PlayerComponent.class).getName().equals("Player2")) {
 						id = 1;
 					}
 					uiController.setAddProgress(BombermanType.UPMAXBOMBS, id);
@@ -350,7 +335,7 @@ public class BombermanApp extends GameApplication {
 					int id = 0;
 					if (pl.getComponent(PlayerComponent.class).getName().equals("Player")) {
 						id = 0;
-					} else if(pl.getComponent(PlayerComponent.class).getName().equals("Player2")) {
+					} else if (pl.getComponent(PlayerComponent.class).getName().equals("Player2")) {
 						id = 1;
 					}
 					uiController.setAddProgress(BombermanType.UPPOWER, id);
@@ -377,7 +362,7 @@ public class BombermanApp extends GameApplication {
 			envioPosicion("playerPosition");
 
 		}
-		//nuevo
+		// nuevo
 		if (requestNewGame) {
 			requestNewGame = false;
 			if (!multiplayer) {
@@ -385,6 +370,7 @@ public class BombermanApp extends GameApplication {
 			} else {
 				if (id == 0) {
 					DynamicObject dOSolicitaMapa = new DynamicObject("RequestNewMap", String.valueOf(lvl));
+					System.out.println(lvl);
 					try {
 						cliente.getOs().writeObject(dOSolicitaMapa);
 					} catch (IOException e) {
@@ -393,7 +379,7 @@ public class BombermanApp extends GameApplication {
 				}
 
 			}
-			
+
 		}
 	}
 
@@ -409,6 +395,7 @@ public class BombermanApp extends GameApplication {
 			}
 		}
 	}
+
 //nuevo
 	private void envioPosicion(String type) {
 		if (juegoPreparado) {
@@ -436,22 +423,22 @@ public class BombermanApp extends GameApplication {
 			if (owned != null && !owned.equals(e.getComponent(PlayerComponent.class))) {
 				if (owned.getName().equals("Player")) {
 					pl = 0;
-				} else if(owned.getName().equals("Player2")) {
+				} else if (owned.getName().equals("Player2")) {
 					pl = 1;
 				}
 				int pOld = Integer.parseInt(ratings.getPoints().get(pl).get(1));
 				int pNew = pOld + 100;
-				uiController.setPointsLbl(pNew+"", pl);
-				ratings.getPoints().get(pl).set(1, ""+pNew);
+				uiController.setPointsLbl(pNew + "", pl);
+				ratings.getPoints().get(pl).set(1, "" + pNew);
 //				System.out.println(ratings.getPoints().get(pl).get(0)+" points: "+ratings.getPoints().get(pl).get(1));
 			}
 			PlayerComponent playerHit = e.getComponent(PlayerComponent.class);
 			if (playerHit.getName().equals("Player")) {
 				pl = 0;
-			} else if(playerHit.getName().equals("Player2")) {
+			} else if (playerHit.getName().equals("Player2")) {
 				pl = 1;
 			}
-			uiController.setLifesLbl(playerHit.getVidas()+"", pl);
+			uiController.setLifesLbl(playerHit.getVidas() + "", pl);
 			if (playerHit.getVidas() == 0) {
 				e.removeFromWorld();
 				levelUp();
@@ -471,14 +458,15 @@ public class BombermanApp extends GameApplication {
 				int pl = 0;
 				if (owned.getName().equals("Player")) {
 					pl = 0;
-				} else if(owned.getName().equals("Player2")) {
+				} else if (owned.getName().equals("Player2")) {
 					pl = 1;
 				}
 				int pOld = Integer.parseInt(ratings.getPoints().get(pl).get(1));
 				int pNew = pOld + 5;
-				uiController.setPointsLbl(pNew+"", pl);
-				ratings.getPoints().get(pl).set(1, ""+pNew);
-				System.out.println(ratings.getPoints().get(pl).get(0)+" points: "+ratings.getPoints().get(pl).get(1));
+				uiController.setPointsLbl(pNew + "", pl);
+				ratings.getPoints().get(pl).set(1, "" + pNew);
+				System.out
+						.println(ratings.getPoints().get(pl).get(0) + " points: " + ratings.getPoints().get(pl).get(1));
 			}
 			e.removeFromWorld();
 			// Cambiar el estado de la entidad BRICK a "WALKABLE" cuando desaparece
@@ -503,6 +491,7 @@ public class BombermanApp extends GameApplication {
 			e.removeFromWorld();
 		}
 	}
+
 //Nuevo
 	public static void actualizaNuevoMapa(String mapa) {
 		juegoPreparado = false;
@@ -511,6 +500,7 @@ public class BombermanApp extends GameApplication {
 			getGameController().startNewGame();
 		}, Duration.millis(10));
 	}
+
 //Nuevo
 	public static void actualizarPlayer(PlayerPosition player) {
 
@@ -528,6 +518,7 @@ public class BombermanApp extends GameApplication {
 
 		}
 	}
+
 //Nuevo
 	public static void ponerBombaPlayer(PlayerPosition player) {
 		if (juegoPreparado) {
@@ -543,7 +534,9 @@ public class BombermanApp extends GameApplication {
 
 					FXGL.getGameTimer().runOnceAfter(() -> {
 
-						bomb.getComponent(BombComponent.class).explode(power,FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(player.getIdEntity()).getComponent(PlayerComponent.class));
+						bomb.getComponent(BombComponent.class).explode(power,
+								FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(player.getIdEntity())
+										.getComponent(PlayerComponent.class));
 
 					}, Duration.seconds(2));
 				} catch (Exception e) {

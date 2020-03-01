@@ -19,28 +19,22 @@ public class ClienteTCP {
 	private int id;
 	private String mapa;
 
-	
-
-
 	public static ArrayList<String>listaMovimientos= new ArrayList<String>();
 
-	public ClienteTCP() {
+	public ClienteTCP(String ip, int port) {
 		try {
 			clientSocket = new Socket();
-			addr = new InetSocketAddress("10.1.2.127",5555);
+			addr = new InetSocketAddress(ip,port);
 			clientSocket.connect(addr);
 			is = new ObjectInputStream(clientSocket.getInputStream());
 			os = new ObjectOutputStream(clientSocket.getOutputStream());
 			inicializarPartida();
 			recibir=new Recibir(this);
 			recibir.start();
-		
-
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 	}
-
 
 	public Recibir getRecibir() {
 		return recibir;
