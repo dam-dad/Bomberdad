@@ -19,6 +19,7 @@ public class PlayerComponent extends Component {
 
 	private int maxBombs = 1;
 	private int bombsPlaced = 0;
+	
 	private int vidas = 3;
 	private String name;
 	private int power = 0;
@@ -122,6 +123,9 @@ public class PlayerComponent extends Component {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	public int getPower() {
+		return power;
 	}
 
 }

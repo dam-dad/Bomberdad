@@ -5,11 +5,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import dad.javafx.bomberdad.GenerateMap;
+
 public class Server {
 	private static final int PORT = 5555;
 	private static int id = 0;
-
-	// public static ArrayList<ConnectionClient> clientes = new ArrayList<>();
+	private static int numeroJugadoresPartida=2;
 	public static ArrayList<ConnectionClient> clientes = new ArrayList<>();
 
 	public static void iniciar() throws IOException {
@@ -29,6 +30,7 @@ public class Server {
 	public static int listaSize() {
 		return clientes.size();
 	}
+
 
 	public static void main(String[] args) {
 		try {
