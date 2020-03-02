@@ -7,7 +7,6 @@ import static com.almasb.fxgl.dsl.FXGL.texture;
 import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.ExpireCleanComponent;
-import com.almasb.fxgl.dsl.components.ProjectileComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
@@ -22,7 +21,6 @@ import com.almasb.fxgl.physics.HitBox;
 import dad.javafx.bomberdad.components.BombComponent;
 import dad.javafx.bomberdad.components.EnemyComponent;
 import dad.javafx.bomberdad.components.PlayerComponent;
-import dad.javafx.bomberdad.components.StaticComponent;
 import dad.javafx.bomberdad.ia.AvoidBombs;
 import dad.javafx.bomberdad.ia.ChasePlayer;
 //----
@@ -41,6 +39,9 @@ public class BombermanFactory implements EntityFactory {
 		this.theme = theme;
 	}
 
+	/**
+	 * Entidad del suelo y su textura
+	 */
 	@Spawns("f")
 	public Entity newBackground(SpawnData data) {
 		return FXGL.entityBuilder().type(BombermanType.FLOOR).from(data).opacity(0)
@@ -50,12 +51,18 @@ public class BombermanFactory implements EntityFactory {
 				.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid")))).build();
 	}
 
+	/**
+	 * Entidad del muro y su textura
+	 */
 	@Spawns("w")
 	public Entity newWall(SpawnData data) {
 		return FXGL.entityBuilder().type(BombermanType.WALL).from(data).viewWithBBox(FXGL.getAssetLoader()
 				.loadTexture("rock" + theme + ".png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE)).build();
 	}
 
+	/**
+	 * Entidad del bloque y su textura
+	 */
 	@Spawns("b")
 	public Entity newBrick(SpawnData data) {
 		return FXGL.entityBuilder().type(BombermanType.BRICK).from(data)
@@ -65,6 +72,9 @@ public class BombermanFactory implements EntityFactory {
 				.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid")))).build();
 	}
 
+	/**
+	 * Entidad del bloque que genera powerup rojo y su textura
+	 */
 	@Spawns("r")
 	public Entity newBrickRed(SpawnData data) {
 		return FXGL.entityBuilder().type(BombermanType.BRICKRED).from(data)
@@ -74,6 +84,9 @@ public class BombermanFactory implements EntityFactory {
 				.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid")))).build();
 	}
 
+	/**
+	 * Entidad del bloque que genera un powerup amarillo y su textura
+	 */
 	@Spawns("y")
 	public Entity newBrickYellow(SpawnData data) {
 		return FXGL.entityBuilder().type(BombermanType.BRICKYELLOW).from(data)
@@ -83,18 +96,9 @@ public class BombermanFactory implements EntityFactory {
 				.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid")))).build();
 	}
 
-//OLD PLAYER
-//    @Spawns("Player")
-//    public Entity newPlayer(SpawnData data) {
-//        return FXGL.entityBuilder()
-//                .type(BombermanType.PLAYER)
-//                .from(data)
-//                .viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.BLUE))
-//                .with(new CollidableComponent(true))
-//                .with(new PlayerComponent())
-//                .build();
-//    }
-	// PRUEBAS
+	/**
+	 * Entidad del jugador y su textura
+	 */
 	@Spawns("Player")
 	public Entity newPlayer(SpawnData data) {
 		Entity e = entityBuilder().from(data).type(BombermanType.PLAYER)
@@ -103,13 +107,14 @@ public class BombermanFactory implements EntityFactory {
 						BombermanApp.TILE_SIZE))
 				.with(new CollidableComponent(true)).with(new CellMoveComponent(30, 30, 175))
 				.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid")))).with(new PlayerComponent()).build();
-
-//        e.getTransformComponent().setRotationOrigin(new Point2D(35 / 2.0, 40 / 2.0));
 		e.getTransformComponent().setScaleOrigin(new Point2D(0, 0));
 
 		return e;
 	}
 
+	/**
+	 * Entidad de la bomba y su textura
+	 */
 	@Spawns("Bomb")
 	public Entity newBomb(SpawnData data) {
 		Entity bombBuilder = entityBuilder().type(BombermanType.BOMB).from(data)
@@ -121,18 +126,27 @@ public class BombermanFactory implements EntityFactory {
 		return bombBuilder;
 	}
 
+	/**
+	 * Entidad del powerup de maximo de bombas y su textura
+	 */
 	@Spawns("PUMaxBombs")
 	public Entity newMaxBomsUp(SpawnData data) {
 		return FXGL.entityBuilder().type(BombermanType.UPMAXBOMBS).from(data)
 				.viewWithBBox(texture("MoreBombsBottle.gif")).with(new CollidableComponent(true)).build();
 	}
 
+	/**
+	 * Entidad del power de aumento de radio de explosión y su textura
+	 */
 	@Spawns("PUPower")
 	public Entity newPower(SpawnData data) {
 		return FXGL.entityBuilder().type(BombermanType.UPPOWER).from(data).viewWithBBox(texture("PowerBottle.gif"))
 				.with(new CollidableComponent(true)).build();
 	}
 
+	/**
+	 * Entidad de la explosión y su textura
+	 */
 	@Spawns("explosion")
 	public Entity newExplosion(SpawnData data) {
 		return FXGL.entityBuilder().type(BombermanType.EXPLOSION).from(data)
@@ -141,7 +155,9 @@ public class BombermanFactory implements EntityFactory {
 				.with(new ExpireCleanComponent(Duration.seconds(0.66))).build();
 	}
 
-	//////
+	/**
+	 * Entidad del enemy que persigue y su textura
+	 */
 	@Spawns("e")
 	public Entity newEnemy(SpawnData data) {
 		Entity enemy = entityBuilder().from(data).type(BombermanType.ENEMY)
@@ -156,6 +172,9 @@ public class BombermanFactory implements EntityFactory {
 		return enemy;
 	}
 
+	/**
+	 * Entidad del enemy que defiende una zona y su textura
+	 */
 	@Spawns("d")
 	public Entity newEnemyZone(SpawnData data) {
 		Entity enemy = entityBuilder().from(data).type(BombermanType.ENEMY)
@@ -168,25 +187,5 @@ public class BombermanFactory implements EntityFactory {
 		enemy.getTransformComponent().setScaleOrigin(new Point2D(0, 0));
 
 		return enemy;
-	}
-
-	@Spawns("s")
-	public Entity newStaticEnemy(SpawnData data) {
-		Entity enemy = entityBuilder().from(data).type(BombermanType.ENEMY)
-				.bbox(new HitBox(new Point2D(2, 2), BoundingShape.box(30, 30)))
-				.viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.DARKRED))
-				.with(new StaticComponent()).build();
-
-		enemy.getTransformComponent().setScaleOrigin(new Point2D(0, 0));
-
-		return enemy;
-	}
-
-	@Spawns("Bullet")
-	public Entity newBullet(SpawnData data) {
-		Point2D dir = data.get("dir");
-		return entityBuilder().from(data).type(BombermanType.BULLET).viewWithBBox("bala.png")
-				.with(new ProjectileComponent(dir, 50)).build();
-
 	}
 }

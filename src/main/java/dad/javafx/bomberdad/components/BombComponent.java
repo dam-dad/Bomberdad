@@ -37,7 +37,7 @@ public class BombComponent extends Component {
 				.get(this.getEntity().getComponent(CellMoveComponent.class).getCellX(),
 						this.getEntity().getComponent(CellMoveComponent.class).getCellY())
 				.setState(CellState.NOT_WALKABLE);
-	}
+		}
 
 	public void explode(int power, PlayerComponent owned) {
 		BoundingBoxComponent bbox = getEntity().getBoundingBoxComponent();
@@ -192,5 +192,4 @@ public class BombComponent extends Component {
 		getEntity().removeFromWorld();
 		FXGL.spawn("explosion", getEntity().getPosition());
 	}
-
-}
+				}

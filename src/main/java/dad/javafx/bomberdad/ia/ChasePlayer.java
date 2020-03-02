@@ -15,6 +15,10 @@ public class ChasePlayer extends Component {
 	private AStarMoveComponent astar;
 	int[] coorCerca = new int[2];
 
+	/**
+	 * @param tpf Tiempo por frame
+	 * Recibe las coordenadas del player mas cercano y se mueve hacia su posición
+	*/
 	@Override
 	public void onUpdate(double tpf) {
 		coorCerca = playerNear();
@@ -22,7 +26,8 @@ public class ChasePlayer extends Component {
 	}
 
 	/**
-	 * 
+	 * Localizar al player mas cercano
+	 * @return Devuelve un array de enteros, (posición X e Y del jugador mas cercano) 
 	*/
 	public int[] playerNear() {
 		ArrayList<Entity> listaPlayer = new ArrayList<Entity>(

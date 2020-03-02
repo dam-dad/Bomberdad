@@ -17,7 +17,10 @@ public class DefendZone extends Component {
 	int enemyYOrigen = 0;
 	int[] coorCerca = new int[3];
 	
-
+	/**
+	 * @param tpf Tiempo por frame
+	 * Recibe las coordenadas del player mas cercano y se mueve hacia su posición si está demasiado cerca de la posicion de origen del enemy
+	*/
 	@Override
 	public void onUpdate(double tpf) {
 		if (enemyXOrigen == 0 & enemyYOrigen == 0) {
@@ -33,6 +36,10 @@ public class DefendZone extends Component {
 		}
 	}
 	
+	/**
+	 * Localizar al player mas cercano
+	 * @return Devuelve un array de enteros, (posición X e Y del jugador mas cercano y la distancia a la que se encuentra del enemy) 
+	*/
 	public int[] playerOnZone() {
 		ArrayList<Entity> listaPlayer = new ArrayList<Entity>(
 				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER));

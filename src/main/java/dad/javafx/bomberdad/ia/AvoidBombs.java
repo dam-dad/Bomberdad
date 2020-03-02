@@ -17,6 +17,10 @@ public class AvoidBombs extends Component {
 	int xb;
 	int yb;
 
+	/**
+	 * @param tpf Tiempo por frame
+	 * Recibe las coordenadas de la bomba mas cercana y el enemy se mueve hacia una posicion fuera del radio de explosion
+	*/
 	@Override
 	public void onUpdate(double tpf) {
 		ArrayList<Entity> listaBombs = new ArrayList<Entity>(FXGL.getGameWorld().getEntitiesByType(BombermanType.BOMB));
@@ -39,7 +43,10 @@ public class AvoidBombs extends Component {
 			}
 		}
 	
-
+	/**
+	 * Localizar bombas cerca
+	 * @return Devuelve un array de enteros, (posición X e Y de la bomba mas cercana y la distancia a la que se encuentra del enemy) 
+	*/
 	public int[] bombNear() {
 		ArrayList<Entity> listaBombs = new ArrayList<Entity>(FXGL.getGameWorld().getEntitiesByType(BombermanType.BOMB));
 		int enemyX = FXGL.getGameWorld().getEntitiesByType(BombermanType.ENEMY).get(0).call("getCellX");
