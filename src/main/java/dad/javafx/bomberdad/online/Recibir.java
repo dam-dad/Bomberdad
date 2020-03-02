@@ -37,8 +37,6 @@ public class Recibir extends Thread {
 					String mapa = (String) dO.getObjeto();
 					BombermanApp.actualizaNuevoMapa(mapa);
 					break;
-			
-					
 				default:
 					break;
 				}
@@ -49,6 +47,7 @@ public class Recibir extends Thread {
 				e1.printStackTrace();
 			}
 		}
+
 	}
 
 }
