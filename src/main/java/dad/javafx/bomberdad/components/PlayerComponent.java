@@ -19,7 +19,7 @@ public class PlayerComponent extends Component {
 
 	private int maxBombs = 1;
 	private int bombsPlaced = 0;
-	
+
 	private int vidas = 3;
 	private String name;
 	private int power = 0;
@@ -27,23 +27,18 @@ public class PlayerComponent extends Component {
 	private AStarMoveComponent astar;
 
 	public void up() {
-		if (!astar.isMoving())
 			astar.moveToUpCell();
 	}
 
 	public void down() {
-		if (!astar.isMoving())
 			astar.moveToDownCell();
-
 	}
 
 	public void left() {
-		if (!astar.isMoving())
 			astar.moveToLeftCell();
 	}
 
 	public void right() {
-		if (!astar.isMoving())
 			astar.moveToRightCell();
 	}
 
@@ -62,7 +57,6 @@ public class PlayerComponent extends Component {
 	}
 
 	public void resetPower() {
-
 		power = 0;
 	}
 
@@ -124,6 +118,7 @@ public class PlayerComponent extends Component {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public int getPower() {
 		return power;
 	}
