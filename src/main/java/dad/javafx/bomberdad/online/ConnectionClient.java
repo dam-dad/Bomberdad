@@ -3,104 +3,146 @@ package dad.javafx.bomberdad.online;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import com.almasb.fxgl.app.GameApplication;
-import com.almasb.fxgl.core.util.Platform;
-import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.pathfinding.CellMoveComponent;
-
-import dad.javafx.bomberdad.BombermanApp;
-import dad.javafx.bomberdad.BombermanType;
-import dad.javafx.bomberdad.components.PlayerComponent;
+import dad.javafx.bomberdad.GenerateMap;
 
 public class ConnectionClient extends Thread {
 
-	Socket client;
-	DataOutputStream dataOut;
-	DataInputStream dataIn;
+	public Socket client;
 
-	public DataOutputStream getDataOut() {
-		return dataOut;
-	}
+	ObjectOutputStream objectOut;
+	ObjectInputStream objectIn;
+	DynamicObject objetoDinamico;
+	private int idPlayer;
 
-	public void setDataOut(DataOutputStream dataOut) {
-		this.dataOut = dataOut;
-	}
-
-	public ConnectionClient(Socket client) throws IOException {
+	public ConnectionClient(Socket client, int id) throws IOException {
+		super();
 		this.client = client;
-
-		dataIn = new DataInputStream(client.getInputStream());
-		dataOut = new DataOutputStream(client.getOutputStream());
+		this.idPlayer = id;
+		objectOut = new ObjectOutputStream(client.getOutputStream());
+		objectIn = new ObjectInputStream(client.getInputStream());
 	}
 
 	@Override
 	public void run() {
-		String letra;
-		int id;
-		String cadena;
+
 		while (true) {
-
 			try {
-				cadena = dataIn.readUTF();
-				letra = cadena.charAt(0) + "";
-				id = Integer.parseInt(cadena.charAt(1) + "");
-				switch (letra) {
-				case "l":
-					procesaLista(letra, id);
-					break;
-				case "w":
-					procesaDato(letra, id);
-					break;
-				case "a":
-					procesaDato(letra, id);
-					break;
-				case "s":
-					procesaDato(letra, id);
-					break;
-				case "d":
-					procesaDato(letra, id);
+				this.objetoDinamico = (DynamicObject) objectIn.readObject();
+				procesaDynamicObject(this.objetoDinamico);
 
-					break;
-				case "e":
-					procesaDato(letra, id);
-					break;
+			} catch (IOException | ClassNotFoundException e) {
+				e.printStackTrace();
+			}
 
-				default:
-					break;
+		}
+	}
+
+	private void procesaDynamicObject(DynamicObject dO) {
+
+		DynamicObject nDo = new DynamicObject(dO.getTipoObjeto(), dO.getObjeto());
+
+		switch (nDo.getTipoObjeto()) {
+
+		case "getId":
+			
+			nDo.setIdJugador(idPlayer);
+			try {
+				this.objectOut.writeObject(nDo);
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			}
+			break;
+			
+		case "getLista":
+			
+			nDo.setTipoObjeto(Server.listaSize() + "");
+			try {
+				this.objectOut.writeObject(nDo);
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			}
+			break;
+			//nuevo
+		case "PlacePlayerBomb":	
+		case "PlayerPosition":
+			nDo.setIdJugador(dO.getIdJugador());
+			procesaPosicion(nDo);
+			break;
+			
+		case "RequestNewMap":
+			procesaMapa(dO);
+			break;
+		case "PlaceBomb":
+
+			break;
+
+		case "PowerUpp":
+
+			break;
+
+		default:
+			break;
+		}
+
+	}
+//nuevo
+	private void procesaMapa(DynamicObject dO) {
+	
+		int lvl= Integer.parseInt((String)dO.getObjeto());
+		String map= generaMapa(lvl);
+		System.out.println(lvl);
+		System.out.println(map);
+		DynamicObject dOenvio= new DynamicObject("RequestNewMap",map);
+		for (int i = 0; i < Server.clientes.size(); i++) {
+			try {
+				Server.clientes.get(i).getObjectOut().writeObject(dOenvio);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void procesaPosicion(DynamicObject dO) {
+		for (int i = 0; i < Server.clientes.size(); i++) {
+			if (this.idPlayer != Server.clientes.get(i).getIdPlayer()) {
+				try {
+					Server.clientes.get(i).getObjectOut().writeObject(dO);
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
-
 		}
+
+	}
+	private String generaMapa(int lvl) {
+		GenerateMap.newMap(lvl);
+		return GenerateMap.getMap();
 	}
 
-	private void procesaDato(String accion, int id) {
-		
-		for (int i = 0; i < Server.clientes.size(); i++) {
-
-			try {
-				Server.clientes.get(i).getDataOut().writeUTF(accion + "" + id);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-		}
-		
+	public ObjectOutputStream getObjectOut() {
+		return objectOut;
 	}
 
-	private void procesaLista(String accion, int id) {
-		for (int i = 0; i < Server.clientes.size(); i++) {
+	public void setObjectOut(ObjectOutputStream objectOut) {
+		this.objectOut = objectOut;
+	}
 
-			try {
-				Server.clientes.get(i).getDataOut().writeUTF(Server.listaSize() + "");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+	public ObjectInputStream getObjectIn() {
+		return objectIn;
+	}
 
+	public void setObjectIn(ObjectInputStream objectIn) {
+		this.objectIn = objectIn;
+	}
+
+	public int getIdPlayer() {
+		return idPlayer;
 	}
 
 }

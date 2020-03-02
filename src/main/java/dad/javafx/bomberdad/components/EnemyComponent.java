@@ -35,7 +35,7 @@ public class EnemyComponent extends Component {
 							(BombermanApp.TILE_SIZE / 2)));
 
 			FXGL.getGameTimer().runOnceAfter(() -> {
-				bomb.getComponent(BombComponent.class).explode(0);
+				bomb.getComponent(BombComponent.class).explode(0, null);
 			}, Duration.seconds(2));
 		}
 

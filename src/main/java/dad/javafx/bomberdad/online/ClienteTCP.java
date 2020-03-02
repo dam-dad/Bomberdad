@@ -1,124 +1,110 @@
 package dad.javafx.bomberdad.online;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Date;
-
-import com.almasb.fxgl.dsl.FXGL;
-import dad.javafx.bomberdad.BombermanType;
-import dad.javafx.bomberdad.components.PlayerComponent;
+import java.util.ArrayList;
 
 public class ClienteTCP {
-	private DataInputStream is;
-	private DataOutputStream os;
+	private ObjectInputStream is;
+	private ObjectOutputStream os;
 	private Socket clientSocket;
+
+	public InetSocketAddress addr;
 	public static boolean bombaPuesta = false;
 	public static int colocada = 0;
+	public Recibir recibir;
+	private int id;
+	private String mapa;
 
-	public ClienteTCP() {
+	public static ArrayList<String>listaMovimientos= new ArrayList<String>();
+
+	public ClienteTCP(String ip, int port) {
 		try {
 			clientSocket = new Socket();
-			InetSocketAddress addr = new InetSocketAddress("10.1.2.127", 5555);
+			addr = new InetSocketAddress(ip,port);
 			clientSocket.connect(addr);
-			is = new DataInputStream(clientSocket.getInputStream());
-			os = new DataOutputStream(clientSocket.getOutputStream());
-			System.out.println("Conectado");
-			os.writeUTF("l1");
-			@SuppressWarnings("unused")
-			String line;
-			while (!(line = is.readUTF()).equals("2")) {
-				// waiting
-				os.writeUTF("l1");
-			}
-			is.readUTF();
-			Recibir recibir = new Recibir(is);
+			is = new ObjectInputStream(clientSocket.getInputStream());
+			os = new ObjectOutputStream(clientSocket.getOutputStream());
+			inicializarPartida();
+			recibir=new Recibir(this);
 			recibir.start();
-
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 	}
 
-	public DataInputStream getIs() {
-		return is;
+	public Recibir getRecibir() {
+		return recibir;
 	}
 
-	public void setIs(DataInputStream is) {
-		this.is = is;
+
+	private void inicializarPartida() {
+			DynamicObject dOsolicitarId= new DynamicObject("getId", "getId");
+		try {
+			os.writeObject(dOsolicitarId);
+			DynamicObject leidO=(DynamicObject)is.readObject();
+			this.id=leidO.getIdJugador();
+			DynamicObject dOsolicitaLista= new DynamicObject("getLista","getLista");
+			os.writeObject(dOsolicitaLista);
+			DynamicObject leedOlista=(DynamicObject)is.readObject();
+			while (!leedOlista.getTipoObjeto().equals("2")) {
+				os.writeObject(dOsolicitaLista);
+				leedOlista=(DynamicObject)is.readObject();
+			}
+			//nuevo
+			if(id == 0) {
+				DynamicObject dOSolicitaMapa= new DynamicObject("RequestNewMap", "0");
+				os.writeObject(dOSolicitaMapa);
+			}
+				DynamicObject leeMapa=(DynamicObject)is.readObject();
+				setMapa((String)leeMapa.getObjeto());
+		
+			
+			
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
-	public DataOutputStream getOs() {
+	
+	public String getMapa() {
+		return mapa;
+	}
+
+
+	public void setMapa(String mapa) {
+		this.mapa = mapa;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	public ObjectOutputStream getOs() {
 		return os;
 	}
 
-	public void setOs(DataOutputStream os) {
-		this.os = os;
+
+	public ObjectInputStream getIs() {
+		return is;
 	}
 
-}
 
-class Recibir extends Thread {
-	public boolean continuar = true;
-	DataInputStream is;
-
-	public Recibir(DataInputStream is) {
+	public void setIs(ObjectInputStream is) {
 		this.is = is;
 	}
 
-	@Override
-	public void run() {
-		super.run();
-		while (continuar) {
-			try {
-				String letra = is.readUTF() + "";
-				int id = Integer.parseInt(letra.charAt(1) + "");
-				switch (letra.charAt(0) + "") {
-				case "w":
-					
-					FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id)
-							.getComponent(PlayerComponent.class).getAstar().moveToUpCell();
-					
-					break;
-				case "a":
-					
-							FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id)
-									.getComponent(PlayerComponent.class).getAstar().moveToLeftCell();
-							
-					break;
-				case "s":
-					
-							FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id)
-									.getComponent(PlayerComponent.class).getAstar().moveToDownCell();
-							
-					break;
-				case "d":
-					
-							FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id)
-									.getComponent(PlayerComponent.class).getAstar().moveToRightCell();
-							
-					break;
-				case "e":
-					ClienteTCP.bombaPuesta = true;
-					ClienteTCP.colocada = 1;
-					break;
-				default:
-					break;
-				}
-				DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-				Date date = new Date();
-				System.out.println(letra.charAt(0) + "    " + dateFormat.format(date));
-				ClienteTCP.colocada = 1;
-					
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 
-		}
+	public void setOs(ObjectOutputStream os) {
+		this.os = os;
 	}
+
 }

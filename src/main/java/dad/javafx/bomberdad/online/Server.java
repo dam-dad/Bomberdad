@@ -1,44 +1,22 @@
 package dad.javafx.bomberdad.online;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import com.almasb.fxgl.app.GameApplication;
-
-import dad.javafx.bomberdad.BombermanApp;
-
-public class Server {
+public class Server extends Thread{
 	private static final int PORT = 5555;
-	private static int id=0;
-	private static BombermanApp game;
-
-	public void setGame(BombermanApp game) {
-		this.game = game;
-	}
-
-	//public static ArrayList<ConnectionClient> clientes = new ArrayList<>();
+	private static int id = 0;
+	private static int numeroJugadoresPartida;
 	public static ArrayList<ConnectionClient> clientes = new ArrayList<>();
-	public static void iniciar() throws IOException {
-		ServerSocket listener = new ServerSocket(PORT);
-		while (clientes.size()<2) {
-			System.out.println("[SERVER] Esperando clientes");
-			Socket client = listener.accept();
-			System.out.println("Conectando cliente");
-			ConnectionClient clientThread = new ConnectionClient(client);
-			//ConnectionClientTask<Void> cliente= new ConnectionClientTask<Void>(client, id);
-			clientes.add(clientThread);
-			clientThread.start();
-			id++;
-		}
-		
 
-
+	public Server(int numPlayers) {
+		numeroJugadoresPartida = numPlayers;
 	}
-	public static int listaSize() {
-		return clientes.size();
-	}
-	public static void main(String[] args) {
+	
+	@Override
+	public void run() {
 		try {
 			iniciar();
 		} catch (IOException e) {
@@ -46,4 +24,27 @@ public class Server {
 			e.printStackTrace();
 		}
 	}
+	
+	public void iniciar() throws IOException {
+		ServerSocket listener = new ServerSocket(PORT);
+		while (clientes.size() < numeroJugadoresPartida) {
+			System.out.println("[SERVER] Esperando clientes");
+			Socket client = listener.accept();
+			System.out.println("Conectando cliente");
+			ConnectionClient clientThread = new ConnectionClient(client,id);
+			clientes.add(clientThread);
+			clientThread.start();
+			id++;
+		}
+		listener.close();
+	}
+
+	public static int listaSize() {
+		return clientes.size();
+	}
+
+	public static void setNumeroJugadoresPartida(int numeroJugadoresPartida) {
+		Server.numeroJugadoresPartida = numeroJugadoresPartida;
+	}
+	
 }
