@@ -3,6 +3,7 @@ package dad.javafx.bomberdad;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.ui.UIController;
 
+import dad.javafx.bomberdad.ratings.TarjetaPuntuaciones;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
@@ -57,6 +58,8 @@ public class BombermanAppUIController implements UIController {
 			vboxpl3.setOpacity(0);
 			vboxpl4.setOpacity(0);
 		}
+		vboxpl3.setOpacity(0);
+		vboxpl4.setOpacity(0);
 	}
 
 	public void setPointsLbl(String txt, int id) {

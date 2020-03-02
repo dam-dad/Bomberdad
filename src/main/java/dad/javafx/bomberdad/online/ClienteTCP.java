@@ -48,6 +48,7 @@ public class ClienteTCP {
 		
 			os.writeObject(dOsolicitarId);
 			DynamicObject leidO=(DynamicObject)is.readObject();
+			System.out.println(leidO.getTipoObjeto());
 			this.id=leidO.getIdJugador();
 			System.out.println("DespuesSolicitud"+id);
 			DynamicObject dOsolicitaLista= new DynamicObject("getLista","getLista");
@@ -61,9 +62,13 @@ public class ClienteTCP {
 			if(id == 0) {
 				DynamicObject dOSolicitaMapa= new DynamicObject("RequestNewMap", "0");
 				os.writeObject(dOSolicitaMapa);
-			}
 				//is.readObject();
-				DynamicObject leeMapa=(DynamicObject)is.readObject();
+			}
+			DynamicObject leeMapa = (DynamicObject)is.readObject();
+			while (!leeMapa.getTipoObjeto().equals("RequestNewMap")) {
+				leeMapa = (DynamicObject)is.readObject();
+				
+			}
 				setMapa((String)leeMapa.getObjeto());
 		
 			

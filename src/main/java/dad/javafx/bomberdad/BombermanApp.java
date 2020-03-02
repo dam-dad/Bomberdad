@@ -46,6 +46,7 @@ import dad.javafx.bomberdad.menu.LoadingSceneController;
 import dad.javafx.bomberdad.online.ClienteTCP;
 import dad.javafx.bomberdad.online.DynamicObject;
 import dad.javafx.bomberdad.online.PlayerPosition;
+import dad.javafx.bomberdad.ratings.Puntuaciones;
 import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
 
