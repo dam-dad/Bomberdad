@@ -30,6 +30,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class BombermanFactory implements EntityFactory {
 	
 	private String theme = "crab";
+	public static String id = "";
 	
 	public BombermanFactory(String theme) {
 		this.theme = theme;
@@ -41,7 +42,7 @@ public class BombermanFactory implements EntityFactory {
         		.type(BombermanType.FLOOR)
                 .from(data)
                 .opacity(0)
-               .viewWithBBox(FXGL.getAssetLoader().loadTexture("bg"+theme+".gif", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("bg"+theme+".gif", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
                 .with(new CellMoveComponent(30, 30,0))
                 .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
                 .build();
@@ -107,14 +108,13 @@ public class BombermanFactory implements EntityFactory {
                 .from(data)
                 .type(BombermanType.PLAYER)
                 .bbox(new HitBox(new Point2D(2, 2), BoundingShape.box(30, 30)))
-                .viewWithBBox(FXGL.getAssetLoader().loadTexture("py"+theme+".gif", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("py"+theme+id+".gif", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
                 .with(new CollidableComponent(true))
                 .with(new CellMoveComponent(30, 30, 175))
                 .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
                 .with(new PlayerComponent())
                 .build();
 
-//        e.getTransformComponent().setRotationOrigin(new Point2D(35 / 2.0, 40 / 2.0));
       	e.getTransformComponent().setScaleOrigin(new Point2D(0, 0));
    
 

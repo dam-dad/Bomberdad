@@ -6,6 +6,7 @@ import com.almasb.fxgl.ui.UIController;
 import dad.javafx.bomberdad.ratings.TarjetaPuntuaciones;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -28,6 +29,9 @@ public class BombermanAppUIController implements UIController {
 	private TarjetaPuntuaciones tarjetapl1, tarjetapl4, tarjetapl3, tarjetapl2;
 
 	@FXML
+	private ImageView bgLeft, bgRight;
+
+	@FXML
 	private HBox hboxApp;
 
 	@Override
@@ -43,9 +47,15 @@ public class BombermanAppUIController implements UIController {
 
 		vboxLeft.setPrefWidth(BombermanApp.UI_SIZE);
 		vboxRight.setPrefWidth(BombermanApp.UI_SIZE);
+		bgLeft.setFitWidth(BombermanApp.UI_SIZE);
+		bgRight.setFitWidth(BombermanApp.UI_SIZE);
+		bgLeft.setFitHeight(FXGL.getAppHeight());
+		bgRight.setFitHeight(FXGL.getAppHeight());
+		bgLeft.setImage(new Image("./assets/textures/bg" + BombermanApp.theme + "UI.gif"));
+		bgRight.setImage(new Image("./assets/textures/bg" + BombermanApp.theme + "UI.gif"));
 		vboxLeft.setPrefHeight(FXGL.getAppHeight());
 		vboxRight.setPrefHeight(FXGL.getAppHeight());
-		hboxApp.setPrefWidth(FXGL.getAppWidth() - BombermanApp.UI_SIZE * 2);
+		hboxApp.setPrefWidth(FXGL.getAppWidth() - BombermanApp.UI_SIZE * 3);
 		tarjetapl1.getNumberPointsLb().setText(BombermanApp.ratings.getPoints().get(0).get(0));
 		tarjetapl2.getNumberPointsLb().setText(BombermanApp.ratings.getPoints().get(1).get(0));
 		if (BombermanApp.numberPlayers >= 3)
@@ -60,8 +70,8 @@ public class BombermanAppUIController implements UIController {
 			setPointsLbl(BombermanApp.ratings.getPoints().get(3).get(1), 3);
 
 		if (!BombermanApp.multiplayer) {
-				vboxpl3.setOpacity(0);
-				vboxpl4.setOpacity(0);
+			vboxpl3.setOpacity(0);
+			vboxpl4.setOpacity(0);
 		}
 	}
 

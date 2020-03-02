@@ -266,6 +266,7 @@ public class BombermanApp extends GameApplication {
 		cargarMundo();
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
 		player.getComponent(PlayerComponent.class).setName("Player");
+		BombermanFactory.id = "2";
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
 		player2.getComponent(PlayerComponent.class).setName("PLayer2");
 
