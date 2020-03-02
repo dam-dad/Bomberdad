@@ -48,7 +48,6 @@ public class ConnectionClient extends Thread {
 		switch (nDo.getTipoObjeto()) {
 
 		case "getId":
-			System.out.println("enviando id"+ idPlayer);
 			nDo.setIdJugador(idPlayer);
 			try {
 				System.out.println(nDo.getIdJugador());

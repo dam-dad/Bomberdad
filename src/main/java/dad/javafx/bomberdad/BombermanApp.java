@@ -249,12 +249,11 @@ public class BombermanApp extends GameApplication {
 			cliente = new ClienteTCP(ip, port);
 			id = cliente.getId();
 			onlineActivo = true;
-			System.out.println("fdsfsefs");
 		}
 		
 		playerPosition = new PlayerPosition(0.0, 0.0, id);
 		GenerateMap.createMap(cliente.getMapa());
-		System.out.println(cliente.getMapa());
+		System.out.println(cliente.getMapa() +"yolo");
 		cargarMundo();
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
 		player.getComponent(PlayerComponent.class).setName("Player");

@@ -61,7 +61,10 @@ public class BombermanAppUIController implements UIController {
 			if (BombermanApp.numberPlayers == 3) {
 				vboxpl4.setOpacity(0);
 			}
+			
 		}
+		vboxpl3.setOpacity(0);
+		vboxpl4.setOpacity(0);
 	}
 
 	public void setPointsLbl(String txt, int id) {

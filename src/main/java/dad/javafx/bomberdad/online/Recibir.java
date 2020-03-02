@@ -12,6 +12,7 @@ public class Recibir extends Thread {
 
 	public Recibir(ClienteTCP client) {
 			is = client.getIs();
+		
 	}
 
 	@Override
@@ -35,20 +36,20 @@ public class Recibir extends Thread {
 				// Nuevo
 				case "RequestNewMap":
 					String mapa = (String) dO.getObjeto();
-					System.out.println(mapa);
 					BombermanApp.actualizaNuevoMapa(mapa);
 					break;
+			
+					
 				default:
 					break;
 				}
+			}catch (IOException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		}
-
 	}
 
 }

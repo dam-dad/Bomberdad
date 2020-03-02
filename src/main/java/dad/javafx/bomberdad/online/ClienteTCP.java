@@ -56,6 +56,7 @@ public class ClienteTCP {
 			DynamicObject dOsolicitaLista= new DynamicObject("getLista","getLista");
 			os.writeObject(dOsolicitaLista);
 			DynamicObject leedOlista = (DynamicObject) is.readObject();
+			System.out.println(leedOlista.getObjeto());
 			while (!leedOlista.getTipoObjeto().equals("2")) {
 				os.writeObject(dOsolicitaLista);
 				leedOlista = (DynamicObject) is.readObject();
@@ -65,9 +66,13 @@ public class ClienteTCP {
 				DynamicObject dOSolicitaMapa = new DynamicObject("RequestNewMap", "0");
 				os.writeObject(dOSolicitaMapa);
 			}
-				//is.readObject();
-				DynamicObject leeMapa=(DynamicObject)is.readObject();
-				setMapa((String)leeMapa.getObjeto());
+//				is.readObject();
+			DynamicObject leeMapa=(DynamicObject)is.readObject();
+			while(!leeMapa.getTipoObjeto().equals("RequestNewMap")) {
+				leeMapa=(DynamicObject)is.readObject();
+	
+				}
+			setMapa((String)leeMapa.getObjeto());
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
