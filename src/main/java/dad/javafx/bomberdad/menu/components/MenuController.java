@@ -42,7 +42,7 @@ public class MenuController extends BorderPane implements Initializable {
 	private FadeTransition transicionFadeVBoxBtns;
 	private FadeTransition transicionFadeBG;
 	private Timeline timeline;
-	private String ip = "10.1.2.122";
+	private String ip = "192.168.0.167";
 	private int port = 5555;
 
 	// view

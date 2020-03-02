@@ -2,7 +2,6 @@ package dad.javafx.bomberdad.online;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.net.Socket;
 
 import dad.javafx.bomberdad.BombermanApp;
 
@@ -38,8 +37,6 @@ public class Recibir extends Thread {
 					String mapa = (String) dO.getObjeto();
 					BombermanApp.actualizaNuevoMapa(mapa);
 					break;
-			
-					
 				default:
 					break;
 				}
