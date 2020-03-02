@@ -27,23 +27,19 @@ public class PlayerComponent extends Component {
 	private AStarMoveComponent astar;
 
 	public void up() {
-		if (!astar.isMoving())
 			astar.moveToUpCell();
 	}
 
 	public void down() {
-		if (!astar.isMoving())
 			astar.moveToDownCell();
 
 	}
 
 	public void left() {
-		if (!astar.isMoving())
 			astar.moveToLeftCell();
 	}
 
 	public void right() {
-		if (!astar.isMoving())
 			astar.moveToRightCell();
 	}
 
