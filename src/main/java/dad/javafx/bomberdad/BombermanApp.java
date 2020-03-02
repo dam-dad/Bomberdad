@@ -275,7 +275,7 @@ public class BombermanApp extends GameApplication {
 	private void cargarMundo() {
 		getGameWorld().addEntityFactory(new BombermanFactory(theme));
 		Texture texture = getAssetLoader().loadTexture("bg" + theme + ".gif");
-		GameView vista = new GameView(texture, 0);
+		GameView vista = new GameView(texture, -0);
 		getGameScene().addGameView(vista);
 		System.out.println("hilo");
 
@@ -484,17 +484,6 @@ public class BombermanApp extends GameApplication {
 			} else if (e.isType(BombermanType.BRICKYELLOW)) {
 				getGameWorld().spawn("PUMaxBombs", x, y);
 			}
-//			if (FXGLMath.randomBoolean()) {
-//
-//				int x = (int) e.getPosition().getX();
-//				int y = (int) e.getPosition().getY();
-//
-//				if (FXGLMath.randomBoolean()) {
-//					getGameWorld().spawn("PUMaxBombs", x, y);
-//				} else {
-//					getGameWorld().spawn("PUPower", x, y);
-//				}
-//			}
 		} else if (e.isType(BombermanType.ENEMY)) {
 			e.removeFromWorld();
 		}

@@ -17,32 +17,11 @@ public class ChasePlayer extends Component {
 
 	@Override
 	public void onUpdate(double tpf) {
-		coorCerca = masCercanoPro();
+		coorCerca = playerNear();
 		astar.moveToCell(coorCerca[0], coorCerca[1]);
 	}
 
-//	public String masCercano() {
-//
-//		String cercano = "player";
-//		double d1;
-//		double d2;
-//		int playerX = FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(0).call("getCellX");
-//		int player2X = FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(1).call("getCellX");
-//		int enemyX = FXGL.getGameWorld().getEntitiesByType(BombermanType.ENEMY).get(0).call("getCellX");
-//		int playerY = FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(0).call("getCellY");
-//		int player2Y = FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(1).call("getCellY");
-//		int enemyY = FXGL.getGameWorld().getEntitiesByType(BombermanType.ENEMY).get(0).call("getCellY");
-//
-//		d1 = Math.hypot(playerX - enemyX, playerY - enemyY);
-//		d2 = Math.hypot(player2X - enemyX, player2Y - enemyY);
-//
-//		if (d1 > d2) {
-//			cercano = "player2";
-//		}
-//		return cercano;
-//	}
-
-	public int[] masCercanoPro() {
+	public int[] playerNear() {
 		ArrayList<Entity> listaPlayer = new ArrayList<Entity>(
 				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER));
 		int[] coor = new int[2];
