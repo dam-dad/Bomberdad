@@ -46,22 +46,17 @@ public class ClienteTCP {
 	}
 
 	private void inicializarPartida() {
+			DynamicObject dOsolicitarId= new DynamicObject("getId", "getId");
 		try {
-			DynamicObject dOsolicitarId = new DynamicObject("getId", "getId");
+		
 			os.writeObject(dOsolicitarId);
-			DynamicObject leidO = (DynamicObject) is.readObject();
-			this.id = leidO.getIdJugador();
-
-			DynamicObject dOsolicitarNumPlayers = new DynamicObject("NumeroJugadores", "NumeroJugadores");
-			os.writeObject(dOsolicitarNumPlayers);
-			DynamicObject dO = (DynamicObject) is.readObject();
-			int numJugadores = (int) dO.getObjeto();
-			BombermanApp.numberPlayers = numJugadores;
-
-			DynamicObject dOsolicitaLista = new DynamicObject("getLista", "getLista");
+			DynamicObject leidO=(DynamicObject)is.readObject();
+			this.id=leidO.getIdJugador();
+			System.out.println("DespuesSolicitud"+id);
+			DynamicObject dOsolicitaLista= new DynamicObject("getLista","getLista");
 			os.writeObject(dOsolicitaLista);
 			DynamicObject leedOlista = (DynamicObject) is.readObject();
-			while (!leedOlista.getTipoObjeto().equals(numJugadores + "")) {
+			while (!leedOlista.getTipoObjeto().equals("2")) {
 				os.writeObject(dOsolicitaLista);
 				leedOlista = (DynamicObject) is.readObject();
 			}
@@ -69,11 +64,10 @@ public class ClienteTCP {
 			if (id == 0) {
 				DynamicObject dOSolicitaMapa = new DynamicObject("RequestNewMap", "0");
 				os.writeObject(dOSolicitaMapa);
-			} else {
-				is.readObject();
 			}
-			DynamicObject leeMapa = (DynamicObject) is.readObject();
-			setMapa((String) leeMapa.getObjeto());
+				//is.readObject();
+				DynamicObject leeMapa=(DynamicObject)is.readObject();
+				setMapa((String)leeMapa.getObjeto());
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}

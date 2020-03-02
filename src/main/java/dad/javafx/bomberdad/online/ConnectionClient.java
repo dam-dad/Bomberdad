@@ -48,9 +48,12 @@ public class ConnectionClient extends Thread {
 		switch (nDo.getTipoObjeto()) {
 
 		case "getId":
+			System.out.println("enviando id"+ idPlayer);
 			nDo.setIdJugador(idPlayer);
 			try {
+				System.out.println(nDo.getIdJugador());
 				this.objectOut.writeObject(nDo);
+				
 			} catch (IOException e) {
 
 				e.printStackTrace();
@@ -71,7 +74,6 @@ public class ConnectionClient extends Thread {
 			nDo.setIdJugador(dO.getIdJugador());
 			procesaPosicion(nDo);
 			break;
-
 		case "RequestNewMap":
 			procesaMapa(nDo);
 			break;
@@ -94,10 +96,10 @@ public class ConnectionClient extends Thread {
 
 	// nuevo
 	private void procesaMapa(DynamicObject dO) {
+		int lvl= Integer.parseInt((String)dO.getObjeto());
+		String map= generaMapa(lvl);
 
-		int lvl = Integer.parseInt((String) dO.getObjeto());
-		String map = generaMapa(lvl);
-		DynamicObject dOenvio = new DynamicObject("RequestNewMap", map);
+		DynamicObject dOenvio= new DynamicObject("RequestNewMap",map);
 		for (int i = 0; i < Server.clientes.size(); i++) {
 			try {
 				Server.clientes.get(i).getObjectOut().writeObject(dOenvio);
@@ -143,5 +145,6 @@ public class ConnectionClient extends Thread {
 	public int getIdPlayer() {
 		return idPlayer;
 	}
+
 
 }

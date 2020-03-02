@@ -11,17 +11,16 @@ public class Recibir extends Thread {
 	public int id;
 
 	public Recibir(ClienteTCP client) {
-			this.is = client.getIs();
+			is = client.getIs();
 	}
 
 	@Override
 	public void run() {
 		super.run();
-		try {
-			while (continuar) {
-//				System.out.println("antes leer primer recibir");
-				DynamicObject dO = (DynamicObject) is.readObject();
-				String tipoObjeto = dO.getTipoObjeto();
+		while (continuar) {
+			try {
+				DynamicObject dO= (DynamicObject) is.readObject();
+				String tipoObjeto=dO.getTipoObjeto();
 				switch (tipoObjeto) {
 
 				case "PlayerPosition":
