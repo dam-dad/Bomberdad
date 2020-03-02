@@ -16,14 +16,16 @@ public class ConnectionClient extends Thread {
 	DynamicObject objetoDinamico;
 	private int idPlayer;
 	private int numeroJugadoresPartida;
-
-	public ConnectionClient(Socket client, int id, int numeroJugadoresPartida) throws IOException {
+	private String mapaInicial;
+	public ConnectionClient(Socket client, int id, int numeroJugadoresPartida,String mapaInicial) throws IOException {
 		super();
 		this.client = client;
 		this.idPlayer = id;
+		this.mapaInicial=mapaInicial;
 		objectOut = new ObjectOutputStream(client.getOutputStream());
 		objectIn = new ObjectInputStream(client.getInputStream());
 		this.numeroJugadoresPartida = numeroJugadoresPartida;
+		System.out.println(id);
 	}
 
 	@Override
@@ -50,7 +52,7 @@ public class ConnectionClient extends Thread {
 		case "getId":
 			nDo.setIdJugador(idPlayer);
 			try {
-				System.out.println(nDo.getIdJugador());
+				
 				this.objectOut.writeObject(nDo);
 				
 			} catch (IOException e) {
@@ -75,6 +77,14 @@ public class ConnectionClient extends Thread {
 			break;
 		case "RequestNewMap":
 			procesaMapa(nDo);
+			break;
+		case "RequestInicialMap":
+			try {
+				nDo.setObjeto(mapaInicial);
+				this.objectOut.writeObject(nDo);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			break;
 		case "NumeroJugadores":
 			procesaNumJugadores(nDo);
@@ -109,10 +119,13 @@ public class ConnectionClient extends Thread {
 	}
 
 	public void procesaPosicion(DynamicObject dO) {
+
 		for (int i = 0; i < Server.clientes.size(); i++) {
+		
 			if (this.idPlayer != Server.clientes.get(i).getIdPlayer()) {
 				try {
-					Server.clientes.get(i).getObjectOut().writeObject(dO);
+					
+					Server.clientes.get(i).getObjectOut().writeObject(new DynamicObject(dO.getTipoObjeto(),dO.getObjeto()));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
