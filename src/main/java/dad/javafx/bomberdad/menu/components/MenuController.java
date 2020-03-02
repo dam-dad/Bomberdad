@@ -42,7 +42,7 @@ public class MenuController extends BorderPane implements Initializable {
 	private FadeTransition transicionFadeVBoxBtns;
 	private FadeTransition transicionFadeBG;
 	private Timeline timeline;
-	private String ip = "10.1.2.141";
+	private String ip = "192.168.0.167";
 	private int port = 5555;
 
 	// view
@@ -122,7 +122,7 @@ public class MenuController extends BorderPane implements Initializable {
 		transicionFadeVBoxBtns.setToValue(1);
 		transicionFadeVBoxBtns.setRate(0.1);
 		transicionFadeVBoxBtns.setNode(vBoxBtns);
-
+		
 		title.setTranslateY(FXGL.getAppHeight() / 2 - 100);
 
 		FXGL.getEngineTimer().runOnceAfter(() -> {

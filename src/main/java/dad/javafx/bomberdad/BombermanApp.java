@@ -7,7 +7,10 @@ import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
 
+import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.almasb.fxgl.app.FXGLMenu;
@@ -18,7 +21,6 @@ import com.almasb.fxgl.app.IntroScene;
 import com.almasb.fxgl.app.LoadingScene;
 import com.almasb.fxgl.app.MenuType;
 import com.almasb.fxgl.app.SceneFactory;
-import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
@@ -36,7 +38,6 @@ import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 
 
 import dad.javafx.bomberdad.components.EnemyComponent;
-
 import dad.javafx.bomberdad.components.BombComponent;
 
 import dad.javafx.bomberdad.components.PlayerComponent;
@@ -46,8 +47,17 @@ import dad.javafx.bomberdad.menu.LoadingSceneController;
 import dad.javafx.bomberdad.online.ClienteTCP;
 import dad.javafx.bomberdad.online.DynamicObject;
 import dad.javafx.bomberdad.online.PlayerPosition;
+import dad.javafx.bomberdad.ratings.Puntuaciones;
+import dad.javafx.bomberdad.ratings.PuntuacionesDataProvider;
 import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -55,7 +65,6 @@ public class BombermanApp extends GameApplication {
 
 	public static final int TILE_SIZE = 30;
 	public static final int UI_SIZE = 200;
-
 	public static Entity player, player2, enemy;
 	private int lvl = 0;
 	private static boolean requestNewGame = false;
@@ -75,7 +84,7 @@ public class BombermanApp extends GameApplication {
 	public int tam = 0;
 	private BombermanAppUIController uiController = new BombermanAppUIController();
 	public int id;
-	public static int numberPalyers = 3;
+	public static int numberPlayers;
 
 	@Override
 	protected void initSettings(GameSettings settings) {
@@ -229,7 +238,6 @@ public class BombermanApp extends GameApplication {
 //Nuevo
 	public void initOfflineMode() {
 		GenerateMap.newMap(lvl);
-
 		cargarMundo();
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
 		player.getComponent(PlayerComponent.class).setName("Rosmen");
@@ -249,12 +257,12 @@ public class BombermanApp extends GameApplication {
 			cliente = new ClienteTCP(ip, port);
 			id = cliente.getId();
 			onlineActivo = true;
-			System.out.println("fdsfsefs");
+			System.out.println("FIN crear cliente");
 		}
 		
 		playerPosition = new PlayerPosition(0.0, 0.0, id);
 		GenerateMap.createMap(cliente.getMapa());
-		System.out.println(cliente.getMapa());
+		System.out.println(cliente.getMapa() +"yolo");
 		cargarMundo();
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
 		player.getComponent(PlayerComponent.class).setName("Player");
@@ -304,9 +312,9 @@ public class BombermanApp extends GameApplication {
 					powerup.removeFromWorld();
 					pl.getComponent(PlayerComponent.class).increaseMaxBombs();
 					int id = 0;
-					if (pl.getComponent(PlayerComponent.class).getName().equals("Player")) {
+					if (pl.getComponent(PlayerComponent.class).getName().equals(player.getComponent(PlayerComponent.class).getName())) {
 						id = 0;
-					} else if (pl.getComponent(PlayerComponent.class).getName().equals("Player2")) {
+					} else if (pl.getComponent(PlayerComponent.class).getName().equals(player2.getComponent(PlayerComponent.class).getName())) {
 						id = 1;
 					}
 					uiController.setAddProgress(BombermanType.UPMAXBOMBS, id);
@@ -321,9 +329,9 @@ public class BombermanApp extends GameApplication {
 					powerup.removeFromWorld();
 					pl.getComponent(PlayerComponent.class).increasePower();
 					int id = 0;
-					if (pl.getComponent(PlayerComponent.class).getName().equals("Player")) {
+					if (pl.getComponent(PlayerComponent.class).getName().equals(player.getComponent(PlayerComponent.class).getName())) {
 						id = 0;
-					} else if (pl.getComponent(PlayerComponent.class).getName().equals("Player2")) {
+					} else if (pl.getComponent(PlayerComponent.class).getName().equals(player2.getComponent(PlayerComponent.class).getName())) {
 						id = 1;
 					}
 					uiController.setAddProgress(BombermanType.UPPOWER, id);
@@ -354,6 +362,11 @@ public class BombermanApp extends GameApplication {
 		if (requestNewGame) {
 			requestNewGame = false;
 			if (!multiplayer) {
+				try {
+					generarPdf();
+				} catch (JRException | IOException e) {
+					e.printStackTrace();
+				}
 				getGameController().startNewGame();
 			} else {
 				if (id == 0) {
@@ -409,9 +422,9 @@ public class BombermanApp extends GameApplication {
 		if (e.isType(BombermanType.PLAYER)) {
 			int pl = 0;
 			if (owned != null && !owned.equals(e.getComponent(PlayerComponent.class))) {
-				if (owned.getName().equals("Player")) {
+				if (owned.getName().equals(player.getComponent(PlayerComponent.class).getName())) {
 					pl = 0;
-				} else if (owned.getName().equals("Player2")) {
+				} else if (owned.getName().equals(player.getComponent(PlayerComponent.class).getName())) {
 					pl = 1;
 				}
 				int pOld = Integer.parseInt(ratings.getPoints().get(pl).get(1));
@@ -421,9 +434,9 @@ public class BombermanApp extends GameApplication {
 //				System.out.println(ratings.getPoints().get(pl).get(0)+" points: "+ratings.getPoints().get(pl).get(1));
 			}
 			PlayerComponent playerHit = e.getComponent(PlayerComponent.class);
-			if (playerHit.getName().equals("Player")) {
+			if (playerHit.getName().equals(player.getComponent(PlayerComponent.class).getName())) {
 				pl = 0;
-			} else if (playerHit.getName().equals("Player2")) {
+			} else if (playerHit.getName().equals(player2.getComponent(PlayerComponent.class).getName())) {
 				pl = 1;
 			}
 			uiController.setLifesLbl(playerHit.getVidas() + "", pl);
@@ -444,17 +457,15 @@ public class BombermanApp extends GameApplication {
 		} else if (e.isType(BombermanType.BRICK) || e.isType(BombermanType.BRICKRED) || e.isType(BombermanType.BRICKYELLOW)) {
 			if (owned != null) {
 				int pl = 0;
-				if (owned.getName().equals("Player")) {
+				if (owned.getName().equals(player.getComponent(PlayerComponent.class).getName())) {
 					pl = 0;
-				} else if (owned.getName().equals("Player2")) {
+				} else if (owned.getName().equals(player2.getComponent(PlayerComponent.class).getName())) {
 					pl = 1;
 				}
 				int pOld = Integer.parseInt(ratings.getPoints().get(pl).get(1));
 				int pNew = pOld + 5;
 				uiController.setPointsLbl(pNew + "", pl);
 				ratings.getPoints().get(pl).set(1, "" + pNew);
-				System.out
-						.println(ratings.getPoints().get(pl).get(0) + " points: " + ratings.getPoints().get(pl).get(1));
 			}
 			e.removeFromWorld();
 			// Cambiar el estado de la entidad BRICK a "WALKABLE" cuando desaparece
@@ -494,12 +505,11 @@ public class BombermanApp extends GameApplication {
 		cliente.setMapa(mapa);
 		FXGL.getGameTimer().runOnceAfter(() -> {
 			getGameController().startNewGame();
-		}, Duration.millis(10));
+		}, Duration.millis(500));
 	}
 
 //Nuevo
 	public static void actualizarPlayer(PlayerPosition player) {
-
 		if (juegoPreparado) {
 			FXGL.getGameTimer().runOnceAfter(() -> {
 				try {
@@ -540,6 +550,19 @@ public class BombermanApp extends GameApplication {
 				}
 			}, Duration.millis(10));
 		}
+	}
+	
+	public static final String JRXML_FILE = "/reports/informe.jrxml";
+	public static final String PDF_FILE = "pdf/informe.pdf";
+	
+	public static void generarPdf() throws JRException, IOException {
+
+		JasperReport report = JasperCompileManager.compileReport(BombermanApp.class.getResourceAsStream(JRXML_FILE));
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("anyo", 2020);
+        JasperPrint print  = JasperFillManager.fillReport(report, parameters, new JRBeanCollectionDataSource(PuntuacionesDataProvider.getPuntuaciones()));
+        JasperExportManager.exportReportToPdfFile(print, PDF_FILE);
+		Desktop.getDesktop().open(new File(PDF_FILE));
 	}
 
 	public static void main(String[] args) {
