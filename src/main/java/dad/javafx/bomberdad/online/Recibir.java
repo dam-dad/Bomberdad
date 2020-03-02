@@ -38,17 +38,12 @@ public class Recibir extends Thread {
 					String mapa = (String) dO.getObjeto();
 					BombermanApp.actualizaNuevoMapa(mapa);
 					break;
-			
-					
+
 				default:
 					break;
 				}
-			}catch (IOException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			}catch (IOException e) {} 
+			catch (ClassNotFoundException e1) {}
 		}
 	}
 
