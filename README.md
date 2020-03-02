@@ -18,3 +18,5 @@ En la partida online se conectarán 2 jugadores, uno de ellos haciendo la funcio
 -[Pablo García Gómez](https://github.com/Pablogg98)
 -[Alejandro Arrocha Hernández](https://github.com/AlejandroArrochaHdez)
 -[Cristian Abad de Vera](https://github.com/xChota)
+
+![Imagen](https://i.kym-cdn.com/entries/icons/original/000/001/729/x.jpg)
