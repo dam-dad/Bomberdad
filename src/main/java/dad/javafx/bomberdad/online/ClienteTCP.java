@@ -25,7 +25,6 @@ public class ClienteTCP {
 		try {
 			clientSocket = new Socket();
 			addr = new InetSocketAddress(ip,port);
-
 			clientSocket.connect(addr);
 			is = new ObjectInputStream(clientSocket.getInputStream());
 			os = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -43,8 +42,10 @@ public class ClienteTCP {
 
 
 	private void inicializarPartida() {
+		System.out.println("AntesSolicitud"+id);
 			DynamicObject dOsolicitarId= new DynamicObject("getId", "getId");
 		try {
+		
 			os.writeObject(dOsolicitarId);
 			DynamicObject leidO=(DynamicObject)is.readObject();
 			this.id=leidO.getIdJugador();

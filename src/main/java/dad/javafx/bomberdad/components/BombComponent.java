@@ -48,7 +48,6 @@ public class BombComponent extends Component {
 
 	public void explode(int power, PlayerComponent owned) {
 		BoundingBoxComponent bbox = getEntity().getBoundingBoxComponent();
-
 		entities.clear();
 		entitiesToDelete.clear();
 		floorEntities.clear();

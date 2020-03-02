@@ -96,8 +96,7 @@ public class ConnectionClient extends Thread {
 	
 		int lvl= Integer.parseInt((String)dO.getObjeto());
 		String map= generaMapa(lvl);
-		System.out.println(lvl);
-		System.out.println(map);
+
 		DynamicObject dOenvio= new DynamicObject("RequestNewMap",map);
 		for (int i = 0; i < Server.clientes.size(); i++) {
 			try {
@@ -144,5 +143,6 @@ public class ConnectionClient extends Thread {
 	public int getIdPlayer() {
 		return idPlayer;
 	}
+
 
 }
