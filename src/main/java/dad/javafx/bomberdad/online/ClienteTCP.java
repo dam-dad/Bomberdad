@@ -48,6 +48,7 @@ public class ClienteTCP {
 			DynamicObject dOsolicitarId= new DynamicObject("getId","getId");
 			os.writeObject(dOsolicitarId);
 			DynamicObject leidO=(DynamicObject)is.readObject();
+			System.out.println(leidO.getTipoObjeto());
 			this.id=leidO.getIdJugador();
 			System.out.println("DespuesSolicitud"+id);
 			DynamicObject dOsolicitaLista= new DynamicObject("getLista","getLista");

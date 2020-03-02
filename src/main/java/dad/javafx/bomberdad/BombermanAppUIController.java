@@ -3,6 +3,7 @@ package dad.javafx.bomberdad;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.ui.UIController;
 
+import dad.javafx.bomberdad.ratings.TarjetaPuntuaciones;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
