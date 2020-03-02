@@ -1,8 +1,17 @@
 package dad.javafx.bomberdad;
 
-import java.io.IOException;
-import java.util.Map;
 
+import static com.almasb.fxgl.dsl.FXGL.getAssetLoader;
+import static com.almasb.fxgl.dsl.FXGL.getGameController;
+import static com.almasb.fxgl.dsl.FXGL.getGameScene;
+import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGL.getInput;
+import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import com.almasb.fxgl.app.FXGLMenu;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
@@ -28,7 +37,6 @@ import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 
 
 import dad.javafx.bomberdad.components.EnemyComponent;
-
 import dad.javafx.bomberdad.components.BombComponent;
 
 import dad.javafx.bomberdad.components.PlayerComponent;
@@ -38,8 +46,17 @@ import dad.javafx.bomberdad.menu.LoadingSceneController;
 import dad.javafx.bomberdad.online.ClienteTCP;
 import dad.javafx.bomberdad.online.DynamicObject;
 import dad.javafx.bomberdad.online.PlayerPosition;
+import dad.javafx.bomberdad.ratings.Puntuaciones;
+import dad.javafx.bomberdad.ratings.PuntuacionesDataProvider;
 import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -47,7 +64,6 @@ public class BombermanApp extends GameApplication {
 
 	public static final int TILE_SIZE = 30;
 	public static final int UI_SIZE = 200;
-
 	public static Entity player, player2, enemy;
 	private int lvl = 0;
 	private static boolean requestNewGame = false;
@@ -239,6 +255,7 @@ public class BombermanApp extends GameApplication {
 			cliente = new ClienteTCP(ip, port);
 			id = cliente.getId();
 			onlineActivo = true;
+			System.out.println("FIN crear cliente");
 		}
 		playerPosition = new PlayerPosition(0.0, 0.0, id);
 		GenerateMap.createMap(cliente.getMapa());
@@ -252,7 +269,7 @@ public class BombermanApp extends GameApplication {
 	private void cargarMundo() {
 		getGameWorld().addEntityFactory(new BombermanFactory(theme));
 		Texture texture = getAssetLoader().loadTexture("bg" + theme + ".gif");
-		GameView vista = new GameView(texture, 0);
+		GameView vista = new GameView(texture, -0);
 		getGameScene().addGameView(vista);
 
 		Level level = getAssetLoader().loadLevel("map.txt", new TextLevelLoader(TILE_SIZE, TILE_SIZE, '0'));
@@ -305,9 +322,9 @@ public class BombermanApp extends GameApplication {
 					powerup.removeFromWorld();
 					pl.getComponent(PlayerComponent.class).increasePower();
 					int id = 0;
-					if (pl.getComponent(PlayerComponent.class).getName().equals("Player")) {
+					if (pl.getComponent(PlayerComponent.class).getName().equals(player.getComponent(PlayerComponent.class).getName())) {
 						id = 0;
-					} else if (pl.getComponent(PlayerComponent.class).getName().equals("Player2")) {
+					} else if (pl.getComponent(PlayerComponent.class).getName().equals(player2.getComponent(PlayerComponent.class).getName())) {
 						id = 1;
 					}
 					uiController.setAddProgress(BombermanType.UPPOWER, id);
@@ -337,6 +354,11 @@ public class BombermanApp extends GameApplication {
 		if (requestNewGame) {
 			requestNewGame = false;
 			if (!multiplayer) {
+				try {
+					generarPdf();
+				} catch (JRException | IOException e) {
+					e.printStackTrace();
+				}
 				getGameController().startNewGame();
 			} else {
 				if (id == 0) {
@@ -426,16 +448,16 @@ public class BombermanApp extends GameApplication {
 		} else if (e.isType(BombermanType.BRICK) || e.isType(BombermanType.BRICKRED) || e.isType(BombermanType.BRICKYELLOW)) {
 			if (owned != null) {
 				int pl = 0;
-				if (owned.getName().equals("Player")) {
+				if (owned.getName().equals(player.getComponent(PlayerComponent.class).getName())) {
 					pl = 0;
-				} else if (owned.getName().equals("Player2")) {
+				} else if (owned.getName().equals(player2.getComponent(PlayerComponent.class).getName())) {
 					pl = 1;
 				}
 				int pOld = Integer.parseInt(ratings.getPoints().get(pl).get(1));
 				int pNew = pOld + 5;
 				uiController.setPointsLbl(pNew + "", pl);
 				ratings.getPoints().get(pl).set(1, "" + pNew);
-	
+
 			}
 			e.removeFromWorld();
 			// Cambiar el estado de la entidad BRICK a "WALKABLE" cuando desaparece
@@ -510,6 +532,19 @@ public class BombermanApp extends GameApplication {
 				}
 			}, Duration.millis(10));
 		}
+	}
+	
+	public static final String JRXML_FILE = "/reports/informe.jrxml";
+	public static final String PDF_FILE = "pdf/informe.pdf";
+	
+	public static void generarPdf() throws JRException, IOException {
+
+		JasperReport report = JasperCompileManager.compileReport(BombermanApp.class.getResourceAsStream(JRXML_FILE));
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("anyo", 2020);
+        JasperPrint print  = JasperFillManager.fillReport(report, parameters, new JRBeanCollectionDataSource(PuntuacionesDataProvider.getPuntuaciones()));
+        JasperExportManager.exportReportToPdfFile(print, PDF_FILE);
+		Desktop.getDesktop().open(new File(PDF_FILE));
 	}
 
 	public static void main(String[] args) {

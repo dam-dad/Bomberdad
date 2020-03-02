@@ -19,6 +19,7 @@ public class EnemyComponent extends Component {
 
 	public TransformComponent position;
 	private int vida = 1;
+	private int bombsPlaced = 0;
 	private ArrayList<Entity> playerCerca;
 
 	public void setVida(int vida) {
@@ -36,6 +37,7 @@ public class EnemyComponent extends Component {
 
 			FXGL.getGameTimer().runOnceAfter(() -> {
 				bomb.getComponent(BombComponent.class).explode(0, null);
+				bombsPlaced--;
 			}, Duration.seconds(2));
 		}
 
@@ -46,8 +48,9 @@ public class EnemyComponent extends Component {
 
 		playerCerca = new ArrayList<Entity>(FXGL.getGameWorld().getEntitiesAt(this.getEntity().getPosition()));
 		for (int i = 0; i < playerCerca.size(); i++) {
-			if (playerCerca.get(i).isType(BombermanType.PLAYER)) {
+			if (playerCerca.get(i).isType(BombermanType.PLAYER) & bombsPlaced==0) {
 				placeBomb();
+				bombsPlaced++;
 			}
 		}
 

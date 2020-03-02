@@ -13,21 +13,25 @@ import dad.javafx.bomberdad.BombermanType;
 @Required(AStarMoveComponent.class)
 public class DefendZone extends Component {
 	private AStarMoveComponent astar;
-//	int enemyXOrigen = FXGL.getGameWorld().getEntitiesByType(BombermanType.ENEMY).get(0).call("getCellX");
-//	int enemyYOrigen = FXGL.getGameWorld().getEntitiesByType(BombermanType.ENEMY).get(0).call("getCellY");
-//	double distance;
+	int enemyXOrigen = 0;
+	int enemyYOrigen = 0;
 	int[] coorCerca = new int[3];
 	
 
 	@Override
 	public void onUpdate(double tpf) {
+		if (enemyXOrigen == 0 & enemyYOrigen == 0) {
+			enemyXOrigen = FXGL.getGameWorld().getEntitiesByType(BombermanType.ENEMY).get(0).call("getCellX");
+			enemyYOrigen = FXGL.getGameWorld().getEntitiesByType(BombermanType.ENEMY).get(0).call("getCellY");
+		}
 		coorCerca = playerOnZone();
 		if (coorCerca[2] < 7.0) {
 			astar.moveToCell(coorCerca[0], coorCerca[1]);
 		}
-//		else {
-//			astar.moveToCell(enemyXOrigen, enemyYOrigen);
-//		}
+		else {
+			System.out.println(enemyXOrigen);
+			astar.moveToCell(enemyXOrigen, enemyYOrigen);
+		}
 	}
 	
 	public int[] playerOnZone() {
@@ -35,18 +39,16 @@ public class DefendZone extends Component {
 				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER));
 		int x = FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(0).call("getCellX");
 		int y = FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(0).call("getCellY");
-		int enemyX = FXGL.getGameWorld().getEntitiesByType(BombermanType.ENEMY).get(0).call("getCellX");
-		int enemyY = FXGL.getGameWorld().getEntitiesByType(BombermanType.ENEMY).get(0).call("getCellY");
 		int[] coor = new int[3];
 		coor[0] = x;
 		coor[1] = y;
-		double distance = Math.hypot(x - enemyX, y - enemyY);
+		double distance = Math.hypot(x - enemyXOrigen, y - enemyYOrigen);
 		double distanceAux;
 
 		for (int i = 0; i < listaPlayer.size(); i++) {
 			x = FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(i).call("getCellX");
 			y = FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(i).call("getCellY");
-			distanceAux = Math.hypot(x - enemyX, y - enemyY);
+			distanceAux = Math.hypot(x - enemyXOrigen, y - enemyYOrigen);
 			if (distanceAux < distance) {
 				distance = distanceAux;
 				coor[0] = x;

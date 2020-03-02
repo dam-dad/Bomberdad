@@ -1,4 +1,4 @@
-package dad.javafx.bomberdad;
+package dad.javafx.bomberdad.ratings;
 
 import java.io.IOException;
 import java.net.URL;

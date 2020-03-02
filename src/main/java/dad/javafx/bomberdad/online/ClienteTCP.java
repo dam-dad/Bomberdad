@@ -7,8 +7,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import dad.javafx.bomberdad.BombermanApp;
-
 public class ClienteTCP {
 	private ObjectInputStream is;
 	private ObjectOutputStream os;
@@ -43,11 +41,11 @@ public class ClienteTCP {
 	}
 
 	private void inicializarPartida() {
-			DynamicObject dOsolicitarId= new DynamicObject("getId", "getId");
 		try {
-		
+			DynamicObject dOsolicitarId= new DynamicObject("getId","getId");
 			os.writeObject(dOsolicitarId);
 			DynamicObject leidO=(DynamicObject)is.readObject();
+			System.out.println(leidO.getTipoObjeto());
 			this.id=leidO.getIdJugador();
 			DynamicObject dOsolicitaLista= new DynamicObject("getLista","getLista");
 			os.writeObject(dOsolicitaLista);
@@ -103,5 +101,5 @@ public class ClienteTCP {
 	public void setOs(ObjectOutputStream os) {
 		this.os = os;
 	}
-
+	
 }

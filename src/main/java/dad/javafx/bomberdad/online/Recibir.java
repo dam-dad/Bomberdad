@@ -12,7 +12,6 @@ public class Recibir extends Thread {
 
 	public Recibir(ClienteTCP client) {
 			is = client.getIs();
-		
 	}
 
 	@Override
@@ -45,6 +44,7 @@ public class Recibir extends Thread {
 			}catch (IOException e) {} 
 			catch (ClassNotFoundException e1) {}
 		}
+
 	}
 
 }

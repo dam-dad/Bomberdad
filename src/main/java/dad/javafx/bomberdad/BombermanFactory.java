@@ -13,8 +13,8 @@ import dad.javafx.bomberdad.components.BombComponent;
 import dad.javafx.bomberdad.components.EnemyComponent;
 import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.components.StaticComponent;
+import dad.javafx.bomberdad.ia.AvoidBombs;
 //----
-import dad.javafx.bomberdad.ia.ChasePlayer;
 import dad.javafx.bomberdad.ia.DefendZone;
 
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
@@ -179,7 +179,8 @@ public class BombermanFactory implements EntityFactory {
                 .with(new CellMoveComponent(30, 30, 125))
                 .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
                 .with(new EnemyComponent())
-                .with(new DefendZone())
+                .with(new ChasePlayer())
+                .with(new AvoidBombs())
                 .build();
 
         enemy.getTransformComponent().setScaleOrigin(new Point2D(0, 0));
