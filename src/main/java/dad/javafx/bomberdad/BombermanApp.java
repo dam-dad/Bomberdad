@@ -34,7 +34,11 @@ import com.almasb.fxgl.pathfinding.CellState;
 import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 
+
+import dad.javafx.bomberdad.components.EnemyComponent;
+
 import dad.javafx.bomberdad.components.BombComponent;
+
 import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.menu.CustomMenu;
 import dad.javafx.bomberdad.menu.IntroSceneController;
@@ -52,7 +56,7 @@ public class BombermanApp extends GameApplication {
 	public static final int TILE_SIZE = 30;
 	public static final int UI_SIZE = 200;
 
-	public static Entity player, player2;
+	public static Entity player, player2, enemy;
 	private int lvl = 0;
 	private static boolean requestNewGame = false;
 	public static String theme = "crab";
@@ -233,8 +237,11 @@ public class BombermanApp extends GameApplication {
 		player.getComponent(PlayerComponent.class).setName("Rosmen");
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
 		player2.getComponent(PlayerComponent.class).setName("Pablo");
+		enemy = getGameWorld().spawn("e", TILE_SIZE, TILE_SIZE * 17);
+		enemy.getComponent(EnemyComponent.class);
 		ratings.getPoints().get(0).set(0, player.getComponent(PlayerComponent.class).getName());
 		ratings.getPoints().get(1).set(0, player2.getComponent(PlayerComponent.class).getName());
+
 	}
 
 //nuevo, hay mucho codigo repetido, hay que pullirlo un poco
@@ -253,6 +260,7 @@ public class BombermanApp extends GameApplication {
 		player.getComponent(PlayerComponent.class).setName("Player");
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
 		player2.getComponent(PlayerComponent.class).setName("PLayer2");
+
 		juegoPreparado = true;
 
 	}
@@ -274,7 +282,18 @@ public class BombermanApp extends GameApplication {
 			}
 		});
 		set("grid", grid);
+
+		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
+		player.getComponent(PlayerComponent.class).setName("Player");
+		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
+		player2.getComponent(PlayerComponent.class).setName("PLayer2");
+
 		
+
+		juegoPreparado = true;
+
+
+
 	}
 
 	@Override

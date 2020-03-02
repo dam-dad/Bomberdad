@@ -3,23 +3,19 @@ package dad.javafx.bomberdad.components;
 import java.util.ArrayList;
 
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.entity.component.Component;
-import com.almasb.fxgl.entity.components.TransformComponent;
-import dad.javafx.bomberdad.BombermanApp;
-import dad.javafx.bomberdad.BombermanType;
-
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
-import javafx.util.Duration;
+import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.component.Required;
+import com.almasb.fxgl.entity.components.TransformComponent;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 
+import dad.javafx.bomberdad.BombermanApp;
+import dad.javafx.bomberdad.BombermanType;
+import javafx.util.Duration;
 
 @Required(AStarMoveComponent.class)
 public class EnemyComponent extends Component {
-
-	
-
 
 	public TransformComponent position;
 	private int vida = 1;
@@ -31,7 +27,6 @@ public class EnemyComponent extends Component {
 
 	public void placeBomb() {
 
-//
 		if (vida != 0) {
 			int x = (int) position.getX() / BombermanApp.TILE_SIZE;
 			int y = (int) position.getY() / BombermanApp.TILE_SIZE;
@@ -49,19 +44,13 @@ public class EnemyComponent extends Component {
 	@Override
 	public void onUpdate(double tpf) {
 
-	
-		playerCerca=new ArrayList<Entity>(FXGL.getGameWorld().getEntitiesAt(this.getEntity().getPosition()));	
-		for(int i = 0;i<playerCerca.size(); i++ ) {
-			if(playerCerca.get(i).isType(BombermanType.PLAYER)) {
+		playerCerca = new ArrayList<Entity>(FXGL.getGameWorld().getEntitiesAt(this.getEntity().getPosition()));
+		for (int i = 0; i < playerCerca.size(); i++) {
+			if (playerCerca.get(i).isType(BombermanType.PLAYER)) {
 				placeBomb();
 			}
 		}
-		
-
 
 	}
 
-
 }
-
-
