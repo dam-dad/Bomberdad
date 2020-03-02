@@ -34,9 +34,13 @@ public class GenerateMap {
 								line = replace(line,i,'b');
 							} else {
 								if (FXGLMath.randomBoolean()) {
-									line = replace(line,i,'r');
+									line = replace(line,i,'b');
 								} else {
-									line = replace(line,i,'y');
+									if (FXGLMath.randomBoolean()) {
+										line = replace(line,i,'r');
+									} else {
+										line = replace(line,i,'y');
+									}
 								}
 							}
 						}
