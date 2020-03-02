@@ -42,7 +42,7 @@ public class ClienteTCP {
 
 
 	private void inicializarPartida() {
-		System.out.println("AntesSolicitud"+id);
+	
 			DynamicObject dOsolicitarId= new DynamicObject("getId", "getId");
 		try {
 		

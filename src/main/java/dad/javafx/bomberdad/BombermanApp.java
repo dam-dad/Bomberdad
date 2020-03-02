@@ -218,9 +218,7 @@ public class BombermanApp extends GameApplication {
 
 	@Override
 	public void initGame() {
-//Nuevo
 		if (multiplayer) {
-
 			initOnlineMode();
 		} else {
 			initOfflineMode();
@@ -253,6 +251,7 @@ public class BombermanApp extends GameApplication {
 			onlineActivo = true;
 			System.out.println("fdsfsefs");
 		}
+		
 		playerPosition = new PlayerPosition(0.0, 0.0, id);
 		GenerateMap.createMap(cliente.getMapa());
 		System.out.println(cliente.getMapa());
