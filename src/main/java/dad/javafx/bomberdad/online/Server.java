@@ -31,7 +31,7 @@ public class Server extends Thread{
 			System.out.println("[SERVER] Esperando clientes");
 			Socket client = listener.accept();
 			System.out.println("Conectando cliente");
-			ConnectionClient clientThread = new ConnectionClient(client,id);
+			ConnectionClient clientThread = new ConnectionClient(client,id,numeroJugadoresPartida);
 			clientes.add(clientThread);
 			clientThread.start();
 			id++;

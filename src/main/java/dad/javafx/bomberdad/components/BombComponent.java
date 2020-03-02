@@ -1,9 +1,5 @@
 package dad.javafx.bomberdad.components;
 
-import static com.almasb.fxgl.dsl.FXGL.texture;
-
-
-import java.awt.TexturePaint;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,13 +11,12 @@ import com.almasb.fxgl.entity.components.BoundingBoxComponent;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
 import com.almasb.fxgl.pathfinding.CellState;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
-import com.almasb.fxgl.texture.Texture;
 
 import dad.javafx.bomberdad.BombermanApp;
 import dad.javafx.bomberdad.BombermanType;
 import javafx.beans.property.SimpleListProperty;
 import javafx.geometry.Point2D;
-import javafx.util.Duration;
+
 @Required(AStarMoveComponent.class)
 public class BombComponent extends Component {
 
@@ -48,7 +43,7 @@ public class BombComponent extends Component {
 
 	public void explode(int power, PlayerComponent owned) {
 		BoundingBoxComponent bbox = getEntity().getBoundingBoxComponent();
-
+		
 		entities.clear();
 		entitiesToDelete.clear();
 		floorEntities.clear();
@@ -56,16 +51,13 @@ public class BombComponent extends Component {
 		// Explosion vertical
  
 		FXGL.getGameWorld().getEntitiesInRange(bbox.range(0, radius)).stream()
-
 				.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER) || e.isType(BombermanType.FLOOR) || e.isType(BombermanType.ENEMY)).forEach(e -> {
-
 					entities.add(e);
 				});
 
-		// Explosion horizontal
-		FXGL.getGameWorld()
 
-				.getEntitiesInRange(bbox.range(radius, 0)).stream()
+		// Explosion horizontal
+		FXGL.getGameWorld().getEntitiesInRange(bbox.range(radius, 0)).stream()
 				.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.PLAYER) || e.isType(BombermanType.FLOOR) || e.isType(BombermanType.ENEMY)).forEach(e -> {
 					boolean thereIs = false;
 					for (int i = 0; i < entities.size(); i++) {

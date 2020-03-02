@@ -1,7 +1,5 @@
 package dad.javafx.bomberdad.online;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -17,13 +15,15 @@ public class ConnectionClient extends Thread {
 	ObjectInputStream objectIn;
 	DynamicObject objetoDinamico;
 	private int idPlayer;
+	private int numeroJugadoresPartida;
 
-	public ConnectionClient(Socket client, int id) throws IOException {
+	public ConnectionClient(Socket client, int id, int numeroJugadoresPartida) throws IOException {
 		super();
 		this.client = client;
 		this.idPlayer = id;
 		objectOut = new ObjectOutputStream(client.getOutputStream());
 		objectIn = new ObjectInputStream(client.getInputStream());
+		this.numeroJugadoresPartida = numeroJugadoresPartida;
 	}
 
 	@Override
@@ -48,7 +48,6 @@ public class ConnectionClient extends Thread {
 		switch (nDo.getTipoObjeto()) {
 
 		case "getId":
-			
 			nDo.setIdJugador(idPlayer);
 			try {
 				this.objectOut.writeObject(nDo);
@@ -57,48 +56,48 @@ public class ConnectionClient extends Thread {
 				e.printStackTrace();
 			}
 			break;
-			
+
 		case "getLista":
-			
 			nDo.setTipoObjeto(Server.listaSize() + "");
 			try {
 				this.objectOut.writeObject(nDo);
 			} catch (IOException e) {
-
 				e.printStackTrace();
 			}
 			break;
-			//nuevo
-		case "PlacePlayerBomb":	
+		// nuevo
+		case "PlacePlayerBomb":
 		case "PlayerPosition":
 			nDo.setIdJugador(dO.getIdJugador());
 			procesaPosicion(nDo);
 			break;
-			
+
 		case "RequestNewMap":
-			procesaMapa(dO);
+			procesaMapa(nDo);
 			break;
-		case "PlaceBomb":
-
+		case "NumeroJugadores":
+			procesaNumJugadores(nDo);
 			break;
-
-		case "PowerUpp":
-
-			break;
-
 		default:
 			break;
 		}
-
 	}
-//nuevo
+
+	private void procesaNumJugadores(DynamicObject dO) {
+		DynamicObject dOenvio = new DynamicObject("NumeroJugadores", numeroJugadoresPartida);
+		try {
+			this.objectOut.writeObject(dOenvio);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// nuevo
 	private void procesaMapa(DynamicObject dO) {
-	
-		int lvl= Integer.parseInt((String)dO.getObjeto());
-		String map= generaMapa(lvl);
-		System.out.println(lvl);
-		System.out.println(map);
-		DynamicObject dOenvio= new DynamicObject("RequestNewMap",map);
+
+		int lvl = Integer.parseInt((String) dO.getObjeto());
+		String map = generaMapa(lvl);
+		DynamicObject dOenvio = new DynamicObject("RequestNewMap", map);
 		for (int i = 0; i < Server.clientes.size(); i++) {
 			try {
 				Server.clientes.get(i).getObjectOut().writeObject(dOenvio);
@@ -118,8 +117,8 @@ public class ConnectionClient extends Thread {
 				}
 			}
 		}
-
 	}
+
 	private String generaMapa(int lvl) {
 		GenerateMap.newMap(lvl);
 		return GenerateMap.getMap();
