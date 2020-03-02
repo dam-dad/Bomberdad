@@ -43,7 +43,9 @@ public class PlayerComponent extends Component {
 	}
 
 	public void increaseMaxBombs() {
-		maxBombs++;
+		if (maxBombs < 5) {
+			maxBombs++;
+		}
 	}
 
 	public void resetMaxBombs() {
@@ -51,7 +53,7 @@ public class PlayerComponent extends Component {
 	}
 
 	public void increasePower() {
-		if (power <= 45) {
+		if (power <= 75) {
 			power = power + BombermanApp.TILE_SIZE;
 		}
 	}

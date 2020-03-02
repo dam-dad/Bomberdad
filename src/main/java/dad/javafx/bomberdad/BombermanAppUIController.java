@@ -13,21 +13,22 @@ public class BombermanAppUIController implements UIController {
 
 	// model
 
-	private int maxBombspl1,maxBombspl2,maxBombspl3,maxBombspl4, maxExplosionpl1,maxExplosionpl2,maxExplosionpl3,maxExplosionpl4;
+	private int maxBombspl1, maxBombspl2, maxBombspl3, maxBombspl4, maxExplosionpl1, maxExplosionpl2, maxExplosionpl3,
+			maxExplosionpl4;
 
 	// view
 
-	 @FXML
-	    private HBox view;
+	@FXML
+	private HBox view;
 
-	    @FXML
-	    private VBox vboxLeft,vboxRight,vboxpl1,vboxpl4,vboxpl3,vboxpl2;
+	@FXML
+	private VBox vboxLeft, vboxRight, vboxpl1, vboxpl4, vboxpl3, vboxpl2;
 
-	    @FXML
-	    private TarjetaPuntuaciones tarjetapl1,tarjetapl4,tarjetapl3,tarjetapl2;
+	@FXML
+	private TarjetaPuntuaciones tarjetapl1, tarjetapl4, tarjetapl3, tarjetapl2;
 
-	    @FXML
-	    private HBox hboxApp;
+	@FXML
+	private HBox hboxApp;
 
 	@Override
 	public void init() {
@@ -39,7 +40,7 @@ public class BombermanAppUIController implements UIController {
 		maxExplosionpl2 = 1;
 		maxExplosionpl3 = 1;
 		maxExplosionpl4 = 1;
-		
+
 		vboxLeft.setPrefWidth(BombermanApp.UI_SIZE);
 		vboxRight.setPrefWidth(BombermanApp.UI_SIZE);
 		vboxLeft.setPrefHeight(FXGL.getAppHeight());
@@ -47,25 +48,21 @@ public class BombermanAppUIController implements UIController {
 		hboxApp.setPrefWidth(FXGL.getAppWidth() - BombermanApp.UI_SIZE * 2);
 		tarjetapl1.getNumberPointsLb().setText(BombermanApp.ratings.getPoints().get(0).get(0));
 		tarjetapl2.getNumberPointsLb().setText(BombermanApp.ratings.getPoints().get(1).get(0));
-		tarjetapl3.getNumberPointsLb().setText(BombermanApp.ratings.getPoints().get(2).get(0));
-		tarjetapl4.getNumberPointsLb().setText(BombermanApp.ratings.getPoints().get(3).get(0));
+		if (BombermanApp.numberPlayers >= 3)
+			tarjetapl3.getNumberPointsLb().setText(BombermanApp.ratings.getPoints().get(2).get(0));
+		if (BombermanApp.numberPlayers >= 4)
+			tarjetapl4.getNumberPointsLb().setText(BombermanApp.ratings.getPoints().get(3).get(0));
 		setPointsLbl(BombermanApp.ratings.getPoints().get(0).get(1), 0);
 		setPointsLbl(BombermanApp.ratings.getPoints().get(1).get(1), 1);
-		setPointsLbl(BombermanApp.ratings.getPoints().get(2).get(1), 2);
-		setPointsLbl(BombermanApp.ratings.getPoints().get(3).get(1), 3);
+		if (BombermanApp.numberPlayers >= 3)
+			setPointsLbl(BombermanApp.ratings.getPoints().get(2).get(1), 2);
+		if (BombermanApp.numberPlayers >= 4)
+			setPointsLbl(BombermanApp.ratings.getPoints().get(3).get(1), 3);
 
 		if (!BombermanApp.multiplayer) {
-			if (BombermanApp.numberPlayers == 2) {
 				vboxpl3.setOpacity(0);
 				vboxpl4.setOpacity(0);
-			}
-			if (BombermanApp.numberPlayers == 3) {
-				vboxpl4.setOpacity(0);
-			}
-			
 		}
-		vboxpl3.setOpacity(0);
-		vboxpl4.setOpacity(0);
 	}
 
 	public void setPointsLbl(String txt, int id) {
@@ -204,7 +201,7 @@ public class BombermanAppUIController implements UIController {
 				else if (maxBombspl3 == 5)
 					tarjetapl3.getMaxBBarpos5().setProgress(1);
 				maxBombspl3++;
-			} else if (id == 1) {
+			} else if (id == 3) {
 				if (maxBombspl4 == 1)
 					tarjetapl4.getMaxBBarpos1().setProgress(1);
 				else if (maxBombspl4 == 2)
