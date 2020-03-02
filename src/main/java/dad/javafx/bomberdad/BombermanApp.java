@@ -76,7 +76,7 @@ public class BombermanApp extends GameApplication {
 	public int tam = 0;
 	private BombermanAppUIController uiController = new BombermanAppUIController();
 	public int id;
-	public static int numberPalyers = 3;
+	public static int numberPlayers;
 
 	@Override
 	protected void initSettings(GameSettings settings) {
@@ -250,12 +250,11 @@ public class BombermanApp extends GameApplication {
 			cliente = new ClienteTCP(ip, port);
 			id = cliente.getId();
 			onlineActivo = true;
-			System.out.println("fdsfsefs");
 		}
 		
 		playerPosition = new PlayerPosition(0.0, 0.0, id);
 		GenerateMap.createMap(cliente.getMapa());
-		System.out.println(cliente.getMapa());
+		System.out.println(cliente.getMapa() +"yolo");
 		cargarMundo();
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
 		player.getComponent(PlayerComponent.class).setName("Player");
@@ -305,9 +304,9 @@ public class BombermanApp extends GameApplication {
 					powerup.removeFromWorld();
 					pl.getComponent(PlayerComponent.class).increaseMaxBombs();
 					int id = 0;
-					if (pl.getComponent(PlayerComponent.class).getName().equals("Player")) {
+					if (pl.getComponent(PlayerComponent.class).getName().equals(player.getComponent(PlayerComponent.class).getName())) {
 						id = 0;
-					} else if (pl.getComponent(PlayerComponent.class).getName().equals("Player2")) {
+					} else if (pl.getComponent(PlayerComponent.class).getName().equals(player2.getComponent(PlayerComponent.class).getName())) {
 						id = 1;
 					}
 					uiController.setAddProgress(BombermanType.UPMAXBOMBS, id);
@@ -410,9 +409,9 @@ public class BombermanApp extends GameApplication {
 		if (e.isType(BombermanType.PLAYER)) {
 			int pl = 0;
 			if (owned != null && !owned.equals(e.getComponent(PlayerComponent.class))) {
-				if (owned.getName().equals("Player")) {
+				if (owned.getName().equals(player.getComponent(PlayerComponent.class).getName())) {
 					pl = 0;
-				} else if (owned.getName().equals("Player2")) {
+				} else if (owned.getName().equals(player.getComponent(PlayerComponent.class).getName())) {
 					pl = 1;
 				}
 				int pOld = Integer.parseInt(ratings.getPoints().get(pl).get(1));
@@ -422,9 +421,9 @@ public class BombermanApp extends GameApplication {
 //				System.out.println(ratings.getPoints().get(pl).get(0)+" points: "+ratings.getPoints().get(pl).get(1));
 			}
 			PlayerComponent playerHit = e.getComponent(PlayerComponent.class);
-			if (playerHit.getName().equals("Player")) {
+			if (playerHit.getName().equals(player.getComponent(PlayerComponent.class).getName())) {
 				pl = 0;
-			} else if (playerHit.getName().equals("Player2")) {
+			} else if (playerHit.getName().equals(player2.getComponent(PlayerComponent.class).getName())) {
 				pl = 1;
 			}
 			uiController.setLifesLbl(playerHit.getVidas() + "", pl);
@@ -495,12 +494,11 @@ public class BombermanApp extends GameApplication {
 		cliente.setMapa(mapa);
 		FXGL.getGameTimer().runOnceAfter(() -> {
 			getGameController().startNewGame();
-		}, Duration.millis(10));
+		}, Duration.millis(500));
 	}
 
 //Nuevo
 	public static void actualizarPlayer(PlayerPosition player) {
-
 		if (juegoPreparado) {
 			FXGL.getGameTimer().runOnceAfter(() -> {
 				try {

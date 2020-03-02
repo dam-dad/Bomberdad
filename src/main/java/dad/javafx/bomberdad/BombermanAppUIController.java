@@ -55,8 +55,14 @@ public class BombermanAppUIController implements UIController {
 		setPointsLbl(BombermanApp.ratings.getPoints().get(3).get(1), 3);
 
 		if (!BombermanApp.multiplayer) {
-			vboxpl3.setOpacity(0);
-			vboxpl4.setOpacity(0);
+			if (BombermanApp.numberPlayers == 2) {
+				vboxpl3.setOpacity(0);
+				vboxpl4.setOpacity(0);
+			}
+			if (BombermanApp.numberPlayers == 3) {
+				vboxpl4.setOpacity(0);
+			}
+			
 		}
 		vboxpl3.setOpacity(0);
 		vboxpl4.setOpacity(0);

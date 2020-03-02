@@ -1,6 +1,5 @@
 package dad.javafx.bomberdad.online;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
@@ -12,48 +11,43 @@ public class Recibir extends Thread {
 	public int id;
 
 	public Recibir(ClienteTCP client) {
-	
 			is = client.getIs();
 	}
 
 	@Override
 	public void run() {
 		super.run();
-	
 		while (continuar) {
 			try {
-				
 				DynamicObject dO= (DynamicObject) is.readObject();
 				String tipoObjeto=dO.getTipoObjeto();
 				switch (tipoObjeto) {
-				
+
 				case "PlayerPosition":
-				PlayerPosition p=(PlayerPosition) dO.getObjeto();
+					PlayerPosition p = (PlayerPosition) dO.getObjeto();
 					BombermanApp.actualizarPlayer(p);
 					break;
-					//Nuevo
+				// Nuevo
 				case "PlacePlayerBomb":
-					PlayerPosition pBomba=(PlayerPosition) dO.getObjeto();
+					PlayerPosition pBomba = (PlayerPosition) dO.getObjeto();
 					BombermanApp.ponerBombaPlayer(pBomba);
 					break;
-					//Nuevo
+				// Nuevo
 				case "RequestNewMap":
-					String mapa=(String) dO.getObjeto();
+					String mapa = (String) dO.getObjeto();
 					BombermanApp.actualizaNuevoMapa(mapa);
-					
 					break;
-				
+			
+					
 				default:
 					break;
 				}
-	
-			} catch (IOException e) {
+			}catch (IOException e) {
 				e.printStackTrace();
 			} catch (ClassNotFoundException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-
 		}
 	}
 
