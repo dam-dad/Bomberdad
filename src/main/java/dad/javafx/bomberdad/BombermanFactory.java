@@ -67,6 +67,28 @@ public class BombermanFactory implements EntityFactory {
                 .build();
     }
     
+    @Spawns("r")
+    public Entity newBrickRed(SpawnData data) {
+        return FXGL.entityBuilder()
+                .type(BombermanType.BRICKRED)
+                .from(data)
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("brick"+theme+".png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
+                .with(new CellMoveComponent(30, 30,0))
+                .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
+                .build();
+    }
+    
+    @Spawns("y")
+    public Entity newBrickYellow(SpawnData data) {
+        return FXGL.entityBuilder()
+                .type(BombermanType.BRICKYELLOW)
+                .from(data)
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("brick"+theme+".png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
+                .with(new CellMoveComponent(30, 30,0))
+                .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
+                .build();
+    }
+    
 //OLD PLAYER
 //    @Spawns("Player")
 //    public Entity newPlayer(SpawnData data) {

@@ -332,7 +332,7 @@ public class BombermanApp extends GameApplication {
 				}
 				e.getComponent(PlayerComponent.class).playFadeAnimation();
 			}
-		} else if (e.isType(BombermanType.BRICK)) {
+		} else if (e.isType(BombermanType.BRICK) || e.isType(BombermanType.BRICKRED) || e.isType(BombermanType.BRICKYELLOW)) {
 			if (owned != null) {
 				int pl = 0;
 				if (owned.getName().equals("Player")) {
@@ -353,18 +353,26 @@ public class BombermanApp extends GameApplication {
 
 			Entity f = getGameWorld().spawn("f", e.getX(), e.getY());
 			f.getViewComponent().setOpacity(0);
-
-			if (FXGLMath.randomBoolean()) {
-
-				int x = (int) e.getPosition().getX();
-				int y = (int) e.getPosition().getY();
-
-				if (FXGLMath.randomBoolean()) {
-					getGameWorld().spawn("PUMaxBombs", x, y);
-				} else {
-					getGameWorld().spawn("PUPower", x, y);
-				}
+			
+			int x = (int) e.getPosition().getX();
+			int y = (int) e.getPosition().getY();
+			
+			if (e.isType(BombermanType.BRICKRED)) {
+				getGameWorld().spawn("PUPower", x, y);
+			} else if (e.isType(BombermanType.BRICKYELLOW)) {
+				getGameWorld().spawn("PUMaxBombs", x, y);
 			}
+//			if (FXGLMath.randomBoolean()) {
+//
+//				int x = (int) e.getPosition().getX();
+//				int y = (int) e.getPosition().getY();
+//
+//				if (FXGLMath.randomBoolean()) {
+//					getGameWorld().spawn("PUMaxBombs", x, y);
+//				} else {
+//					getGameWorld().spawn("PUPower", x, y);
+//				}
+//			}
 		} else if (e.isType(BombermanType.ENEMY)) {
 			e.removeFromWorld();
 		}
