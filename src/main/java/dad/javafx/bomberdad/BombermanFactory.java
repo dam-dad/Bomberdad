@@ -6,7 +6,6 @@ import com.almasb.fxgl.dsl.components.ExpireCleanComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
-import com.almasb.fxgl.pathfinding.CellState;
 import com.almasb.fxgl.physics.BoundingShape;
 //import com.sun.javafx.geom.Point2D;
 
@@ -16,6 +15,8 @@ import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.components.StaticComponent;
 //----
 import dad.javafx.bomberdad.ia.ChasePlayer;
+import dad.javafx.bomberdad.ia.DefendZone;
+
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.entity.*;
@@ -175,10 +176,10 @@ public class BombermanFactory implements EntityFactory {
                 .type(BombermanType.ENEMY)
                 .bbox(new HitBox(new Point2D(2, 2), BoundingShape.box(30, 30)))
                 .viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.DARKRED))
-                .with(new CellMoveComponent(30, 30, 150))
+                .with(new CellMoveComponent(30, 30, 125))
                 .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
                 .with(new EnemyComponent())
-                .with(new ChasePlayer())
+                .with(new DefendZone())
                 .build();
 
         enemy.getTransformComponent().setScaleOrigin(new Point2D(0, 0));

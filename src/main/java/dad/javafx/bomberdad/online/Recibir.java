@@ -14,17 +14,16 @@ public class Recibir extends Thread {
 	public Recibir(ClienteTCP client) {
 	
 			is = client.getIs();
-	
+		
 	}
 
 	@Override
 	public void run() {
 		super.run();
+	
 		while (continuar) {
 			try {
-//				PlayerPosition p = new PlayerPosition();
-//				p= (PlayerPosition)is.readObject();
-//				BombermanApp.actualizarPlayer(p);
+				
 				DynamicObject dO= (DynamicObject) is.readObject();
 				String tipoObjeto=dO.getTipoObjeto();
 				switch (tipoObjeto) {
@@ -33,20 +32,22 @@ public class Recibir extends Thread {
 				PlayerPosition p=(PlayerPosition) dO.getObjeto();
 					BombermanApp.actualizarPlayer(p);
 					break;
-				case "PlaceBomb":
-					
+					//Nuevo
+				case "PlacePlayerBomb":
+					PlayerPosition pBomba=(PlayerPosition) dO.getObjeto();
+					BombermanApp.ponerBombaPlayer(pBomba);
 					break;
-
-				case "PowerUpp":
+					//Nuevo
+				case "RequestNewMap":
+					String mapa=(String) dO.getObjeto();
+					BombermanApp.actualizaNuevoMapa(mapa);
 					
 					break;
 				
 				default:
 					break;
 				}
-
-
-				
+	
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ClassNotFoundException e1) {
