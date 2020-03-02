@@ -21,15 +21,14 @@ public class DefendZone extends Component {
 	@Override
 	public void onUpdate(double tpf) {
 		if (enemyXOrigen == 0 & enemyYOrigen == 0) {
-			enemyXOrigen = FXGL.getGameWorld().getEntitiesByType(BombermanType.ENEMY).get(0).call("getCellX");
-			enemyYOrigen = FXGL.getGameWorld().getEntitiesByType(BombermanType.ENEMY).get(0).call("getCellY");
+			enemyXOrigen = FXGL.getGameWorld().getEntitiesByType(BombermanType.ENEMY).get(1).call("getCellX");
+			enemyYOrigen = FXGL.getGameWorld().getEntitiesByType(BombermanType.ENEMY).get(1).call("getCellY");
 		}
 		coorCerca = playerOnZone();
-		if (coorCerca[2] < 7.0) {
+		if (coorCerca[2] < 8.0) {
 			astar.moveToCell(coorCerca[0], coorCerca[1]);
 		}
 		else {
-			System.out.println(enemyXOrigen);
 			astar.moveToCell(enemyXOrigen, enemyYOrigen);
 		}
 	}

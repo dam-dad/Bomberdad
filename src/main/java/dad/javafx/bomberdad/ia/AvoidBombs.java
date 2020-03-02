@@ -34,8 +34,8 @@ public class AvoidBombs extends Component {
 						xb--;
 						yb--;
 					}
-				}
 				astar.moveToCell(xb, yb);
+				}
 			}
 		}
 	

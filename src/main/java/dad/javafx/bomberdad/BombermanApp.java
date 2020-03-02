@@ -65,7 +65,7 @@ public class BombermanApp extends GameApplication {
 
 	public static final int TILE_SIZE = 30;
 	public static final int UI_SIZE = 200;
-	public static Entity player, player2, enemy;
+	public static Entity player, player2, enemy, enemy2;
 	private int lvl = 0;
 	private static boolean requestNewGame = false;
 	public static String theme = "crab";
@@ -245,6 +245,8 @@ public class BombermanApp extends GameApplication {
 		player2.getComponent(PlayerComponent.class).setName("Pablo");
 		enemy = getGameWorld().spawn("e", TILE_SIZE, TILE_SIZE * 17);
 		enemy.getComponent(EnemyComponent.class);
+		enemy2 = getGameWorld().spawn("d", TILE_SIZE * 17, TILE_SIZE);
+		enemy2.getComponent(EnemyComponent.class);
 		ratings.getPoints().get(0).set(0, player.getComponent(PlayerComponent.class).getName());
 		ratings.getPoints().get(1).set(0, player2.getComponent(PlayerComponent.class).getName());
 

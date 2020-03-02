@@ -21,6 +21,9 @@ public class ChasePlayer extends Component {
 		astar.moveToCell(coorCerca[0], coorCerca[1]);
 	}
 
+	/**
+	 * 
+	*/
 	public int[] playerNear() {
 		ArrayList<Entity> listaPlayer = new ArrayList<Entity>(
 				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER));
