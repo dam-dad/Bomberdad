@@ -27,6 +27,8 @@ import com.almasb.fxgl.pathfinding.CellMoveComponent;
 import com.almasb.fxgl.pathfinding.CellState;
 import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
+
+import dad.javafx.bomberdad.components.EnemyComponent;
 import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.menu.CustomMenu;
 import dad.javafx.bomberdad.online.ClienteTCP;
@@ -38,7 +40,7 @@ public class BombermanApp extends GameApplication {
 
 	public static final int TILE_SIZE = 30;
 
-	public static Entity player, player2;
+	public static Entity player, player2, enemy;
 	private int lvl = 0;
 	private boolean requestNewGame = false;
 	public static String theme;
@@ -248,6 +250,8 @@ public class BombermanApp extends GameApplication {
 		player.getComponent(PlayerComponent.class).setName("Player");
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
 		player2.getComponent(PlayerComponent.class).setName("PLayer2");
+		enemy = getGameWorld().spawn("e", TILE_SIZE, TILE_SIZE * 17);
+		enemy.getComponent(EnemyComponent.class);
 
 	}
 
