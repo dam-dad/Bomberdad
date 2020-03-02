@@ -33,8 +33,8 @@ public class ClienteTCP {
 			inicializarPartida();
 //			is.close();
 //			os.close();
-			recibir = new Recibir(clientSocket);
 			System.out.println("start hilo");
+			recibir = new Recibir(this);
 			recibir.start();
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -47,21 +47,15 @@ public class ClienteTCP {
 
 	private void inicializarPartida() {
 		try {
-			DynamicObject dOsolicitarId = new DynamicObject("getId", "getId");
 			os.writeObject(dOsolicitarId);
-			DynamicObject leidO = (DynamicObject) is.readObject();
-			this.id = leidO.getIdJugador();
-
-			DynamicObject dOsolicitarNumPlayers = new DynamicObject("NumeroJugadores", "NumeroJugadores");
-			os.writeObject(dOsolicitarNumPlayers);
-			DynamicObject dO = (DynamicObject) is.readObject();
-			int numJugadores = (int) dO.getObjeto();
-			BombermanApp.numberPlayers = numJugadores;
-
-			DynamicObject dOsolicitaLista = new DynamicObject("getLista", "getLista");
+			DynamicObject leidO=(DynamicObject)is.readObject();
+			this.id=leidO.getIdJugador();
+			System.out.println("DespuesSolicitud"+id);
+			DynamicObject dOsolicitaLista= new DynamicObject("getLista","getLista");
 			os.writeObject(dOsolicitaLista);
 			DynamicObject leedOlista = (DynamicObject) is.readObject();
-			while (!leedOlista.getTipoObjeto().equals(numJugadores+"")) {
+			System.out.println(leedOlista.getObjeto());
+			while (!leedOlista.getTipoObjeto().equals("2")) {
 				os.writeObject(dOsolicitaLista);
 				leedOlista = (DynamicObject) is.readObject();
 			}
@@ -70,8 +64,13 @@ public class ClienteTCP {
 				DynamicObject dOSolicitaMapa = new DynamicObject("RequestNewMap", "0");
 				os.writeObject(dOSolicitaMapa);
 			}
-			DynamicObject leeMapa = (DynamicObject) is.readObject();
-			setMapa((String) leeMapa.getObjeto());
+//				is.readObject();
+			DynamicObject leeMapa=(DynamicObject)is.readObject();
+			while(!leeMapa.getTipoObjeto().equals("RequestNewMap")) {
+				leeMapa=(DynamicObject)is.readObject();
+	
+				}
+			setMapa((String)leeMapa.getObjeto());
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}

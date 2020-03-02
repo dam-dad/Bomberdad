@@ -15,6 +15,8 @@ import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.components.StaticComponent;
 //----
 import dad.javafx.bomberdad.ia.ChasePlayer;
+import dad.javafx.bomberdad.ia.DefendZone;
+
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.entity.*;
@@ -59,6 +61,28 @@ public class BombermanFactory implements EntityFactory {
     public Entity newBrick(SpawnData data) {
         return FXGL.entityBuilder()
                 .type(BombermanType.BRICK)
+                .from(data)
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("brick"+theme+".png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
+                .with(new CellMoveComponent(30, 30,0))
+                .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
+                .build();
+    }
+    
+    @Spawns("r")
+    public Entity newBrickRed(SpawnData data) {
+        return FXGL.entityBuilder()
+                .type(BombermanType.BRICKRED)
+                .from(data)
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("brick"+theme+".png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
+                .with(new CellMoveComponent(30, 30,0))
+                .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
+                .build();
+    }
+    
+    @Spawns("y")
+    public Entity newBrickYellow(SpawnData data) {
+        return FXGL.entityBuilder()
+                .type(BombermanType.BRICKYELLOW)
                 .from(data)
                 .viewWithBBox(FXGL.getAssetLoader().loadTexture("brick"+theme+".png", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
                 .with(new CellMoveComponent(30, 30,0))
@@ -152,10 +176,10 @@ public class BombermanFactory implements EntityFactory {
                 .type(BombermanType.ENEMY)
                 .bbox(new HitBox(new Point2D(2, 2), BoundingShape.box(30, 30)))
                 .viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.DARKRED))
-                .with(new CellMoveComponent(30, 30, 150))
+                .with(new CellMoveComponent(30, 30, 125))
                 .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))
                 .with(new EnemyComponent())
-                .with(new ChasePlayer())
+                .with(new DefendZone())
                 .build();
 
         enemy.getTransformComponent().setScaleOrigin(new Point2D(0, 0));

@@ -122,7 +122,7 @@ public class MenuController extends BorderPane implements Initializable {
 		transicionFadeVBoxBtns.setToValue(1);
 		transicionFadeVBoxBtns.setRate(0.1);
 		transicionFadeVBoxBtns.setNode(vBoxBtns);
-
+		
 		title.setTranslateY(FXGL.getAppHeight() / 2 - 100);
 
 		FXGL.getEngineTimer().runOnceAfter(() -> {

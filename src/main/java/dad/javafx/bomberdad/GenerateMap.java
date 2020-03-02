@@ -30,7 +30,15 @@ public class GenerateMap {
 						if (FXGLMath.randomBoolean()) {
 							line = replace(line,i,'f');
 						} else {
-							line = replace(line,i,'b');
+							if (FXGLMath.randomBoolean()) {
+								line = replace(line,i,'b');
+							} else {
+								if (FXGLMath.randomBoolean()) {
+									line = replace(line,i,'r');
+								} else {
+									line = replace(line,i,'y');
+								}
+							}
 						}
 					}
 				}
