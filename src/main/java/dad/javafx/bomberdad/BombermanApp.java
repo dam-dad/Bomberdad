@@ -218,9 +218,7 @@ public class BombermanApp extends GameApplication {
 
 	@Override
 	public void initGame() {
-//Nuevo
 		if (multiplayer) {
-
 			initOnlineMode();
 		} else {
 			initOfflineMode();
@@ -253,8 +251,10 @@ public class BombermanApp extends GameApplication {
 			playerPosition = new PlayerPosition(0.0, 0.0, id);
 			onlineActivo = true;
 		}
+		
 		playerPosition = new PlayerPosition(0.0, 0.0, id);
 		GenerateMap.createMap(cliente.getMapa());
+		System.out.println(cliente.getMapa());
 		cargarMundo();
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
 		player.getComponent(PlayerComponent.class).setName("Player");
@@ -262,17 +262,14 @@ public class BombermanApp extends GameApplication {
 		player2.getComponent(PlayerComponent.class).setName("PLayer2");
 
 		juegoPreparado = true;
-
 	}
 	private void cargarMundo() {
 		getGameWorld().addEntityFactory(new BombermanFactory(theme));
 		Texture texture = getAssetLoader().loadTexture("bg" + theme + ".gif");
 		GameView vista = new GameView(texture, 0);
 		getGameScene().addGameView(vista);
-
 		Level level = getAssetLoader().loadLevel("map.txt", new TextLevelLoader(TILE_SIZE, TILE_SIZE, '0'));
 		getGameWorld().setLevel(level);
-
 		AStarGrid grid = AStarGrid.fromWorld(getGameWorld(), 19, 19, 30, 30, (type) -> {
 
 			if (type == BombermanType.FLOOR || type == BombermanType.ENEMY) {
@@ -282,17 +279,6 @@ public class BombermanApp extends GameApplication {
 			}
 		});
 		set("grid", grid);
-
-		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
-		player.getComponent(PlayerComponent.class).setName("Player");
-		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
-		player2.getComponent(PlayerComponent.class).setName("PLayer2");
-
-		
-
-		juegoPreparado = true;
-
-
 
 	}
 

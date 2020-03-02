@@ -42,7 +42,7 @@ public class ClienteTCP {
 
 
 	private void inicializarPartida() {
-		System.out.println("AntesSolicitud"+id);
+	
 			DynamicObject dOsolicitarId= new DynamicObject("getId", "getId");
 		try {
 		
@@ -61,6 +61,7 @@ public class ClienteTCP {
 				DynamicObject dOSolicitaMapa= new DynamicObject("RequestNewMap", "0");
 				os.writeObject(dOSolicitaMapa);
 			}
+	
 				DynamicObject leeMapa=(DynamicObject)is.readObject();
 				setMapa((String)leeMapa.getObjeto());
 		

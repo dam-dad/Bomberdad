@@ -48,10 +48,12 @@ public class ConnectionClient extends Thread {
 		switch (nDo.getTipoObjeto()) {
 
 		case "getId":
-			
+			System.out.println("enviando id"+ idPlayer);
 			nDo.setIdJugador(idPlayer);
 			try {
+				System.out.println(nDo.getIdJugador());
 				this.objectOut.writeObject(nDo);
+				
 			} catch (IOException e) {
 
 				e.printStackTrace();
@@ -59,7 +61,7 @@ public class ConnectionClient extends Thread {
 			break;
 			
 		case "getLista":
-			
+		
 			nDo.setTipoObjeto(Server.listaSize() + "");
 			try {
 				this.objectOut.writeObject(nDo);
@@ -76,7 +78,7 @@ public class ConnectionClient extends Thread {
 			break;
 			
 		case "RequestNewMap":
-			procesaMapa(dO);
+			procesaMapa(nDo);
 			break;
 		case "PlaceBomb":
 
