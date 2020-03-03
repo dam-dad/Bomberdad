@@ -37,7 +37,7 @@ public class BombComponent extends Component {
 				.get(this.getEntity().getComponent(CellMoveComponent.class).getCellX(),
 						this.getEntity().getComponent(CellMoveComponent.class).getCellY())
 				.setState(CellState.NOT_WALKABLE);
-		}
+	}
 
 	public void explode(int power, PlayerComponent owned) {
 		BoundingBoxComponent bbox = getEntity().getBoundingBoxComponent();
@@ -48,28 +48,22 @@ public class BombComponent extends Component {
 		// Explosion vertical
 
 		FXGL.getGameWorld().getEntitiesInRange(bbox.range(0, radius)).stream()
-
 				.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.BRICKRED)
 						|| e.isType(BombermanType.ENEMY) || e.isType(BombermanType.BRICKYELLOW)
 						|| e.isType(BombermanType.PLAYER) || e.isType(BombermanType.FLOOR)
 						|| e.isType(BombermanType.ENEMY))
 				.forEach(e -> {
-
-				.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.BRICKRED) ||e.isType(BombermanType.ENEMY) || e.isType(BombermanType.BRICKYELLOW) || e.isType(BombermanType.PLAYER) || e.isType(BombermanType.FLOOR) || e.isType(BombermanType.ENEMY)).forEach(e -> {
 
 					entities.add(e);
 				});
 
 		// Explosion horizontal
 		FXGL.getGameWorld().getEntitiesInRange(bbox.range(radius, 0)).stream()
-
 				.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.BRICKRED)
 						|| e.isType(BombermanType.ENEMY) || e.isType(BombermanType.BRICKYELLOW)
 						|| e.isType(BombermanType.PLAYER) || e.isType(BombermanType.FLOOR)
 						|| e.isType(BombermanType.ENEMY))
 				.forEach(e -> {
-
-				.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.BRICKRED) || e.isType(BombermanType.ENEMY)|| e.isType(BombermanType.BRICKYELLOW) || e.isType(BombermanType.PLAYER) || e.isType(BombermanType.FLOOR) || e.isType(BombermanType.ENEMY)).forEach(e -> {
 
 					boolean thereIs = false;
 					for (int i = 0; i < entities.size(); i++) {
@@ -168,28 +162,30 @@ public class BombComponent extends Component {
 					|| st.isType(BombermanType.BRICKYELLOW)) {
 				Entity aux = st;
 
-			if(st.isType(BombermanType.FLOOR) || st.isType(BombermanType.ENEMY)) {
-				if( st.isType(BombermanType.ENEMY))
-					st.removeFromWorld();
-				FXGL.spawn("explosion",st.getPosition());
-				
-			}else if (st.isType(BombermanType.BRICK) || st.isType(BombermanType.BRICKRED) || st.isType(BombermanType.BRICKYELLOW)){
-				Entity aux=st;
+				if (st.isType(BombermanType.FLOOR) || st.isType(BombermanType.ENEMY)) {
+					if (st.isType(BombermanType.ENEMY))
+						st.removeFromWorld();
+					FXGL.spawn("explosion", st.getPosition());
 
-				FXGL.<BombermanApp>getAppCast().onDestroyed(st, owned);
-				aux.getTypeComponent().setValue(BombermanType.FLOOR);
+				} else if (st.isType(BombermanType.BRICK) || st.isType(BombermanType.BRICKRED)
+						|| st.isType(BombermanType.BRICKYELLOW)) {
+					aux = st;
 
-				FXGL.spawn("explosion", st.getPosition());
+					FXGL.<BombermanApp>getAppCast().onDestroyed(st, owned);
+					aux.getTypeComponent().setValue(BombermanType.FLOOR);
 
-			} else {
-				FXGL.<BombermanApp>getAppCast().onDestroyed(st, owned);
-			}
-		}
-		getEntity().getComponent(AStarMoveComponent.class).getGrid()
-				.get(this.getEntity().getComponent(CellMoveComponent.class).getCellX(),
-						this.getEntity().getComponent(CellMoveComponent.class).getCellY())
-				.setState(CellState.WALKABLE);
-		getEntity().removeFromWorld();
-		FXGL.spawn("explosion", getEntity().getPosition());
-	}
+					FXGL.spawn("explosion", st.getPosition());
+
+				} else {
+					FXGL.<BombermanApp>getAppCast().onDestroyed(st, owned);
 				}
+			}
+			getEntity().getComponent(AStarMoveComponent.class).getGrid()
+					.get(this.getEntity().getComponent(CellMoveComponent.class).getCellX(),
+							this.getEntity().getComponent(CellMoveComponent.class).getCellY())
+					.setState(CellState.WALKABLE);
+			getEntity().removeFromWorld();
+			FXGL.spawn("explosion", getEntity().getPosition());
+		}
+	}
+}
