@@ -1,9 +1,9 @@
 package dad.javafx.bomberdad.menu;
 
-
 import com.almasb.fxgl.app.FXGLMenu;
 import com.almasb.fxgl.app.MenuType;
 
+import dad.javafx.bomberdad.menu.components.InGameMenuController;
 import dad.javafx.bomberdad.menu.components.MenuController;
 import javafx.beans.binding.StringBinding;
 import javafx.scene.Node;
@@ -17,7 +17,7 @@ import javafx.scene.text.Text;
  */
 
 public class CustomMenu extends FXGLMenu {
-
+	
 	public CustomMenu(MenuType type) {
         super(type);
         this.getContentRoot().getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());

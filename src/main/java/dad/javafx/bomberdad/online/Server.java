@@ -14,14 +14,12 @@ import dad.javafx.bomberdad.GenerateMap;
 public class Server extends Thread{
 	private static final int PORT = 5555;
 	private static int id = 0;
-	private static int numeroJugadoresPartida;
+	private static int numeroJugadoresPartida = 2;
 	public static String initialMap;
 	public static ArrayList<ConnectionClient> clientes = new ArrayList<>();
 	
 
-	public Server(int numPlayers) {
-		numeroJugadoresPartida = numPlayers;
-	}
+	public Server() { }
 	
 	@Override
 	public void run() {
@@ -60,6 +58,16 @@ public class Server extends Thread{
 
 	public static void setNumeroJugadoresPartida(int numeroJugadoresPartida) {
 		Server.numeroJugadoresPartida = numeroJugadoresPartida;
+	}
+
+	public static void closeSockets() {
+		for (int i = 0; i < clientes.size(); i++) {
+			try {
+				clientes.get(i).getClient().close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 }

@@ -24,6 +24,9 @@ import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.ia.AvoidBombs;
 import dad.javafx.bomberdad.ia.ChasePlayer;
 //----
+import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
+import com.almasb.fxgl.physics.HitBox;
+import com.almasb.fxgl.entity.*;
 import dad.javafx.bomberdad.ia.DefendZone;
 import javafx.geometry.Point2D;
 //---

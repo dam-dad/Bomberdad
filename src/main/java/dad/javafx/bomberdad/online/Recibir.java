@@ -15,9 +15,11 @@ public class Recibir extends Thread {
 	public boolean continuar = true;
 	private ObjectInputStream is;
 	public int id;
+	private ClienteTCP client;
 
 	public Recibir(ClienteTCP client) {
-			is = client.getIs();
+		this.client = client;
+		is = client.getIs();
 	}
 
 	@Override
@@ -25,8 +27,8 @@ public class Recibir extends Thread {
 		super.run();
 		while (continuar) {
 			try {
-				DynamicObject dO= (DynamicObject) is.readObject();
-				String tipoObjeto=dO.getTipoObjeto();
+				DynamicObject dO = (DynamicObject) is.readObject();
+				String tipoObjeto = dO.getTipoObjeto();
 				switch (tipoObjeto) {
 
 				case "PlayerPosition":
@@ -43,14 +45,21 @@ public class Recibir extends Thread {
 					String mapa = (String) dO.getObjeto();
 					BombermanApp.actualizaNuevoMapa(mapa);
 					break;
-
+				case "Terminar":
+					client.closeCient();
+					break;
 				default:
 					break;
 				}
-			}catch (IOException e) {} 
-			catch (ClassNotFoundException e1) {}
+			} catch (IOException | ClassNotFoundException e) {
+			}
+
 		}
 
+	}
+
+	public void setFinal(boolean b) {
+		continuar = b;
 	}
 
 }

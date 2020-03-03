@@ -1,40 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import dad.javafx.bomberdad.ratings.TarjetaPuntuaciones?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<HBox fx:id="view" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1">
+<HBox fx:id="view" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox fx:id="vboxLeft" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
          <children>
-            <VBox fx:id="vboxpl1" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+            <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                <children>
-                  <TarjetaPuntuaciones fx:id="tarjetapl1" />
+                  <ImageView fx:id="bgLeft" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                  <VBox fx:id="vboxpl1" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                     <children>
+                        <TarjetaPuntuaciones fx:id="tarjetapl1" />
+                     </children>
+                  </VBox>
+                  <VBox fx:id="vboxpl4" alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                     <children>
+                        <TarjetaPuntuaciones fx:id="tarjetapl4" />
+                     </children>
+                  </VBox>
                </children>
-            </VBox>
-            <VBox fx:id="vboxpl4" alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
-               <children>
-                  <TarjetaPuntuaciones fx:id="tarjetapl4" />
-               </children>
-            </VBox>
+            </StackPane>
          </children>
       </VBox>
-      <HBox fx:id="hboxApp" />
-      <VBox fx:id="vboxRight" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+      <HBox fx:id="hboxApp" prefHeight="570.0" />
+      <VBox fx:id="vboxRight" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+      <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
          <children>
-            <VBox fx:id="vboxpl3" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+            <ImageView fx:id="bgRight" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+            <VBox fx:id="vboxpl3" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <children>
                   <TarjetaPuntuaciones fx:id="tarjetapl3" />
                </children>
             </VBox>
-            <VBox fx:id="vboxpl2" alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+            <VBox fx:id="vboxpl2" alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <children>
                   <TarjetaPuntuaciones fx:id="tarjetapl2" />
                </children>
             </VBox>
          </children>
-      </VBox>
+      </StackPane>
    </children>
 </HBox>

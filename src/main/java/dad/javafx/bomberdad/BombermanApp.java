@@ -74,7 +74,7 @@ public class BombermanApp extends GameApplication {
 	private int lvl = 0;
 	private static boolean requestNewGame = false;
 	public static String theme = "crab";
-	private static ClienteTCP cliente;
+	public static ClienteTCP cliente;
 	public static String ip;
 	public static int port;
 	private PlayerPosition playerPosition;
@@ -87,7 +87,7 @@ public class BombermanApp extends GameApplication {
 	int i = 0;
 	public int tam = 0;
 	private BombermanAppUIController uiController = new BombermanAppUIController();
-	public int id;
+	public static int id;
 	public static int numberPlayers;
 
 	@Override

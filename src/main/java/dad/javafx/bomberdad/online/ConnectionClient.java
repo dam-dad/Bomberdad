@@ -16,7 +16,7 @@ import dad.javafx.bomberdad.GenerateMap;
 public class ConnectionClient extends Thread {
 
 	public Socket client;
-
+	private boolean continuar = true;
 	ObjectOutputStream objectOut;
 	ObjectInputStream objectIn;
 	DynamicObject objetoDinamico;
@@ -37,14 +37,12 @@ public class ConnectionClient extends Thread {
 	@Override
 	public void run() {
 
-		while (true) {
+		while (continuar) {
 			try {
 				this.objetoDinamico = (DynamicObject) objectIn.readObject();
 				procesaDynamicObject(this.objetoDinamico);
 
-			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
-			}
+			} catch (IOException | ClassNotFoundException e) { }
 
 		}
 	}
@@ -60,7 +58,7 @@ public class ConnectionClient extends Thread {
 			try {
 				
 				this.objectOut.writeObject(nDo);
-				
+
 			} catch (IOException e) {
 
 				e.printStackTrace();
@@ -95,8 +93,34 @@ public class ConnectionClient extends Thread {
 		case "NumeroJugadores":
 			procesaNumJugadores(nDo);
 			break;
+		case "Terminar":
+			finalizarPartida(nDo);
+			continuar = false;
+			break;
 		default:
 			break;
+		}
+	}
+
+	private void finalizarPartida(DynamicObject dO) {
+//		dO.setTipoObjeto("Terminar");
+//		for (int i = 0; i < Server.clientes.size(); i++) {
+//			if (this.idPlayer != Server.clientes.get(i).getIdPlayer()) {
+//				try {
+//					Server.clientes.get(i).getObjectOut().writeObject(dO);
+//				} catch (IOException e) {
+//				}
+//			} else {
+//				Server.clientes.remove(i);
+//			}
+//		}
+//		try {
+//			client.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		if (idPlayer == 0) {
+			Server.closeSockets();
 		}
 	}
 
@@ -111,10 +135,10 @@ public class ConnectionClient extends Thread {
 
 	// nuevo
 	private void procesaMapa(DynamicObject dO) {
-		int lvl= Integer.parseInt((String)dO.getObjeto());
-		String map= generaMapa(lvl);
+		int lvl = Integer.parseInt((String) dO.getObjeto());
+		String map = generaMapa(lvl);
 
-		DynamicObject dOenvio= new DynamicObject("RequestNewMap",map);
+		DynamicObject dOenvio = new DynamicObject("RequestNewMap", map);
 		for (int i = 0; i < Server.clientes.size(); i++) {
 			try {
 				Server.clientes.get(i).getObjectOut().writeObject(dOenvio);
@@ -164,5 +188,12 @@ public class ConnectionClient extends Thread {
 		return idPlayer;
 	}
 
+	public Socket getClient() {
+		return client;
+	}
+
+	public void setClient(Socket client) {
+		this.client = client;
+	}
 
 }

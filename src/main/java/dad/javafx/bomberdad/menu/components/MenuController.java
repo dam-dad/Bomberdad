@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import com.almasb.fxgl.dsl.FXGL;
 
 import dad.javafx.bomberdad.BombermanApp;
+import dad.javafx.bomberdad.online.PedirDatosComponent;
 import dad.javafx.bomberdad.online.Server;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
@@ -48,10 +49,7 @@ public class MenuController extends BorderPane implements Initializable {
 	private FadeTransition transicionFadeVBoxBtns;
 	private FadeTransition transicionFadeBG;
 	private Timeline timeline;
-
-	private String ip = "192.168.1.14";
-
-	private int port = 5555;
+	private boolean skipIntro;
 
 	// view
 
@@ -73,11 +71,12 @@ public class MenuController extends BorderPane implements Initializable {
 	@FXML
 	private Button nuevaPartidaBtn, opcionesBtn, themesBtn, exitBtn;
 
-	public MenuController(double w, double h) {
+	public MenuController(double w, double h, boolean skipIntro) {
 		super();
 		try {
 			this.w = w;
 			this.h = h;
+			this.skipIntro = skipIntro;
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainMenu.fxml"));
 			loader.setController(this);
 			loader.setRoot(this);
@@ -89,10 +88,6 @@ public class MenuController extends BorderPane implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-//		Media mainmusic = new Media(
-//				new File(GenerateMap.class.getClassLoader().getResource("./assets/music/MainMusicdad.mp3").getFile())
-//						.toURI().toString());
-//		MediaPlayer player = new MediaPlayer(mainmusic);
 		view.setPrefSize(w, h);
 		vBoxBtns.setOpacity(0);
 		conVbox.getChildren().add(new ControlsController());
@@ -130,30 +125,38 @@ public class MenuController extends BorderPane implements Initializable {
 		transicionFadeVBoxBtns.setToValue(1);
 		transicionFadeVBoxBtns.setRate(0.1);
 		transicionFadeVBoxBtns.setNode(vBoxBtns);
-		
-		title.setTranslateY(FXGL.getAppHeight() / 2 - 100);
 
-		FXGL.getEngineTimer().runOnceAfter(() -> {
-//			player.play();
-			transicionTrans.playFromStart();
-			transicionScale.playFromStart();
+		if (skipIntro) {
+			lessText.setText(BombermanApp.theme.toUpperCase());
+			title.getStyleClass().add("lbless");
+			imageView.setImage(new Image("./assets/textures/TitleStatic.png"));
+			view.setStyle("-fx-background-color: gray;");
+			vBoxBtns.setOpacity(1);
+		} else {
+			title.setTranslateY(FXGL.getAppHeight() / 2 - 100);
 			FXGL.getEngineTimer().runOnceAfter(() -> {
-				imageView.setImage(new Image("./assets/textures/Title.gif"));
+//				player.play();
+				transicionTrans.playFromStart();
+				transicionScale.playFromStart();
 				FXGL.getEngineTimer().runOnceAfter(() -> {
-					transicionFadeBG.playFromStart();
-					view.setStyle("-fx-background-color: white;");
-					lessText.getStyleClass().add("finalText");
+					imageView.setImage(new Image("./assets/textures/Title.gif"));
 					FXGL.getEngineTimer().runOnceAfter(() -> {
-						lessText.setText(BombermanApp.theme.toUpperCase());
-						lessText.getStyleClass().add("lbless");
-						imageView.setImage(new Image("./assets/textures/TitleStatic.png"));
-						view.setStyle("-fx-background-color: gray;");
-						transicionFadeBGBack.playFromStart();
-						transicionFadeVBoxBtns.playFromStart();
-					}, Duration.seconds(0.5));
-				}, Duration.seconds(1));
-			}, Duration.seconds(3));
-		}, Duration.seconds(4));
+						transicionFadeBG.playFromStart();
+						view.setStyle("-fx-background-color: white;");
+						lessText.getStyleClass().add("finalText");
+						FXGL.getEngineTimer().runOnceAfter(() -> {
+							lessText.setText(BombermanApp.theme.toUpperCase());
+							lessText.getStyleClass().add("lbless");
+							imageView.setImage(new Image("./assets/textures/TitleStatic.png"));
+							view.setStyle("-fx-background-color: gray;");
+							transicionFadeBGBack.playFromStart();
+							transicionFadeVBoxBtns.playFromStart();
+						}, Duration.seconds(0.5));
+					}, Duration.seconds(1));
+				}, Duration.seconds(3));
+			}, Duration.seconds(4));
+		}
+
 	}
 
 	@FXML
@@ -175,7 +178,13 @@ public class MenuController extends BorderPane implements Initializable {
 				Button offlineModeBtn = new Button("Offline (1vs1)");
 				offlineModeBtn.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
 				offlineModeBtn.setMaxSize(getMaxWidth(), getMaxHeight());
-				offlineModeBtn.setOnAction(e -> FXGL.getGameController().startNewGame());
+				offlineModeBtn.setOnAction(e -> {
+					view.getChildren().clear();
+					view.setCenter(new InGameMenuController(w, h));
+					BombermanApp.id = 0;
+					BombermanApp.multiplayer = false;
+					FXGL.getGameController().startNewGame();
+				});
 				offlineModeBtn.setAlignment(Pos.TOP_LEFT);
 
 				offlineModeBtn.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
@@ -185,7 +194,7 @@ public class MenuController extends BorderPane implements Initializable {
 				onlineServerModeBtn.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
 				onlineServerModeBtn.setMaxSize(getMaxWidth(), getMaxHeight());
 				onlineServerModeBtn.setOnAction(e -> {
-					createServer();
+					setIpAndPort(true);
 				});
 				onlineServerModeBtn.setAlignment(Pos.TOP_LEFT);
 
@@ -196,7 +205,7 @@ public class MenuController extends BorderPane implements Initializable {
 				onlineClientMode.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
 				onlineClientMode.setMaxSize(getMaxWidth(), getMaxHeight());
 				onlineClientMode.setOnAction(e -> {
-					buscarServer();
+					setIpAndPort(false);
 				});
 				onlineClientMode.setAlignment(Pos.TOP_LEFT);
 
@@ -208,7 +217,7 @@ public class MenuController extends BorderPane implements Initializable {
 		}, Duration.millis(200));
 	}
 
-	private void buscarServer() {
+	private void setIpAndPort(boolean isCreateServer) {
 		RotateTransition flipping = flip(vBoxBtns);
 		flipping.playFromStart();
 		FXGL.getEngineTimer().runOnceAfter(() -> {
@@ -223,13 +232,25 @@ public class MenuController extends BorderPane implements Initializable {
 				backBtn.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
 				backBtn.getStyleClass().add("btn");
 
-				Button buscar = new Button("Conectarse al Servidor");
+				PedirDatosComponent datos = new PedirDatosComponent();
+
+				Button buscar;
+				if (isCreateServer)
+					buscar = new Button("Crear al Servidor");
+				else
+					buscar = new Button("Conectarse al Servidor");
 				buscar.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
 				buscar.setMaxSize(getMaxWidth(), getMaxHeight());
 				buscar.setOnAction(e -> {
+					if (isCreateServer) {
+						Server server = new Server();
+						server.start();
+					}
 					BombermanApp.multiplayer = true;
-					BombermanApp.ip = ip;
-					BombermanApp.port = port;
+					BombermanApp.ip = datos.getIp();
+					BombermanApp.port = Integer.parseInt(datos.getPort());
+					view.getChildren().clear();
+					view.setCenter(new InGameMenuController(w, h));
 					FXGL.getGameController().startNewGame();
 				});
 				buscar.setAlignment(Pos.TOP_LEFT);
@@ -237,75 +258,7 @@ public class MenuController extends BorderPane implements Initializable {
 				buscar.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
 				buscar.getStyleClass().add("btn");
 
-				vBoxBtns.getChildren().addAll(backBtn, buscar);
-			}, Duration.millis(125));
-		}, Duration.millis(200));
-	}
-
-	private void createServer() {
-		RotateTransition flipping = flip(vBoxBtns);
-		flipping.playFromStart();
-		FXGL.getEngineTimer().runOnceAfter(() -> {
-			vBoxBtns.getChildren().clear();
-			FXGL.getEngineTimer().runOnceAfter(() -> {
-				Button backBtn = new Button("Volver");
-				backBtn.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
-				backBtn.setMaxSize(getMaxWidth(), getMaxHeight());
-				backBtn.setOnAction(e -> backtoMainMenu());
-				backBtn.setAlignment(Pos.TOP_LEFT);
-
-				backBtn.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
-				backBtn.getStyleClass().add("btn");
-
-				Button playersNum4 = new Button("4 Jugadores");
-				playersNum4.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
-				playersNum4.setMaxSize(getMaxWidth(), getMaxHeight());
-				playersNum4.setOnAction(e -> {
-					Server server = new Server(4);
-					server.start();
-					BombermanApp.multiplayer = true;
-					BombermanApp.ip = ip;
-					BombermanApp.port = port;
-					FXGL.getGameController().startNewGame();
-				});
-				playersNum4.setAlignment(Pos.TOP_LEFT);
-
-				playersNum4.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
-				playersNum4.getStyleClass().add("btn");
-
-				Button playersNum3 = new Button("3 Jugadores");
-				playersNum3.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
-				playersNum3.setMaxSize(getMaxWidth(), getMaxHeight());
-				playersNum3.setOnAction(e -> {
-					Server server = new Server(3);
-					server.start();
-					BombermanApp.multiplayer = true;
-					BombermanApp.ip = ip;
-					BombermanApp.port = port;
-					FXGL.getGameController().startNewGame();
-				});
-				playersNum3.setAlignment(Pos.TOP_LEFT);
-
-				playersNum3.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
-				playersNum3.getStyleClass().add("btn");
-
-				Button playersNum2 = new Button("2 Jugadores");
-				playersNum2.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
-				playersNum2.setMaxSize(getMaxWidth(), getMaxHeight());
-				playersNum2.setOnAction(e -> {
-					Server server = new Server(2);
-					server.start();
-					BombermanApp.multiplayer = true;
-					BombermanApp.ip = ip;
-					BombermanApp.port = port;
-					FXGL.getGameController().startNewGame();
-				});
-				playersNum2.setAlignment(Pos.TOP_LEFT);
-
-				playersNum2.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
-				playersNum2.getStyleClass().add("btn");
-
-				vBoxBtns.getChildren().addAll(backBtn, playersNum2, playersNum3, playersNum4);
+				vBoxBtns.getChildren().addAll(backBtn, datos, buscar);
 			}, Duration.millis(125));
 		}, Duration.millis(200));
 	}
