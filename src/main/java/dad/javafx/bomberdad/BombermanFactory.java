@@ -12,8 +12,8 @@ import com.almasb.fxgl.physics.BoundingShape;
 import dad.javafx.bomberdad.components.BombComponent;
 import dad.javafx.bomberdad.components.EnemyComponent;
 import dad.javafx.bomberdad.components.PlayerComponent;
-import dad.javafx.bomberdad.components.StaticComponent;
 import dad.javafx.bomberdad.ia.AvoidBombs;
+import dad.javafx.bomberdad.ia.ChasePlayer;
 //----
 import dad.javafx.bomberdad.ia.DefendZone;
 
@@ -27,6 +27,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
+/**
+ * Crea todas las entidades del juego
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
 
 public class BombermanFactory implements EntityFactory {
 	
@@ -187,20 +192,7 @@ public class BombermanFactory implements EntityFactory {
 
         return enemy;
     }
-    @Spawns("s")
-    public Entity newStaticEnemy(SpawnData data) {
-        Entity enemy = entityBuilder()
-                .from(data)
-                .type(BombermanType.ENEMY)
-                .bbox(new HitBox(new Point2D(2, 2), BoundingShape.box(30, 30)))
-                .viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.DARKRED))
-                .with(new StaticComponent())
-                .build();
 
-        enemy.getTransformComponent().setScaleOrigin(new Point2D(0, 0));
-
-        return enemy;
-    }
     @Spawns("Bullet")
     public Entity newBullet(SpawnData data) {
     	Point2D dir= data.get("dir");

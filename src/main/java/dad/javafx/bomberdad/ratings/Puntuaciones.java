@@ -4,9 +4,19 @@ import java.util.ArrayList;
 
 import dad.javafx.bomberdad.BombermanApp;
 
+/**
+ * Clase para el sistema de puntuaciones del juego
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
+
 public class Puntuaciones {
 	private ArrayList<ArrayList<String>> points = new ArrayList<ArrayList<String>>();
 
+	/**
+	 * Constructor que genera las filas y columnas de las puntuaciones en la tabla bidireccional
+	 */
+	
 	public Puntuaciones() {
 		points.add(new ArrayList<String>());
 		points.get(0).add("");

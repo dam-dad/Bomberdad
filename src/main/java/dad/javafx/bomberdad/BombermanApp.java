@@ -61,6 +61,12 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
+/**
+ * Clase principal que maneja los componentes principales del juego
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
+
 public class BombermanApp extends GameApplication {
 
 	public static final int TILE_SIZE = 30;
@@ -240,9 +246,9 @@ public class BombermanApp extends GameApplication {
 		GenerateMap.newMap(lvl);
 		cargarMundo();
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
-		player.getComponent(PlayerComponent.class).setName("Rosmen");
+		player.getComponent(PlayerComponent.class).setName("Player");
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
-		player2.getComponent(PlayerComponent.class).setName("Pablo");
+		player2.getComponent(PlayerComponent.class).setName("Player 2");
 		enemy = getGameWorld().spawn("e", TILE_SIZE, TILE_SIZE * 17);
 		enemy.getComponent(EnemyComponent.class);
 		ratings.getPoints().get(0).set(0, player.getComponent(PlayerComponent.class).getName());
@@ -267,7 +273,7 @@ public class BombermanApp extends GameApplication {
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
 		player.getComponent(PlayerComponent.class).setName("Player");
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
-		player2.getComponent(PlayerComponent.class).setName("PLayer2");
+		player2.getComponent(PlayerComponent.class).setName("PLayer 2");
 
 		juegoPreparado = true;
 	}
@@ -341,12 +347,26 @@ public class BombermanApp extends GameApplication {
 	}
 
 	private void levelUp() {
-		if (lvl == 3) {
-			lvl = 0;
+		if (!multiplayer) {
+			if (lvl == 3) {
+				FXGL.getGameController().gotoMainMenu();
+				try {
+					generarPdf();
+				} catch (JRException | IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				lvl++;
+				requestNewGame = true;
+			}
 		} else {
-			lvl++;
+			if (lvl == 3) {
+				lvl=0;
+			} else {
+				lvl++;
+			}
+			requestNewGame = true;
 		}
-		requestNewGame = true;
 	}
 
 	@Override
@@ -362,11 +382,6 @@ public class BombermanApp extends GameApplication {
 		if (requestNewGame) {
 			requestNewGame = false;
 			if (!multiplayer) {
-				try {
-					generarPdf();
-				} catch (JRException | IOException e) {
-					e.printStackTrace();
-				}
 				getGameController().startNewGame();
 			} else {
 				if (id == 0) {

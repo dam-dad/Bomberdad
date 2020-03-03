@@ -17,6 +17,12 @@ import dad.javafx.bomberdad.BombermanType;
 import javafx.beans.property.SimpleListProperty;
 import javafx.geometry.Point2D;
 
+/**
+ * Componente de la Bomba
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
+
 @Required(AStarMoveComponent.class)
 public class BombComponent extends Component {
 

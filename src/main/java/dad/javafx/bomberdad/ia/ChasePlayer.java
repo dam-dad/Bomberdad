@@ -10,6 +10,12 @@ import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 
 import dad.javafx.bomberdad.BombermanType;
 
+/**
+ * Componente que realiza el movimiento de perseguir al jugador
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
+
 @Required(AStarMoveComponent.class)
 public class ChasePlayer extends Component {
 	private AStarMoveComponent astar;

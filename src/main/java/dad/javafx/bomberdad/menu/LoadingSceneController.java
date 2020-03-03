@@ -7,6 +7,12 @@ import com.almasb.fxgl.saving.DataFile;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Controlador para la pantalla de carga
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
+
 public class LoadingSceneController extends LoadingScene {
 
 	private boolean loadingFinished = false;

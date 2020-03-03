@@ -33,6 +33,12 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+/**
+ * Controlador del menu personalizado
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
+
 public class MenuController extends BorderPane implements Initializable {
 
 	// model

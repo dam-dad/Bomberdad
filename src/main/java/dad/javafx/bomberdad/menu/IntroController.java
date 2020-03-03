@@ -13,6 +13,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
+/**
+ * Animación para la intro del juego
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
+
 public class IntroController extends VBox implements Initializable {
 	
 	@FXML

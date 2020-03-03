@@ -8,6 +8,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
 
+/**
+ * Componente para pedir datos al usuario
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
+
 public class PedirDatosComponent extends VBox implements Initializable {
 
 	public PedirDatosComponent() {

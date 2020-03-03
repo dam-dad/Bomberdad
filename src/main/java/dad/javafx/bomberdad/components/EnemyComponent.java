@@ -14,6 +14,12 @@ import dad.javafx.bomberdad.BombermanApp;
 import dad.javafx.bomberdad.BombermanType;
 import javafx.util.Duration;
 
+/**
+ * Componentes del enemigo (IA)
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
+
 @Required(AStarMoveComponent.class)
 public class EnemyComponent extends Component {
 

@@ -10,6 +10,12 @@ import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 
 import dad.javafx.bomberdad.BombermanType;
 
+/**
+ * Componente que realiza el movimiento de defender una zona determinada
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
+
 @Required(AStarMoveComponent.class)
 public class DefendZone extends Component {
 	private AStarMoveComponent astar;

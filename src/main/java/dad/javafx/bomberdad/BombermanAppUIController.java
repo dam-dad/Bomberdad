@@ -9,6 +9,12 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+/**
+ * Controlador de la interfaz de usuario
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
+
 public class BombermanAppUIController implements UIController {
 
 	// model
@@ -30,6 +36,10 @@ public class BombermanAppUIController implements UIController {
 	@FXML
 	private HBox hboxApp;
 
+	/**
+	 * Inicializa la interfaz de usuario con las puntuaciones
+	 */
+	
 	@Override
 	public void init() {
 		maxBombspl1 = 1;
@@ -46,8 +56,10 @@ public class BombermanAppUIController implements UIController {
 		vboxLeft.setPrefHeight(FXGL.getAppHeight());
 		vboxRight.setPrefHeight(FXGL.getAppHeight());
 		hboxApp.setPrefWidth(FXGL.getAppWidth() - BombermanApp.UI_SIZE * 2);
-		tarjetapl1.getNumberPointsLb().setText(BombermanApp.ratings.getPoints().get(0).get(0));
-		tarjetapl2.getNumberPointsLb().setText(BombermanApp.ratings.getPoints().get(1).get(0));
+		tarjetapl1.getNumberPointsLb().setText(BombermanApp.ratings.getPoints().get(0).get(1));
+		tarjetapl2.getNumberPointsLb().setText(BombermanApp.ratings.getPoints().get(1).get(1));
+		tarjetapl1.getPlayerNameLb().setText(BombermanApp.ratings.getPoints().get(0).get(0));
+		tarjetapl2.getPlayerNameLb().setText(BombermanApp.ratings.getPoints().get(1).get(0));
 		if (BombermanApp.numberPlayers >= 3)
 			tarjetapl3.getNumberPointsLb().setText(BombermanApp.ratings.getPoints().get(2).get(0));
 		if (BombermanApp.numberPlayers >= 4)
@@ -64,7 +76,13 @@ public class BombermanAppUIController implements UIController {
 				vboxpl4.setOpacity(0);
 		}
 	}
-
+	
+	
+	/**
+	 * Edita el label con la puntuación dependiendo del jugador
+	 * @param txt puntos para editar el Label
+	 * @param id del jugador
+	 */
 	public void setPointsLbl(String txt, int id) {
 		if (id == 0) {
 			tarjetapl1.getNumberPointsLb().setText(txt);
@@ -76,7 +94,12 @@ public class BombermanAppUIController implements UIController {
 			tarjetapl4.getNumberPointsLb().setText(txt);
 		}
 	}
-
+	
+	/**
+	 * Edita el label con las vidas dependiendo del jugador
+	 * @param lifes vidas para editar el Label
+	 * @param id del jugador
+	 */
 	public void setLifesLbl(String lifes, int id) {
 		if (id == 0) {
 			if (lifes.equals("3")) {
@@ -113,6 +136,11 @@ public class BombermanAppUIController implements UIController {
 		}
 	}
 
+	/**
+	 * Edita barra de progreción con los Power Ups dependiendo del jugador
+	 * @param powerup para distinguir del Power Up rojo o amarillo
+	 * @param id del jugador
+	 */
 	public void setAddProgress(BombermanType powerup, int id) {
 		if (powerup == BombermanType.UPPOWER) {
 			if (id == 0) {

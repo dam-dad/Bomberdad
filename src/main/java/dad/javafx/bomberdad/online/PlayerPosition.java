@@ -2,11 +2,14 @@ package dad.javafx.bomberdad.online;
 
 import java.io.Serializable;
 
+/**
+ * Clase para obtener la posición de los jugadores
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
+
 public class PlayerPosition implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private double positionX;
 	private double positionY;

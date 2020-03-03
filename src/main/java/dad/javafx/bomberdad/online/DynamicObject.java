@@ -2,10 +2,14 @@ package dad.javafx.bomberdad.online;
 
 import java.io.Serializable;
 
+/**
+ * Objectos dinámicos para el envio de distintos objetos por sockets
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
+
 public class DynamicObject implements Serializable{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	String tipoObjeto;
 	int idJugador;

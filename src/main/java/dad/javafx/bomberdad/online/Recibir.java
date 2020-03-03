@@ -5,6 +5,12 @@ import java.io.ObjectInputStream;
 
 import dad.javafx.bomberdad.BombermanApp;
 
+/**
+ * Hilo donde recoge las peticiones realizadas al servidor
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
+
 public class Recibir extends Thread {
 	public boolean continuar = true;
 	private ObjectInputStream is;

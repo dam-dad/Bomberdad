@@ -13,6 +13,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+/**
+ * Componente para el estilo de las puntuaciones en el juego
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez 
+ *
+ */
+
 public class TarjetaPuntuaciones extends StackPane implements Initializable {
 	// view
 

@@ -9,6 +9,12 @@ import com.almasb.fxgl.saving.DataFile;
 import dad.javafx.bomberdad.BombermanApp;
 import javafx.concurrent.Task;
 
+/**
+ * Tarea para la pantalla de carga
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
+
 public class InitTaskLoading extends Task<Void> {
 
 	private BombermanApp app;

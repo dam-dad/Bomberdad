@@ -7,6 +7,12 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * Clase cliente que se conecta con el servidor para el modo online
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
+
 public class ClienteTCP {
 	private ObjectInputStream is;
 	private ObjectOutputStream os;

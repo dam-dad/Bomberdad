@@ -10,6 +10,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
+/**
+ * Controlador para el contenido del boton "Controles"
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
+
 public class ControlsController extends VBox implements Initializable{
 	
 	
@@ -30,7 +36,7 @@ public class ControlsController extends VBox implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		//TODO
+		
 	}
 
 

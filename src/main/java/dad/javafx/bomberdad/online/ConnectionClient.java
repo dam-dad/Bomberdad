@@ -7,6 +7,12 @@ import java.net.Socket;
 
 import dad.javafx.bomberdad.GenerateMap;
 
+/**
+ * Moderador entre cliente y servidor
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
+
 public class ConnectionClient extends Thread {
 
 	public Socket client;

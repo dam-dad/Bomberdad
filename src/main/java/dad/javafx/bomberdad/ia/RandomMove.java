@@ -4,6 +4,12 @@ import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.component.Required;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 
+/**
+ * Componente que realiza un movimiento aleatorio 
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ *
+ */
+
 @Required(AStarMoveComponent.class)
 public class RandomMove extends Component {
 	private AStarMoveComponent astar;
