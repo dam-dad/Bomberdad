@@ -47,6 +47,7 @@ public class Recibir extends Thread {
 				}
 			} catch (IOException | ClassNotFoundException e) {
 			}
+
 		}
 
 	}
