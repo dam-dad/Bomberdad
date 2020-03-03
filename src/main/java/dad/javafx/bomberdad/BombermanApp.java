@@ -7,11 +7,14 @@ import static com.almasb.fxgl.dsl.FXGL.getGameScene;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
+import static com.almasb.fxgl.dsl.FXGL.set;
+
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 import com.almasb.fxgl.app.FXGLMenu;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
@@ -26,17 +29,17 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.entity.level.text.TextLevelLoader;
 import com.almasb.fxgl.input.UserAction;
-import com.almasb.fxgl.physics.CollisionHandler;
-import com.almasb.fxgl.saving.DataFile;
-import com.almasb.fxgl.texture.Texture;
-import com.almasb.fxgl.ui.UI;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
 import com.almasb.fxgl.pathfinding.CellState;
 import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
+import com.almasb.fxgl.physics.CollisionHandler;
+import com.almasb.fxgl.saving.DataFile;
+import com.almasb.fxgl.texture.Texture;
+import com.almasb.fxgl.ui.UI;
 
 import dad.javafx.bomberdad.components.BombComponent;
-
+import dad.javafx.bomberdad.components.EnemyComponent;
 import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.menu.CustomMenu;
 import dad.javafx.bomberdad.menu.IntroSceneController;
@@ -46,7 +49,6 @@ import dad.javafx.bomberdad.online.DynamicObject;
 import dad.javafx.bomberdad.online.PlayerPosition;
 import dad.javafx.bomberdad.ratings.Puntuaciones;
 import dad.javafx.bomberdad.ratings.PuntuacionesDataProvider;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
 import net.sf.jasperreports.engine.JRException;
@@ -56,8 +58,6 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
-import static com.almasb.fxgl.dsl.FXGL.*;
 
 /**
  * Clase principal que maneja los componentes principales del juego
@@ -103,7 +103,7 @@ public class BombermanApp extends GameApplication {
 		settings.setIntroEnabled(true);
 		settings.setFullScreenAllowed(fullScreen);
 		settings.setFullScreenFromStart(fullScreen);
-		settings.setAppIcon(getClass().getResource("/assets/icon/icon.png").toString());
+//		settings.setAppIcon(getClass().getResource("/assets/icon/icon.png").toString());
 		settings.setSceneFactory(new SceneFactory() {
 			/**
 			 * Devolver menú inicial customizado
@@ -290,10 +290,10 @@ public class BombermanApp extends GameApplication {
 		player.getComponent(PlayerComponent.class).setName("Player");
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
 		player2.getComponent(PlayerComponent.class).setName("Player 2");
-//		enemy = getGameWorld().spawn("e", TILE_SIZE, TILE_SIZE * 17);
-//		enemy.getComponent(EnemyComponent.class);
-//		enemy2 = getGameWorld().spawn("d", TILE_SIZE * 17, TILE_SIZE);
-//		enemy2.getComponent(EnemyComponent.class);
+		enemy = getGameWorld().spawn("e", TILE_SIZE, TILE_SIZE * 17);
+		enemy.getComponent(EnemyComponent.class);
+		enemy2 = getGameWorld().spawn("d", TILE_SIZE * 17, TILE_SIZE);
+		enemy2.getComponent(EnemyComponent.class);
 		ratings.getPoints().get(0).set(0, player.getComponent(PlayerComponent.class).getName());
 		ratings.getPoints().get(1).set(0, player2.getComponent(PlayerComponent.class).getName());
 
