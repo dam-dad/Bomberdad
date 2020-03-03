@@ -3,9 +3,7 @@ package dad.javafx.bomberdad.online;
 import java.io.Serializable;
 
 public class DynamicObject implements Serializable{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	String tipoObjeto;
 	int idJugador;

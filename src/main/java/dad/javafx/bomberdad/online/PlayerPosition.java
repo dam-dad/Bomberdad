@@ -4,9 +4,7 @@ import java.io.Serializable;
 
 public class PlayerPosition implements Serializable {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private double positionX;
 	private double positionY;

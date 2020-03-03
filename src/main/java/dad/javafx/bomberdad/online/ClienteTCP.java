@@ -23,7 +23,11 @@ public class ClienteTCP {
 	private String mapa;
 
 	public static ArrayList<String> listaMovimientos = new ArrayList<String>();
-
+/**
+ * Se conecta al servidor, llama a inicializarPartidad() para preparar la partida online
+ * @param ip Ip del servidor a conectarse
+ * @param port Puerto del servidor 
+ */
 	public ClienteTCP(String ip, int port) {
 		try {
 			clientSocket = new Socket();
@@ -39,16 +43,16 @@ public class ClienteTCP {
 		}
 	}
 
-	public Recibir getRecibir() {
-		return recibir;
-	}
 
+/**
+ * Realiza una serie de peticiones iniciales al servidor para poder cargar la partida, como el id del personaje que le toca y el mapa inicial.
+ * También esperará hasta que estén los dos jugadores conectados al servidor, para iniciarse de manera sincronizada.
+ */
 	private void inicializarPartida() {
 		try {
 			DynamicObject dOsolicitarId= new DynamicObject("getId","getId");
 			os.writeObject(dOsolicitarId);
 			DynamicObject leidO=(DynamicObject)is.readObject();
-			System.out.println(leidO.getTipoObjeto());
 			this.id=leidO.getIdJugador();
 			DynamicObject dOsolicitaLista= new DynamicObject("getLista","getLista");
 			os.writeObject(dOsolicitaLista);
@@ -72,6 +76,11 @@ public class ClienteTCP {
 		}
 
 	}
+
+	public Recibir getRecibir() {
+		return recibir;
+	}
+
 	
 	public void closeCient() {
 		try {
@@ -88,6 +97,7 @@ public class ClienteTCP {
 			}, Duration.millis(10));
 		}
 	}
+
 
 	public String getMapa() {
 		return mapa;

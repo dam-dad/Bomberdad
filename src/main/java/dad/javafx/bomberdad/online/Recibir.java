@@ -15,7 +15,9 @@ public class Recibir extends Thread {
 		this.client = client;
 		is = client.getIs();
 	}
-
+/**
+ * Recibe los objetos DynamicObject y los procesará dependiendo el tipo de objeto que guarde
+ */
 	@Override
 	public void run() {
 		super.run();
@@ -29,12 +31,10 @@ public class Recibir extends Thread {
 					PlayerPosition p = (PlayerPosition) dO.getObjeto();
 					BombermanApp.actualizarPlayer(p);
 					break;
-				// Nuevo
 				case "PlacePlayerBomb":
 					PlayerPosition pBomba = (PlayerPosition) dO.getObjeto();
 					BombermanApp.ponerBombaPlayer(pBomba);
 					break;
-				// Nuevo
 				case "RequestNewMap":
 					String mapa = (String) dO.getObjeto();
 					BombermanApp.actualizaNuevoMapa(mapa);

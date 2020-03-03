@@ -95,6 +95,14 @@ public class PlayerComponent extends Component {
 		}
 	}
 
+	public void setMaxBombs(int maxBombs) {
+		this.maxBombs = maxBombs;
+	}
+
+	public void setBombsPlaced(int bombsPlaced) {
+		this.bombsPlaced = bombsPlaced;
+	}
+
 	// getters & setters
 	/**
 	 * Efecto de transparencia cuando un player recibe una explosión
@@ -109,6 +117,14 @@ public class PlayerComponent extends Component {
 		ft.setCycleCount(4);
 		ft.play();
 
+	}
+
+	public int getMaxBombs() {
+		return maxBombs;
+	}
+
+	public int getBombsPlaced() {
+		return bombsPlaced;
 	}
 
 	public int getVidas() {

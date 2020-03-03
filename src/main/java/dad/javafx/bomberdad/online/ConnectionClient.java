@@ -17,6 +17,18 @@ public class ConnectionClient extends Thread {
 	private int idPlayer;
 	private int numeroJugadoresPartida;
 	private String mapaInicial;
+	
+	
+	
+
+	/**
+	 * Constructor para el manejador de las peticiones del cliente conectados al servidor
+	 * @param client Socket de cliente en escucha con el servidor
+	 * @param id Del jugador
+	 * @param numeroJugadoresPartida Determina el número de jugadores que se conectarán a la partida
+	 * @param mapaInicial String que contiene el mapa inicial de l partida
+	 * 
+	 */
 	public ConnectionClient(Socket client, int id, int numeroJugadoresPartida,String mapaInicial) throws IOException {
 		super();
 		this.client = client;
@@ -25,9 +37,10 @@ public class ConnectionClient extends Thread {
 		objectOut = new ObjectOutputStream(client.getOutputStream());
 		objectIn = new ObjectInputStream(client.getInputStream());
 		this.numeroJugadoresPartida = numeroJugadoresPartida;
-		System.out.println(id);
 	}
-
+/**
+ * Hilo a la escucha de los objetos DynamicObject que reciba del cliente, los procesará al llamar al método procesaDynamicObject
+ */
 	@Override
 	public void run() {
 
@@ -40,6 +53,12 @@ public class ConnectionClient extends Thread {
 
 		}
 	}
+	/**
+	 * 
+	 * @param dO Objecto dinamico que guarda un objeto indeterminado,que se procesará gracias a una variable string,
+	 * también propia del objeto, que determina que tipo de objeto está guardando
+	 * Según el tipo de objecto se procesará de diferente maneras.
+	 */
 
 	private void procesaDynamicObject(DynamicObject dO) {
 
@@ -96,6 +115,12 @@ public class ConnectionClient extends Thread {
 		}
 	}
 
+/**
+ * Envía al cliente el numero de jugadores que se conectarán en la partida
+ * @param dO Objeto de la petición.
+ */
+
+
 	private void finalizarPartida(DynamicObject dO) {
 //		dO.setTipoObjeto("Terminar");
 //		for (int i = 0; i < Server.clientes.size(); i++) {
@@ -118,6 +143,7 @@ public class ConnectionClient extends Thread {
 		}
 	}
 
+
 	private void procesaNumJugadores(DynamicObject dO) {
 		DynamicObject dOenvio = new DynamicObject("NumeroJugadores", numeroJugadoresPartida);
 		try {
@@ -127,7 +153,10 @@ public class ConnectionClient extends Thread {
 		}
 	}
 
-	// nuevo
+/**
+ * Genera y reenvía todos los jugadores conectados un nuevo mapa
+ * @param dO Objeto petición mapa
+ */
 	private void procesaMapa(DynamicObject dO) {
 		int lvl = Integer.parseInt((String) dO.getObjeto());
 		String map = generaMapa(lvl);
@@ -141,7 +170,10 @@ public class ConnectionClient extends Thread {
 			}
 		}
 	}
-
+/**
+ * Reenvía el objeto a todos los jugadores en partida, salvo al cliente al que lo envió
+ * @param dO Objeto que guarda las coordenadas del jugador al que se actualizará la posición
+ */
 	public void procesaPosicion(DynamicObject dO) {
 
 		for (int i = 0; i < Server.clientes.size(); i++) {
@@ -181,10 +213,11 @@ public class ConnectionClient extends Thread {
 	public int getIdPlayer() {
 		return idPlayer;
 	}
-
 	public Socket getClient() {
 		return client;
 	}
+
+
 
 	public void setClient(Socket client) {
 		this.client = client;

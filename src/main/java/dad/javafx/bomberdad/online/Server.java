@@ -26,7 +26,9 @@ public class Server extends Thread{
 			e.printStackTrace();
 		}
 	}
-	
+	/**
+	 * Genera un mapa inicial y acepta la conexión del cliente
+	 */
 	public void iniciar() throws IOException {
 		generaMapaInicial();
 		ServerSocket listener = new ServerSocket(PORT);
@@ -37,15 +39,17 @@ public class Server extends Thread{
 			ConnectionClient clientThread = new ConnectionClient(client,id,numeroJugadoresPartida,initialMap);
 			clientes.add(clientThread);
 			clientThread.start();
+			
 			id++;
 		}
 		listener.close();
-		System.out.println(listaSize());
+	
 	}
 
 	public static int listaSize() {
 		return clientes.size();
 	}
+
 	private static void generaMapaInicial() {
 		GenerateMap.newMap(0);
 		initialMap=GenerateMap.getMap();
