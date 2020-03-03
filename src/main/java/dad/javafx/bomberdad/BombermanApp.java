@@ -432,7 +432,7 @@ public class BombermanApp extends GameApplication {
 			if (owned != null && !owned.equals(e.getComponent(PlayerComponent.class))) {
 				if (owned.getName().equals(player.getComponent(PlayerComponent.class).getName())) {
 					pl = 0;
-				} else if (owned.getName().equals(player.getComponent(PlayerComponent.class).getName())) {
+				} else if (owned.getName().equals(player2.getComponent(PlayerComponent.class).getName())) {
 					pl = 1;
 				}
 				int pOld = Integer.parseInt(ratings.getPoints().get(pl).get(1));

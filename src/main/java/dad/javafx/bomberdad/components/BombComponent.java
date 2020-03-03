@@ -190,8 +190,8 @@ public class BombComponent extends Component {
 					.get(this.getEntity().getComponent(CellMoveComponent.class).getCellX(),
 							this.getEntity().getComponent(CellMoveComponent.class).getCellY())
 					.setState(CellState.WALKABLE);
-			getEntity().removeFromWorld();
 			FXGL.spawn("explosion", getEntity().getPosition());
 		}
+		getEntity().removeFromWorld();
 	}
 }

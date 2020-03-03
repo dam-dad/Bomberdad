@@ -36,7 +36,11 @@ public class CustomMenu extends FXGLMenu {
 
     @Override
     protected Node createBackground(double width, double height) {
-        return new MenuController(width,height);
+    	if (this.getType().equals(MenuType.MAIN_MENU)) {
+			return new MenuController(width, height, false);
+		} else {
+			return new InGameMenuController(width, height);
+		}
     }
 
     @Override
