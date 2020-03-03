@@ -290,10 +290,10 @@ public class BombermanApp extends GameApplication {
 		player.getComponent(PlayerComponent.class).setName("Player");
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
 		player2.getComponent(PlayerComponent.class).setName("Player 2");
-		enemy = getGameWorld().spawn("e", TILE_SIZE, TILE_SIZE * 17);
-		enemy.getComponent(EnemyComponent.class);
-		enemy2 = getGameWorld().spawn("d", TILE_SIZE * 17, TILE_SIZE);
-		enemy2.getComponent(EnemyComponent.class);
+//		enemy = getGameWorld().spawn("e", TILE_SIZE, TILE_SIZE * 17);
+//		enemy.getComponent(EnemyComponent.class);
+//		enemy2 = getGameWorld().spawn("d", TILE_SIZE * 17, TILE_SIZE);
+//		enemy2.getComponent(EnemyComponent.class);
 		ratings.getPoints().get(0).set(0, player.getComponent(PlayerComponent.class).getName());
 		ratings.getPoints().get(1).set(0, player2.getComponent(PlayerComponent.class).getName());
 
@@ -527,8 +527,10 @@ public class BombermanApp extends GameApplication {
 				playerHit.setVidas(playerHit.getVidas() - 1);
 				if (playerHit.getName().equals(player.getComponent(PlayerComponent.class).getName())) {
 					playerHit.resetMaxBombs();
+					playerHit.resetPower();
 				} else {
 					playerHit.resetMaxBombs();
+					playerHit.resetPower();
 				}
 				e.getComponent(PlayerComponent.class).playFadeAnimation();
 			}
