@@ -7,6 +7,9 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import com.almasb.fxgl.dsl.FXGL;
+import javafx.util.Duration;
+
 public class ClienteTCP {
 	private ObjectInputStream is;
 	private ObjectOutputStream os;
@@ -75,6 +78,22 @@ public class ClienteTCP {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public void closeCient() {
+		try {
+			DynamicObject dOTerminar= new DynamicObject("Terminar","Terminar");
+			os.writeObject(dOTerminar);
+			recibir.setFinal(false);
+			clientSocket.close();
+			FXGL.getGameTimer().runOnceAfter(() -> {
+				FXGL.getGameController().gotoMainMenu();
+			}, Duration.millis(10));
+		} catch (IOException e) {
+			FXGL.getGameTimer().runOnceAfter(() -> {
+				FXGL.getGameController().gotoMainMenu();
+			}, Duration.millis(10));
+		}
 	}
 
 	public String getMapa() {

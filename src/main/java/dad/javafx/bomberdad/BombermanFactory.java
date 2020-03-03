@@ -14,9 +14,8 @@ import dad.javafx.bomberdad.components.EnemyComponent;
 import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.components.StaticComponent;
 import dad.javafx.bomberdad.ia.AvoidBombs;
+import dad.javafx.bomberdad.ia.ChasePlayer;
 //----
-import dad.javafx.bomberdad.ia.DefendZone;
-
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.entity.*;
@@ -31,7 +30,6 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class BombermanFactory implements EntityFactory {
 	
 	private String theme = "crab";
-	public static String id = "";
 	
 	public BombermanFactory(String theme) {
 		this.theme = theme;
@@ -109,7 +107,7 @@ public class BombermanFactory implements EntityFactory {
                 .from(data)
                 .type(BombermanType.PLAYER)
                 .bbox(new HitBox(new Point2D(2, 2), BoundingShape.box(30, 30)))
-                .viewWithBBox(FXGL.getAssetLoader().loadTexture("py"+theme+id+".gif", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
+                .viewWithBBox(FXGL.getAssetLoader().loadTexture("py"+theme+"1.gif", BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE))
                 .with(new CollidableComponent(true))
                 .with(new CellMoveComponent(30, 30, 175))
                 .with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid"))))

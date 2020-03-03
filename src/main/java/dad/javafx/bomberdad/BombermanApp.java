@@ -69,7 +69,7 @@ public class BombermanApp extends GameApplication {
 	private int lvl = 0;
 	private static boolean requestNewGame = false;
 	public static String theme = "crab";
-	private static ClienteTCP cliente;
+	public static ClienteTCP cliente;
 	public static String ip;
 	public static int port;
 	private PlayerPosition playerPosition;
@@ -83,7 +83,7 @@ public class BombermanApp extends GameApplication {
 	int i = 0;
 	public int tam = 0;
 	private BombermanAppUIController uiController = new BombermanAppUIController();
-	public int id;
+	public static int id;
 	public static int numberPlayers;
 
 	@Override
@@ -266,7 +266,6 @@ public class BombermanApp extends GameApplication {
 		cargarMundo();
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
 		player.getComponent(PlayerComponent.class).setName("Player");
-		BombermanFactory.id = "2";
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
 		player2.getComponent(PlayerComponent.class).setName("PLayer2");
 
