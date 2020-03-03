@@ -417,14 +417,13 @@ public class BombermanApp extends GameApplication {
 			if (owned != null && !owned.equals(e.getComponent(PlayerComponent.class))) {
 				if (owned.getName().equals(player.getComponent(PlayerComponent.class).getName())) {
 					pl = 0;
-				} else if (owned.getName().equals(player.getComponent(PlayerComponent.class).getName())) {
+				} else if (owned.getName().equals(player2.getComponent(PlayerComponent.class).getName())) {
 					pl = 1;
 				}
 				int pOld = Integer.parseInt(ratings.getPoints().get(pl).get(1));
 				int pNew = pOld + 100;
 				uiController.setPointsLbl(pNew + "", pl);
 				ratings.getPoints().get(pl).set(1, "" + pNew);
-//				System.out.println(ratings.getPoints().get(pl).get(0)+" points: "+ratings.getPoints().get(pl).get(1));
 			}
 			PlayerComponent playerHit = e.getComponent(PlayerComponent.class);
 			if (playerHit.getName().equals(player.getComponent(PlayerComponent.class).getName())) {
@@ -438,11 +437,9 @@ public class BombermanApp extends GameApplication {
 				levelUp();
 			} else {
 				playerHit.setVidas(playerHit.getVidas() - 1);
-				if (playerHit.getName().equals("Player")) {
-
+				if (playerHit.getName().equals(player.getComponent(PlayerComponent.class).getName())) {
 					playerHit.resetMaxBombs();
 				} else {
-
 					playerHit.resetMaxBombs();
 				}
 				e.getComponent(PlayerComponent.class).playFadeAnimation();

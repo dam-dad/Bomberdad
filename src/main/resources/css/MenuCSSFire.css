@@ -26,7 +26,7 @@
 
 .btn {
 	-fx-font-size: 20.0pt;
-	-fx-text-fill: red;
+	-fx-text-fill: black;
 	-fx-font-family: 'PixelarRegularW01-Regular';
 	-fx-background-color: rgba(194, 61, 61, 1);
 }

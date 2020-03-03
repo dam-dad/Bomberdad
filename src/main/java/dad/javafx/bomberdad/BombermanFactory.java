@@ -106,7 +106,7 @@ public class BombermanFactory implements EntityFactory {
 	public Entity newPlayer(SpawnData data) {
 		Entity e = entityBuilder().from(data).type(BombermanType.PLAYER)
 				.bbox(new HitBox(new Point2D(2, 2), BoundingShape.box(30, 30)))
-				.viewWithBBox(FXGL.getAssetLoader().loadTexture("py" + theme + ".gif", BombermanApp.TILE_SIZE,
+				.viewWithBBox(FXGL.getAssetLoader().loadTexture("py" + theme + "1.gif", BombermanApp.TILE_SIZE,
 						BombermanApp.TILE_SIZE))
 				.with(new CollidableComponent(true)).with(new CellMoveComponent(30, 30, 175))
 				.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid")))).with(new PlayerComponent()).build();
@@ -165,7 +165,8 @@ public class BombermanFactory implements EntityFactory {
 	public Entity newEnemy(SpawnData data) {
 		Entity enemy = entityBuilder().from(data).type(BombermanType.ENEMY)
 				.bbox(new HitBox(new Point2D(2, 2), BoundingShape.box(30, 30)))
-				.viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.DARKRED))
+				.viewWithBBox(FXGL.getAssetLoader().loadTexture("py" + theme + "2.gif", BombermanApp.TILE_SIZE,
+						BombermanApp.TILE_SIZE))
 				.with(new CellMoveComponent(30, 30, 125))
 				.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid")))).with(new EnemyComponent())
 				.with(new ChasePlayer()).with(new AvoidBombs()).build();
@@ -182,7 +183,8 @@ public class BombermanFactory implements EntityFactory {
 	public Entity newEnemyZone(SpawnData data) {
 		Entity enemy = entityBuilder().from(data).type(BombermanType.ENEMY)
 				.bbox(new HitBox(new Point2D(2, 2), BoundingShape.box(30, 30)))
-				.viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.DARKRED))
+				.viewWithBBox(FXGL.getAssetLoader().loadTexture("py" + theme + "2.gif", BombermanApp.TILE_SIZE,
+						BombermanApp.TILE_SIZE))
 				.with(new CellMoveComponent(30, 30, 125))
 				.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid")))).with(new EnemyComponent())
 				.with(new DefendZone()).build();
