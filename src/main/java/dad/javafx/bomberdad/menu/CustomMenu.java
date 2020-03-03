@@ -11,7 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 
 public class CustomMenu extends FXGLMenu {
-
+	
 	public CustomMenu(MenuType type) {
 		super(type);
 		this.getContentRoot().getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());

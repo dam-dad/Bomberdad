@@ -17,7 +17,6 @@ public class PedirDatosComponent extends GridPane implements Initializable {
 
 	private SimpleStringProperty ip = new SimpleStringProperty();
 	private SimpleStringProperty port = new SimpleStringProperty();
-	private SimpleStringProperty nickname = new SimpleStringProperty();
 
 	// view
 
@@ -25,7 +24,7 @@ public class PedirDatosComponent extends GridPane implements Initializable {
 	private GridPane view;
 
 	@FXML
-	private TextField nicknameTxt, portTxt, ipTxt;
+	private TextField portTxt, ipTxt;
 
 	public PedirDatosComponent() {
 		super();
@@ -43,7 +42,6 @@ public class PedirDatosComponent extends GridPane implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		ip.bind(ipTxt.textProperty());
 		port.bind(portTxt.textProperty());
-		nickname.bind(nicknameTxt.textProperty());
 	}
 
 	public final SimpleStringProperty ipProperty() {
@@ -73,21 +71,6 @@ public class PedirDatosComponent extends GridPane implements Initializable {
 
 	public final void setPort(final String port) {
 		this.portProperty().set(port);
-	}
-	
-
-	public final SimpleStringProperty nicknameProperty() {
-		return this.nickname;
-	}
-	
-
-	public final String getNickname() {
-		return this.nicknameProperty().get();
-	}
-	
-
-	public final void setNickname(final String nickname) {
-		this.nicknameProperty().set(nickname);
 	}
 
 }
