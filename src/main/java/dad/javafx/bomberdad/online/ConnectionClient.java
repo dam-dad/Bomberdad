@@ -217,9 +217,7 @@ public class ConnectionClient extends Thread {
 		return client;
 	}
 
-	public Socket getClient() {
-		return client;
-	}
+
 
 	public void setClient(Socket client) {
 		this.client = client;

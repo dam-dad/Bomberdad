@@ -106,7 +106,7 @@ public class BombermanFactory implements EntityFactory {
 	public Entity newPlayer(SpawnData data) {
 		Entity e = entityBuilder().from(data).type(BombermanType.PLAYER)
 				.bbox(new HitBox(new Point2D(2, 2), BoundingShape.box(30, 30)))
-				.viewWithBBox(FXGL.getAssetLoader().loadTexture("py" + theme + ".gif", BombermanApp.TILE_SIZE,
+				.viewWithBBox(FXGL.getAssetLoader().loadTexture("py" + theme + "1.gif", BombermanApp.TILE_SIZE,
 						BombermanApp.TILE_SIZE))
 				.with(new CollidableComponent(true)).with(new CellMoveComponent(30, 30, 175))
 				.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid")))).with(new PlayerComponent()).build();
