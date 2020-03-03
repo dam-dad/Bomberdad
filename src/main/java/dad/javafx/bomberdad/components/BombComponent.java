@@ -50,14 +50,14 @@ public class BombComponent extends Component {
 		// Explosion vertical
  
 		FXGL.getGameWorld().getEntitiesInRange(bbox.range(0, radius)).stream()
-				.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.BRICKRED) ||e.isType(BombermanType.ENEMY) || e.isType(BombermanType.BRICKYELLOW) || e.isType(BombermanType.PLAYER) || e.isType(BombermanType.FLOOR) || e.isType(BombermanType.ENEMY)).forEach(e -> {
+				.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.BRICKRED) ||e.isType(BombermanType.BRICKYELLOW) || e.isType(BombermanType.PLAYER) || e.isType(BombermanType.FLOOR) || e.isType(BombermanType.ENEMY)).forEach(e -> {
 					entities.add(e);
 				});
 
 
 		// Explosion horizontal
 		FXGL.getGameWorld().getEntitiesInRange(bbox.range(radius, 0)).stream()
-				.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.BRICKRED) || e.isType(BombermanType.ENEMY)|| e.isType(BombermanType.BRICKYELLOW) || e.isType(BombermanType.PLAYER) || e.isType(BombermanType.FLOOR) || e.isType(BombermanType.ENEMY)).forEach(e -> {
+				.filter(e -> e.isType(BombermanType.BRICK) || e.isType(BombermanType.BRICKRED) ||  e.isType(BombermanType.BRICKYELLOW) || e.isType(BombermanType.PLAYER) || e.isType(BombermanType.FLOOR) || e.isType(BombermanType.ENEMY)).forEach(e -> {
 					boolean thereIs = false;
 					for (int i = 0; i < entities.size(); i++) {
 						if (entities.get(i) == e) {

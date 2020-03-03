@@ -83,7 +83,10 @@ public class BombermanApp extends GameApplication {
 	private BombermanAppUIController uiController = new BombermanAppUIController();
 	public int id;
 	public static int numberPlayers;
-
+/**
+ * Inicializa menú del juego
+ * @param settings clase que contiene todas las herramientas para crear el menú del juego.
+ */
 	@Override
 	protected void initSettings(GameSettings settings) {
 		settings.setTitle("BomberDAD");
@@ -96,21 +99,31 @@ public class BombermanApp extends GameApplication {
 		settings.setFullScreenAllowed(fullScreen);
 		settings.setFullScreenFromStart(fullScreen);
 		settings.setSceneFactory(new SceneFactory() {
+			/**
+			 * Devolver menú inicial customizado
+			 * @return Clase con el menú customizado
+			 */
 			@Override
 			public FXGLMenu newMainMenu() {
 				return new CustomMenu(MenuType.MAIN_MENU);
 			}
-
+			
 			@Override
 			public FXGLMenu newGameMenu() {
 				return new CustomMenu(MenuType.GAME_MENU);
 			}
-
+			/**
+			 * Devolver pantalla de carga customizada
+			 * @return Clase con pantalla de carga customizada
+			 */
 			@Override
 			public LoadingScene newLoadingScene() {
 				return new LoadingSceneController();
 			}
-
+			/**
+			 * Devolver video de introducción al iniciar el juego
+			 * @return Clase que devuelve video customizado con transiciones 
+			 */
 			@Override
 			public IntroScene newIntro() {
 				return new IntroSceneController();
@@ -118,7 +131,10 @@ public class BombermanApp extends GameApplication {
 		});
 
 	}
-
+/**
+ * Metodo para iniciar las puntuaciones dentro del juego
+ * 
+ */
 	@Override
 	public void initUI() {
 		getGameScene().getRoot().setTranslateX(UI_SIZE);
@@ -126,15 +142,21 @@ public class BombermanApp extends GameApplication {
 		ui.getRoot().setTranslateX(-UI_SIZE);
 		getGameScene().addUI(ui);
 	}
-
+/**
+ * Método que recoge las teclas pulsada de los jugadores
+ */
 	@Override
 	protected void initInput() {
 		getInput().addAction(new UserAction("Move Up") {
 			@Override
 			protected void onAction() {
 
-				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class)
-						.up();
+				try {
+					FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class)
+							.up();
+				} catch (Exception e) {
+					
+				}
 			}
 		}, KeyCode.W);
 
@@ -142,8 +164,12 @@ public class BombermanApp extends GameApplication {
 			@Override
 			protected void onAction() {
 
-				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class)
-						.left();
+				try {
+					FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class)
+							.left();
+				} catch (Exception e) {
+					
+				}
 			}
 		}, KeyCode.A);
 
@@ -151,8 +177,12 @@ public class BombermanApp extends GameApplication {
 			@Override
 			protected void onAction() {
 
-				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class)
-						.down();
+				try {
+					FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class)
+							.down();
+				} catch (Exception e) {
+				
+				}
 
 			}
 		}, KeyCode.S);
@@ -161,8 +191,12 @@ public class BombermanApp extends GameApplication {
 			@Override
 			protected void onAction() {
 
-				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class)
-						.right();
+				try {
+					FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class)
+							.right();
+				} catch (Exception e) {
+				
+				}
 
 			}
 		}, KeyCode.D);
@@ -173,8 +207,12 @@ public class BombermanApp extends GameApplication {
 				if (multiplayer) {
 					envioPosicion("bomba");
 				}
-				FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class)
-						.placeBomb();
+				try {
+					FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(id).getComponent(PlayerComponent.class)
+							.placeBomb();
+				} catch (Exception e) {
+					
+				}
 			}
 		}, KeyCode.SPACE);
 
@@ -222,7 +260,9 @@ public class BombermanApp extends GameApplication {
 			}
 		}, KeyCode.ENTER);
 	}
-
+/**
+ * Inicia juego
+ */
 	@Override
 	public void initGame() {
 		if (multiplayer) {
@@ -233,7 +273,10 @@ public class BombermanApp extends GameApplication {
 
 	}
 
-//Nuevo
+/**
+ * Método que prepara el juego para el modo offline
+ * Genera mapa,inicializa los jugadores, inicializa rattings
+ */
 	public void initOfflineMode() {
 		GenerateMap.newMap(lvl);
 		cargarMundo();
@@ -248,14 +291,17 @@ public class BombermanApp extends GameApplication {
 
 	}
 
-//nuevo, hay mucho codigo repetido, hay que pullirlo un poco
+	/**
+	 * Método que prepara el juego para el modo online
+	 * Se genera el cliente y se conecta al servidor
+	 * Genera mapa, genera el nivel de la partida, inicializa los jugadores, inicializa rattings
+	 */
 	public void initOnlineMode() {
 
 		if (multiplayer && !onlineActivo) {
 			cliente = new ClienteTCP(ip, port);
 			id = cliente.getId();
 			onlineActivo = true;
-			System.out.println("FIN crear cliente");
 		}
 		playerPosition = new PlayerPosition(0.0, 0.0, id);
 		GenerateMap.createMap(cliente.getMapa());
@@ -266,6 +312,10 @@ public class BombermanApp extends GameApplication {
 		player2.getComponent(PlayerComponent.class).setName("PLayer2");
 		juegoPreparado = true;
 	}
+	/**
+	 * Método que carga las texturas del mapa y lo asigna a la vista del juego.
+	 * Mapea todo el nivel del juego para asignar a cada entidad, si se puede caminar por encima del componente o no
+	 */
 	private void cargarMundo() {
 		getGameWorld().addEntityFactory(new BombermanFactory(theme));
 		Texture texture = getAssetLoader().loadTexture("bg" + theme + ".gif");
@@ -285,23 +335,29 @@ public class BombermanApp extends GameApplication {
 		});
 		set("grid", grid);
 	}
-
+/**
+ * Override necesario
+ */
 	@Override
 	public void loadState(DataFile dataFile) {
 		super.loadState(dataFile);
 	}
-
+/**
+ * Override necesario
+ */
 	@Override
 	public void initGameVars(Map<String, Object> vars) {
 		super.initGameVars(vars);
 	}
-
+/**
+ * Determina las físicas de los componentes cuando colisionan entre sí
+ */
 	@Override
 	public void initPhysics() {
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPMAXBOMBS) {
 			@Override
 			protected void onCollision(Entity pl, Entity powerup) {
-				if (powerup.getPosition().equals(pl.getPosition())) {
+				
 					powerup.removeFromWorld();
 					pl.getComponent(PlayerComponent.class).increaseMaxBombs();
 					int id = 0;
@@ -311,14 +367,14 @@ public class BombermanApp extends GameApplication {
 						id = 1;
 					}
 					uiController.setAddProgress(BombermanType.UPMAXBOMBS, id);
-				}
+				
 			}
 
 		});
 		getPhysicsWorld().addCollisionHandler(new CollisionHandler(BombermanType.PLAYER, BombermanType.UPPOWER) {
 			@Override
 			protected void onCollision(Entity pl, Entity powerup) {
-				if (powerup.getPosition().equals(pl.getPosition())) {
+			
 					powerup.removeFromWorld();
 					pl.getComponent(PlayerComponent.class).increasePower();
 					int id = 0;
@@ -328,11 +384,13 @@ public class BombermanApp extends GameApplication {
 						id = 1;
 					}
 					uiController.setAddProgress(BombermanType.UPPOWER, id);
-				}
+				
 			}
 		});
 	}
-
+/**
+ * Método para cambiar el nivel del mapa, dependiendo del lvl que asigne, se generará un mapa u otro
+ */
 	private void levelUp() {
 		if (lvl == 3) {
 			lvl = 0;
@@ -341,7 +399,12 @@ public class BombermanApp extends GameApplication {
 		}
 		requestNewGame = true;
 	}
-
+/**
+ * @param tpf tiempo por frame
+ * Cada vez que se refresca un frame actualiza la posición y la envía al servidor si está en modo multiplayer.
+ * Carga un nuevo juego con su correspondiente mapa si requestNewGame pasa a true.
+ * 
+ */
 	@Override
 	protected void onUpdate(double tpf) {
 
@@ -374,7 +437,9 @@ public class BombermanApp extends GameApplication {
 
 		}
 	}
-
+/**
+ * Actualiza la posición del player in game y la guarda en el objeto playerPosition;
+ */
 	private void actualizaPosicion() {
 		if (juegoPreparado) {
 			try {
@@ -388,7 +453,11 @@ public class BombermanApp extends GameApplication {
 		}
 	}
 
-//nuevo
+/**
+ * Envío posición del jugador al servidor para que sea tratada por el resto de jugadores conectados a la partida
+ * @param type Tipo de dato que se va actualizar cuando el objeto sea enviado y recibido, si es PlayerPosition, se actualiza posición del jugador que lo haya
+ * enviado, si es PlacePlayerBomb,generará una bomba en las coordenadas pasadas.
+ */
 	private void envioPosicion(String type) {
 		if (juegoPreparado) {
 			try {
@@ -408,7 +477,11 @@ public class BombermanApp extends GameApplication {
 			}
 		}
 	}
-
+/**
+ * Procesa las entidades que serán eliminadas cuando son afectadas por una bomba
+ * @param e Entitad que será procesada para su eliminación,
+ * @param owned Player que puso la bomba, utilizada para agregar la puntuación dependiendo de que entidades haya destruido
+ */
 	public void onDestroyed(Entity e, PlayerComponent owned) {
 		if (e.isType(BombermanType.PLAYER)) {
 			int pl = 0;
@@ -481,16 +554,27 @@ public class BombermanApp extends GameApplication {
 		}
 	}
 
-//Nuevo
+/**
+ * Recibe un String para generar un nuevo mapa he inicializar una nueva partida
+ * @param mapa String que guarda una matriz que servirá para generar un nuevo mapa
+ */
 	public static void actualizaNuevoMapa(String mapa) {
 		juegoPreparado = false;
 		cliente.setMapa(mapa);
 		FXGL.getGameTimer().runOnceAfter(() -> {
-			getGameController().startNewGame();
+			try {
+				getGameController().startNewGame();
+			} catch (Exception e) {
+				
+			}
+			
 		}, Duration.millis(500));
 	}
 
-//Nuevo
+/**
+ * Actualiza la posición de un player dentro del juego 
+ * @param player PLayer al que se actualizará la posición
+ */
 	public static void actualizarPlayer(PlayerPosition player) {
 		if (juegoPreparado) {
 			FXGL.getGameTimer().runOnceAfter(() -> {
@@ -507,11 +591,19 @@ public class BombermanApp extends GameApplication {
 		}
 	}
 
-//Nuevo
+/**
+ * Recibe un jugador, coge su coordenas y genera un bomba en dichas coordenas
+ * @param player al que se le recogeran sus coordenadas.
+ */
 	public static void ponerBombaPlayer(PlayerPosition player) {
 		if (juegoPreparado) {
 			FXGL.getGameTimer().runOnceAfter(() -> {
 				try {
+				PlayerComponent comprobarBombasPuesta= FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(player.getIdEntity()).getComponent(PlayerComponent.class);
+					if( comprobarBombasPuesta.getBombsPlaced()==comprobarBombasPuesta.getMaxBombs()) {
+						
+					}else {
+						comprobarBombasPuesta.setBombsPlaced(comprobarBombasPuesta.getBombsPlaced()+1);
 					int power = FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(player.getIdEntity())
 							.getComponent(PlayerComponent.class).getPower();
 					int x = (int) player.getPositionX() / BombermanApp.TILE_SIZE;
@@ -521,12 +613,14 @@ public class BombermanApp extends GameApplication {
 									(BombermanApp.TILE_SIZE / 2) + power));
 
 					FXGL.getGameTimer().runOnceAfter(() -> {
-
+						if(juegoPreparado) {
 						bomb.getComponent(BombComponent.class).explode(power,FXGL.getGameWorld().getEntitiesByType(BombermanType.PLAYER).get(player.getIdEntity())
 								.getComponent(PlayerComponent.class));
-
+						comprobarBombasPuesta.setBombsPlaced(comprobarBombasPuesta.getBombsPlaced()-1);
+						}
 
 					}, Duration.seconds(2));
+					}
 				} catch (Exception e) {
 
 				}
@@ -536,7 +630,11 @@ public class BombermanApp extends GameApplication {
 	
 	public static final String JRXML_FILE = "/reports/informe.jrxml";
 	public static final String PDF_FILE = "pdf/informe.pdf";
-	
+	/**
+	 * Método para generar los informas a través de la puntuación.
+	 * @throws JRException
+	 * @throws IOException
+	 */
 	public static void generarPdf() throws JRException, IOException {
 
 		JasperReport report = JasperCompileManager.compileReport(BombermanApp.class.getResourceAsStream(JRXML_FILE));
@@ -546,7 +644,10 @@ public class BombermanApp extends GameApplication {
         JasperExportManager.exportReportToPdfFile(print, PDF_FILE);
 		Desktop.getDesktop().open(new File(PDF_FILE));
 	}
-
+/**
+ * Main
+ * @param args
+ */
 	public static void main(String[] args) {
 		launch(args);
 	}

@@ -14,6 +14,7 @@ import dad.javafx.bomberdad.components.EnemyComponent;
 import dad.javafx.bomberdad.components.PlayerComponent;
 import dad.javafx.bomberdad.components.StaticComponent;
 import dad.javafx.bomberdad.ia.AvoidBombs;
+import dad.javafx.bomberdad.ia.ChasePlayer;
 //----
 import dad.javafx.bomberdad.ia.DefendZone;
 
