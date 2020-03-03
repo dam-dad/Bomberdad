@@ -171,7 +171,8 @@ public class BombermanFactory implements EntityFactory {
 	public Entity newEnemy(SpawnData data) {
 		Entity enemy = entityBuilder().from(data).type(BombermanType.ENEMY)
 				.bbox(new HitBox(new Point2D(2, 2), BoundingShape.box(30, 30)))
-				.viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.DARKRED))
+				.viewWithBBox(FXGL.getAssetLoader().loadTexture("py" + theme + "2.gif", BombermanApp.TILE_SIZE,
+						BombermanApp.TILE_SIZE))
 				.with(new CellMoveComponent(30, 30, 125))
 				.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid")))).with(new EnemyComponent())
 				.with(new ChasePlayer()).with(new AvoidBombs()).build();
@@ -188,7 +189,8 @@ public class BombermanFactory implements EntityFactory {
 	public Entity newEnemyZone(SpawnData data) {
 		Entity enemy = entityBuilder().from(data).type(BombermanType.ENEMY)
 				.bbox(new HitBox(new Point2D(2, 2), BoundingShape.box(30, 30)))
-				.viewWithBBox(new Rectangle(BombermanApp.TILE_SIZE, BombermanApp.TILE_SIZE, Color.DARKRED))
+				.viewWithBBox(FXGL.getAssetLoader().loadTexture("py" + theme + "2.gif", BombermanApp.TILE_SIZE,
+						BombermanApp.TILE_SIZE))
 				.with(new CellMoveComponent(30, 30, 125))
 				.with(new AStarMoveComponent(new LazyValue<>(() -> geto("grid")))).with(new EnemyComponent())
 				.with(new DefendZone()).build();
