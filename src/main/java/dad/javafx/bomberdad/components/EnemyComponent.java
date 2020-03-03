@@ -32,6 +32,9 @@ public class EnemyComponent extends Component {
 		this.vida = vida;
 	}
 
+	/**
+	 * Permite generar una bomba en la posicion actual del enemy si tiene mas de 0 vidas
+	*/
 	public void placeBomb() {
 
 		if (vida != 0) {
@@ -49,6 +52,10 @@ public class EnemyComponent extends Component {
 
 	}
 
+	/**
+	 * @param tpf Tiempo por frame
+	 * Si en la misma posición que el enemy hay un player, pone una bomba
+	*/
 	@Override
 	public void onUpdate(double tpf) {
 

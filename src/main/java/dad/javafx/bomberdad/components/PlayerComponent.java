@@ -76,6 +76,9 @@ public class PlayerComponent extends Component {
 		this.astar = astar;
 	}
 
+	/**
+	 * Permite generar una bomba en la posicion actual del player si tiene mas de 0 vidas
+	*/
 	public void placeBomb() {
 		if (vidas >= 0) {
 			if (bombsPlaced == maxBombs) {
@@ -99,6 +102,9 @@ public class PlayerComponent extends Component {
 	}
 
 	// getters & setters
+	/**
+	 * Efecto de transparencia cuando un player recibe una explosión
+	*/
 	public void playFadeAnimation() {
 
 		FadeTransition ft = new FadeTransition(Duration.seconds(0.5),

@@ -14,6 +14,10 @@ import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 public class RandomMove extends Component {
 	private AStarMoveComponent astar;
 
+	/**
+	 * @param tpf Tiempo por frame
+	 * Genera una coordenada aleatoria y se mueve hacia ella
+	*/
 	@Override
 	public void onUpdate(double tpf) {
 		if (!astar.isMoving()) {

@@ -35,9 +35,6 @@ public class ClienteTCP {
 			is = new ObjectInputStream(clientSocket.getInputStream());
 			os = new ObjectOutputStream(clientSocket.getOutputStream());
 			inicializarPartida();
-//			is.close();
-//			os.close();
-			System.out.println("start hilo");
 			recibir = new Recibir(this);
 			recibir.start();
 		} catch (Exception e) {
@@ -56,23 +53,19 @@ public class ClienteTCP {
 			DynamicObject leidO=(DynamicObject)is.readObject();
 			System.out.println(leidO.getTipoObjeto());
 			this.id=leidO.getIdJugador();
-			System.out.println("DespuesSolicitud"+id);
 			DynamicObject dOsolicitaLista= new DynamicObject("getLista","getLista");
 			os.writeObject(dOsolicitaLista);
 			DynamicObject leedOlista = (DynamicObject) is.readObject();
-			System.out.println(leedOlista.getObjeto());
+			
 			while (!leedOlista.getTipoObjeto().equals("2")) {
 				os.writeObject(dOsolicitaLista);
 				leedOlista = (DynamicObject) is.readObject();
 			}
-			// nuevo
-			if (id == 0) {
-				DynamicObject dOSolicitaMapa = new DynamicObject("RequestNewMap", "0");
+		
+				DynamicObject dOSolicitaMapa = new DynamicObject("RequestInicialMap", "0");
 				os.writeObject(dOSolicitaMapa);
-			}
-//				is.readObject();
 			DynamicObject leeMapa=(DynamicObject)is.readObject();
-			while(!leeMapa.getTipoObjeto().equals("RequestNewMap")) {
+			while(!leeMapa.getTipoObjeto().equals("RequestInicialMap")) {
 				leeMapa=(DynamicObject)is.readObject();
 	
 				}

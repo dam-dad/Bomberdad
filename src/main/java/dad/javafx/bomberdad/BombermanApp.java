@@ -1,18 +1,17 @@
 package dad.javafx.bomberdad;
 
+
 import static com.almasb.fxgl.dsl.FXGL.getAssetLoader;
 import static com.almasb.fxgl.dsl.FXGL.getGameController;
 import static com.almasb.fxgl.dsl.FXGL.getGameScene;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
 import static com.almasb.fxgl.dsl.FXGL.getPhysicsWorld;
-
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import com.almasb.fxgl.app.FXGLMenu;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
@@ -71,7 +70,7 @@ public class BombermanApp extends GameApplication {
 
 	public static final int TILE_SIZE = 30;
 	public static final int UI_SIZE = 200;
-	public static Entity player, player2, enemy;
+	public static Entity player, player2, enemy, enemy2;
 	private int lvl = 0;
 	private static boolean requestNewGame = false;
 	public static String theme = "crab";
@@ -82,7 +81,6 @@ public class BombermanApp extends GameApplication {
 	public static boolean multiplayer = false, onlineActivo = false;
 	public static boolean moving = false;
 	public static boolean fullScreen = false;
-
 	// nuevo
 	private static boolean juegoPreparado = false;
 	public static Puntuaciones ratings = new Puntuaciones();
@@ -251,6 +249,8 @@ public class BombermanApp extends GameApplication {
 		player2.getComponent(PlayerComponent.class).setName("Player 2");
 		enemy = getGameWorld().spawn("e", TILE_SIZE, TILE_SIZE * 17);
 		enemy.getComponent(EnemyComponent.class);
+		enemy2 = getGameWorld().spawn("d", TILE_SIZE * 17, TILE_SIZE);
+		enemy2.getComponent(EnemyComponent.class);
 		ratings.getPoints().get(0).set(0, player.getComponent(PlayerComponent.class).getName());
 		ratings.getPoints().get(1).set(0, player2.getComponent(PlayerComponent.class).getName());
 
@@ -265,16 +265,13 @@ public class BombermanApp extends GameApplication {
 			onlineActivo = true;
 			System.out.println("FIN crear cliente");
 		}
-		
 		playerPosition = new PlayerPosition(0.0, 0.0, id);
 		GenerateMap.createMap(cliente.getMapa());
-		System.out.println(cliente.getMapa() +"yolo");
 		cargarMundo();
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
 		player.getComponent(PlayerComponent.class).setName("Player");
 		player2 = getGameWorld().spawn("Player", TILE_SIZE * 17, TILE_SIZE * 17);
-		player2.getComponent(PlayerComponent.class).setName("PLayer 2");
-
+		player2.getComponent(PlayerComponent.class).setName("Player 2");
 		juegoPreparado = true;
 	}
 	private void cargarMundo() {
@@ -282,12 +279,10 @@ public class BombermanApp extends GameApplication {
 		Texture texture = getAssetLoader().loadTexture("bg" + theme + ".gif");
 		GameView vista = new GameView(texture, -0);
 		getGameScene().addGameView(vista);
-		System.out.println("hilo");
 
 		Level level = getAssetLoader().loadLevel("map.txt", new TextLevelLoader(TILE_SIZE, TILE_SIZE, '0'));
 		getGameWorld().setLevel(level);
 
-		System.out.println("Holi");
 		AStarGrid grid = AStarGrid.fromWorld(getGameWorld(), 19, 19, 30, 30, (type) -> {
 
 			if (type == BombermanType.FLOOR || type == BombermanType.ENEMY) {
@@ -373,7 +368,6 @@ public class BombermanApp extends GameApplication {
 	protected void onUpdate(double tpf) {
 
 		if (multiplayer) {
-
 			actualizaPosicion();
 			envioPosicion("playerPosition");
 
@@ -386,7 +380,6 @@ public class BombermanApp extends GameApplication {
 			} else {
 				if (id == 0) {
 					DynamicObject dOSolicitaMapa = new DynamicObject("RequestNewMap", String.valueOf(lvl));
-					System.out.println(lvl);
 					try {
 						cliente.getOs().writeObject(dOSolicitaMapa);
 					} catch (IOException e) {
@@ -481,6 +474,7 @@ public class BombermanApp extends GameApplication {
 				int pNew = pOld + 5;
 				uiController.setPointsLbl(pNew + "", pl);
 				ratings.getPoints().get(pl).set(1, "" + pNew);
+
 			}
 			e.removeFromWorld();
 			// Cambiar el estado de la entidad BRICK a "WALKABLE" cuando desaparece
@@ -498,6 +492,7 @@ public class BombermanApp extends GameApplication {
 			} else if (e.isType(BombermanType.BRICKYELLOW)) {
 				getGameWorld().spawn("PUMaxBombs", x, y);
 			}
+
 		} else if (e.isType(BombermanType.ENEMY)) {
 			e.removeFromWorld();
 		}
