@@ -44,4 +44,39 @@
 			<version>6.11.0</version>
 		</dependency>
 	</dependencies>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>javapackager</id>
+			<url>https://github.com/fvarrui/JavaPackager/raw/master/releases</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>fvarrui.maven</groupId>
+				<artifactId>javapackager</artifactId>
+				<version>0.8.9</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>package</goal>
+						</goals>
+						<configuration>
+							<mainClass>dad.javafx.bomberdad.main.Main</mainClass>
+							<administratorRequired>true</administratorRequired>
+							<bundleJre>true</bundleJre>
+							<customizedJre>true</customizedJre>
+							<organizationName>PiniaEntertaiment</organizationName>
+							<organizationUrl>https://github.com/dam-dad/Bomberdad</organizationUrl>
+							<url>https://github.com/dam-dad/Bomberdad/blob/master/README.md</url>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>

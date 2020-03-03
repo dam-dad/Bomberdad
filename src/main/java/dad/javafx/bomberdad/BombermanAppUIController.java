@@ -12,7 +12,9 @@ import javafx.scene.layout.VBox;
 
 /**
  * Controlador de la interfaz de usuario
- * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ * 
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera,
+ *         Pablo García Gómez
  *
  */
 
@@ -43,7 +45,7 @@ public class BombermanAppUIController implements UIController {
 	/**
 	 * Inicializa la interfaz de usuario con las puntuaciones
 	 */
-	
+
 	@Override
 	public void init() {
 		maxBombspl1 = 1;
@@ -86,12 +88,12 @@ public class BombermanAppUIController implements UIController {
 			vboxpl4.setOpacity(0);
 		}
 	}
-	
-	
+
 	/**
 	 * Edita el label con la puntuación dependiendo del jugador
+	 * 
 	 * @param txt puntos para editar el Label
-	 * @param id del jugador
+	 * @param id  del jugador
 	 */
 	public void setPointsLbl(String txt, int id) {
 		if (id == 0) {
@@ -104,11 +106,12 @@ public class BombermanAppUIController implements UIController {
 			tarjetapl4.getNumberPointsLb().setText(txt);
 		}
 	}
-	
+
 	/**
 	 * Edita el label con las vidas dependiendo del jugador
+	 * 
 	 * @param lifes vidas para editar el Label
-	 * @param id del jugador
+	 * @param id    del jugador
 	 */
 	public void setLifesLbl(String lifes, int id) {
 		if (id == 0) {
@@ -148,8 +151,9 @@ public class BombermanAppUIController implements UIController {
 
 	/**
 	 * Edita barra de progreción con los Power Ups dependiendo del jugador
+	 * 
 	 * @param powerup para distinguir del Power Up rojo o amarillo
-	 * @param id del jugador
+	 * @param id      del jugador
 	 */
 	public void setAddProgress(BombermanType powerup, int id) {
 		if (powerup == BombermanType.UPPOWER) {
@@ -254,6 +258,67 @@ public class BombermanAppUIController implements UIController {
 			}
 		}
 
+	}
+
+	public void resetPowerUps(int id) {
+		if (id == 0) {
+			tarjetapl1.getPowerBarpos1().setProgress(0);
+			tarjetapl1.getPowerBarpos2().setProgress(0);
+			tarjetapl1.getPowerBarpos3().setProgress(0);
+			tarjetapl1.getPowerBarpos4().setProgress(0);
+			tarjetapl1.getPowerBarpos5().setProgress(0);
+			maxExplosionpl1 = 1;
+		} else if (id == 1) {
+			tarjetapl2.getPowerBarpos1().setProgress(0);
+			tarjetapl2.getPowerBarpos2().setProgress(0);
+			tarjetapl2.getPowerBarpos3().setProgress(0);
+			tarjetapl2.getPowerBarpos4().setProgress(0);
+			tarjetapl2.getPowerBarpos5().setProgress(0);
+			maxExplosionpl2 = 1;
+		} else if (id == 2) {
+			tarjetapl3.getPowerBarpos1().setProgress(0);
+			tarjetapl3.getPowerBarpos2().setProgress(0);
+			tarjetapl3.getPowerBarpos3().setProgress(0);
+			tarjetapl3.getPowerBarpos4().setProgress(0);
+			tarjetapl3.getPowerBarpos5().setProgress(0);
+			maxExplosionpl3 = 1;
+		} else if (id == 3) {
+			tarjetapl4.getPowerBarpos1().setProgress(0);
+			tarjetapl4.getPowerBarpos2().setProgress(0);
+			tarjetapl4.getPowerBarpos3().setProgress(0);
+			tarjetapl4.getPowerBarpos4().setProgress(0);
+			tarjetapl4.getPowerBarpos5().setProgress(0);
+			maxExplosionpl4 = 1;
+		}
+		if (id == 0) {
+			tarjetapl1.getMaxBBarpos1().setProgress(0);
+			tarjetapl1.getMaxBBarpos2().setProgress(0);
+			tarjetapl1.getMaxBBarpos3().setProgress(0);
+			tarjetapl1.getMaxBBarpos4().setProgress(0);
+			tarjetapl1.getMaxBBarpos5().setProgress(0);
+			maxBombspl1 = 1;
+		} else if (id == 1) {
+			tarjetapl2.getMaxBBarpos1().setProgress(0);
+			tarjetapl2.getMaxBBarpos2().setProgress(0);
+			tarjetapl2.getMaxBBarpos3().setProgress(0);
+			tarjetapl2.getMaxBBarpos4().setProgress(0);
+			tarjetapl2.getMaxBBarpos5().setProgress(0);
+			maxBombspl2 = 1;
+		} else if (id == 2) {
+			tarjetapl3.getMaxBBarpos1().setProgress(0);
+			tarjetapl3.getMaxBBarpos2().setProgress(0);
+			tarjetapl3.getMaxBBarpos3().setProgress(0);
+			tarjetapl3.getMaxBBarpos4().setProgress(0);
+			tarjetapl3.getMaxBBarpos5().setProgress(0);
+			maxBombspl3 = 1;
+		} else if (id == 3) {
+			tarjetapl4.getMaxBBarpos1().setProgress(0);
+			tarjetapl4.getMaxBBarpos2().setProgress(0);
+			tarjetapl4.getMaxBBarpos3().setProgress(0);
+			tarjetapl4.getMaxBBarpos4().setProgress(0);
+			tarjetapl4.getMaxBBarpos5().setProgress(0);
+			maxBombspl4 = 1;
+		}
 	}
 
 }

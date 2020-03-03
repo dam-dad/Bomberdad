@@ -35,8 +35,6 @@ import com.almasb.fxgl.pathfinding.CellState;
 import com.almasb.fxgl.pathfinding.astar.AStarGrid;
 import com.almasb.fxgl.pathfinding.astar.AStarMoveComponent;
 
-
-import dad.javafx.bomberdad.components.EnemyComponent;
 import dad.javafx.bomberdad.components.BombComponent;
 
 import dad.javafx.bomberdad.components.PlayerComponent;
@@ -532,6 +530,7 @@ public class BombermanApp extends GameApplication {
 					playerHit.resetMaxBombs();
 					playerHit.resetPower();
 				}
+				uiController.resetPowerUps(pl);
 				e.getComponent(PlayerComponent.class).playFadeAnimation();
 			}
 		} else if (e.isType(BombermanType.BRICK) || e.isType(BombermanType.BRICKRED) || e.isType(BombermanType.BRICKYELLOW)) {
