@@ -48,7 +48,11 @@ public class InitTaskLoading extends Task<Void> {
 	}
 
 	private void initGame() {
-		update("Iniciando partida", 0);
+		if (BombermanApp.multiplayer) {
+			update("Esperando jugadores", 0);
+		} else {
+			update("Iniciando partida", 0);
+		}
 
 		HashMap<String, Object> vars = new HashMap<String, Object>();
 		app.initGameVars(vars);

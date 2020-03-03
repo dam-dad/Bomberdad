@@ -73,7 +73,7 @@ public class BombermanApp extends GameApplication {
 	public static Entity player, player2, enemy, enemy2;
 	private int lvl = 0;
 	private static boolean requestNewGame = false;
-	public static String theme = "crab";
+	public static String theme = "dad";
 	public static ClienteTCP cliente;
 	public static String ip;
 	public static int port;

@@ -24,7 +24,7 @@ public class LoadingSceneController extends LoadingScene {
 		super();
 //		getContentRoot().getChildren().addAll(vbox,progress,text);
 		rec = (Rectangle) getContentRoot().getChildren().get(0);
-		rec = new Rectangle(FXGL.getAppWidth(),FXGL.getAppHeight(),Color.DARKRED);
+		rec = new Rectangle(FXGL.getAppWidth(),FXGL.getAppHeight(),Color.GREY);
 		getContentRoot().getChildren().set(0, rec);
 	}
 
