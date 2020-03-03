@@ -6,7 +6,7 @@ Juego estilo "Bomberman" desarrollado en JavaFX utilizando la librería [FXGL](h
 En el juego local se podrá jugar 1 vs 1 en el mismo pc, también aparecerán distintos tipos de IA neutral.
 
 #### Online
-En la partida online se conectarán 2 jugadores, uno de ellos haciendo la funcion de servidor y esperará a que el cliente se conecte. 
+En la partida online se conectarán 2 jugadores, uno de ellos haciendo la funcion de servidor y esperará a que el cliente se conecte, ambos deberán introducir la ip y el puerto del servidor. 
 
 ### Guia de usuario
 
