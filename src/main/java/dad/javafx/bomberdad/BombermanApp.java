@@ -46,6 +46,7 @@ import dad.javafx.bomberdad.online.DynamicObject;
 import dad.javafx.bomberdad.online.PlayerPosition;
 import dad.javafx.bomberdad.ratings.Puntuaciones;
 import dad.javafx.bomberdad.ratings.PuntuacionesDataProvider;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
 import net.sf.jasperreports.engine.JRException;
@@ -102,6 +103,7 @@ public class BombermanApp extends GameApplication {
 		settings.setIntroEnabled(true);
 		settings.setFullScreenAllowed(fullScreen);
 		settings.setFullScreenFromStart(fullScreen);
+		settings.setAppIcon(getClass().getResource("/assets/icon/icon.png").toString());
 		settings.setSceneFactory(new SceneFactory() {
 			/**
 			 * Devolver menú inicial customizado

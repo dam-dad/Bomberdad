@@ -139,7 +139,7 @@ public class MenuController extends BorderPane implements Initializable {
 				transicionTrans.playFromStart();
 				transicionScale.playFromStart();
 				FXGL.getEngineTimer().runOnceAfter(() -> {
-					imageView.setImage(new Image("./assets/textures/Title.gif"));
+					imageView.setImage(new Image(getClass().getResource("/assets/textures/Title.gif").toString()));
 					FXGL.getEngineTimer().runOnceAfter(() -> {
 						transicionFadeBG.playFromStart();
 						view.setStyle("-fx-background-color: white;");

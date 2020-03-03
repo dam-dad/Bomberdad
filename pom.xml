@@ -72,6 +72,7 @@
 							<organizationName>PiniaEntertaiment</organizationName>
 							<organizationUrl>https://github.com/dam-dad/Bomberdad</organizationUrl>
 							<url>https://github.com/dam-dad/Bomberdad/blob/master/README.md</url>
+							<iconFile>icon.ico</iconFile>
 						</configuration>
 					</execution>
 				</executions>
