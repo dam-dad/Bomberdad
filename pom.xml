@@ -65,8 +65,6 @@
 							<goal>package</goal>
 						</goals>
 						<configuration>
-							<mainClass>dad.javafx.bomberdad.main.Main</mainClass>
-							<administratorRequired>true</administratorRequired>
 							<bundleJre>true</bundleJre>
 							<customizedJre>true</customizedJre>
 							<generateInstaller>true</generateInstaller>

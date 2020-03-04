@@ -660,12 +660,12 @@ public class BombermanApp extends GameApplication {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
 		File f = fileChooser.showSaveDialog(stage);
-		if (f.exists()) {
+		if (f != null) {
 			JasperReport report = JasperCompileManager.compileReport(BombermanApp.class.getResourceAsStream(JRXML_FILE));
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("anyo", 2020);
 	        JasperPrint print  = JasperFillManager.fillReport(report, parameters, new JRBeanCollectionDataSource(PuntuacionesDataProvider.getPuntuaciones()));
-	        JasperExportManager.exportReportToPdfFile(print, f.getPath());
+	        JasperExportManager.exportReportToPdfFile(print, f.getAbsolutePath());
 			Desktop.getDesktop().open(f);
 		}
 	}
