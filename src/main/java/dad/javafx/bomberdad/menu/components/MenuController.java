@@ -129,7 +129,7 @@ public class MenuController extends BorderPane implements Initializable {
 		if (skipIntro) {
 			lessText.setText(BombermanApp.theme.toUpperCase());
 			title.getStyleClass().add("lbless");
-			imageView.setImage(new Image("./assets/textures/TitleStatic.png"));
+			imageView.setImage(new Image(getClass().getResource("/assets/textures/TitleStatic.png").toString()));
 			view.setStyle("-fx-background-color: gray;");
 			vBoxBtns.setOpacity(1);
 		} else {
@@ -147,7 +147,7 @@ public class MenuController extends BorderPane implements Initializable {
 						FXGL.getEngineTimer().runOnceAfter(() -> {
 							lessText.setText(BombermanApp.theme.toUpperCase());
 							lessText.getStyleClass().add("lbless");
-							imageView.setImage(new Image("./assets/textures/TitleStatic.png"));
+							imageView.setImage(new Image(getClass().getResource("/assets/textures/TitleStatic.png").toString()));
 							view.setStyle("-fx-background-color: gray;");
 							transicionFadeBGBack.playFromStart();
 							transicionFadeVBoxBtns.playFromStart();
@@ -362,7 +362,7 @@ public class MenuController extends BorderPane implements Initializable {
 
 	private void titleAnimation(String theme) {
 		BombermanApp.theme = theme;
-		imageView.setImage(new Image("./assets/textures/Title.gif"));
+		imageView.setImage(new Image(getClass().getResource("/assets/textures/Title.gif").toString()));
 		explosionAni();
 		timeline.play();
 		FXGL.getEngineTimer().runOnceAfter(() -> {
@@ -383,7 +383,7 @@ public class MenuController extends BorderPane implements Initializable {
 					this.getStylesheets().clear();
 					this.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
 				}
-				imageView.setImage(new Image("./assets/textures/TitleStatic.png"));
+				imageView.setImage(new Image(getClass().getResource("/assets/textures/TitleStatic.png").toString()));
 				view.setStyle("-fx-background-color: gray;");
 				transicionFadeBGBack.playFromStart();
 				transicionFadeVBoxBtns.playFromStart();

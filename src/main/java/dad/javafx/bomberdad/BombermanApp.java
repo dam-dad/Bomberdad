@@ -50,6 +50,8 @@ import dad.javafx.bomberdad.online.PlayerPosition;
 import dad.javafx.bomberdad.ratings.Puntuaciones;
 import dad.javafx.bomberdad.ratings.PuntuacionesDataProvider;
 import javafx.scene.input.KeyCode;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -284,7 +286,8 @@ public class BombermanApp extends GameApplication {
  * Genera mapa,inicializa los jugadores, inicializa rattings
  */
 	public void initOfflineMode() {
-		GenerateMap.newMap(lvl);
+		GenerateMap gm = new GenerateMap();
+		gm.newMap(lvl);
 		cargarMundo();
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
 		player.getComponent(PlayerComponent.class).setName("Player");
@@ -312,7 +315,8 @@ public class BombermanApp extends GameApplication {
 			onlineActivo = true;
 		}
 		playerPosition = new PlayerPosition(0.0, 0.0, id);
-		GenerateMap.createMap(cliente.getMapa());
+		GenerateMap gm = new GenerateMap();
+		gm.createMap(cliente.getMapa());
 		cargarMundo();
 		player = getGameWorld().spawn("Player", TILE_SIZE, TILE_SIZE);
 		player.getComponent(PlayerComponent.class).setName("Player");
@@ -645,21 +649,25 @@ public class BombermanApp extends GameApplication {
 		}
 	}
 	
-	public static final String JRXML_FILE = "/reports/informe.jrxml";
-	public static final String PDF_FILE = "pdf/informe.pdf";
+	public final String JRXML_FILE = "/reports/informe.jrxml";
 	/**
 	 * Método para generar los informas a través de la puntuación.
 	 * @throws JRException
 	 * @throws IOException
 	 */
-	public static void generarPdf() throws JRException, IOException {
-
-		JasperReport report = JasperCompileManager.compileReport(BombermanApp.class.getResourceAsStream(JRXML_FILE));
-		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("anyo", 2020);
-        JasperPrint print  = JasperFillManager.fillReport(report, parameters, new JRBeanCollectionDataSource(PuntuacionesDataProvider.getPuntuaciones()));
-        JasperExportManager.exportReportToPdfFile(print, PDF_FILE);
-		Desktop.getDesktop().open(new File(PDF_FILE));
+	public void generarPdf() throws JRException, IOException {
+		Stage stage = new Stage();
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
+		File f = fileChooser.showSaveDialog(stage);
+		if (f.exists()) {
+			JasperReport report = JasperCompileManager.compileReport(BombermanApp.class.getResourceAsStream(JRXML_FILE));
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			parameters.put("anyo", 2020);
+	        JasperPrint print  = JasperFillManager.fillReport(report, parameters, new JRBeanCollectionDataSource(PuntuacionesDataProvider.getPuntuaciones()));
+	        JasperExportManager.exportReportToPdfFile(print, f.getPath());
+			Desktop.getDesktop().open(f);
+		}
 	}
 /**
  * Main

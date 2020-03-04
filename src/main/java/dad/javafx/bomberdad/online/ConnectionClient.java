@@ -196,7 +196,8 @@ public class ConnectionClient extends Thread {
 	}
 
 	private String generaMapa(int lvl) {
-		GenerateMap.newMap(lvl);
+		GenerateMap gm = new GenerateMap();
+		gm.newMap(lvl);
 		return GenerateMap.getMap();
 	}
 

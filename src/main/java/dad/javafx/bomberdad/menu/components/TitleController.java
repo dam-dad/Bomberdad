@@ -57,14 +57,14 @@ public class TitleController extends StackPane implements Initializable {
 
 	public void animation(int time) {
 		FXGL.getEngineTimer().runOnceAfter(() -> {
-			image.setImage(new Image("./assets/textures/Title.gif"));
+			image.setImage(new Image(getClass().getResource("/assets/textures/Title.gif").toString()));
 			FXGL.getEngineTimer().runOnceAfter(() -> {
 				textLess.set(null);
-				image.setImage(new Image("./imgs/transparentBum.gif"));
+				image.setImage(new Image(getClass().getResource("/imgs/transparentBum.gif").toString()));
 				lbLess.getStylesheets().add(getClass().getResource("/css/MenuCSS.css").toExternalForm());
 				lbLess.getStyleClass().add("lbless");
 				FXGL.getEngineTimer().runOnceAfter(() -> {
-					image.setImage(new Image("./assets/textures/TitleStatic.png"));
+					image.setImage(new Image(getClass().getResource("/assets/textures/TitleStatic.png").toString()));
 				}, Duration.seconds(1));
 			}, Duration.seconds(1));
 		}, Duration.seconds(time));

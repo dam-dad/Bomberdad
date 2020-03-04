@@ -69,6 +69,7 @@
 							<administratorRequired>true</administratorRequired>
 							<bundleJre>true</bundleJre>
 							<customizedJre>true</customizedJre>
+							<generateInstaller>true</generateInstaller>
 							<organizationName>PiniaEntertaiment</organizationName>
 							<organizationUrl>https://github.com/dam-dad/Bomberdad</organizationUrl>
 							<url>https://github.com/dam-dad/Bomberdad/blob/master/README.md</url>

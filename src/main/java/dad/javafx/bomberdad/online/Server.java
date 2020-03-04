@@ -55,7 +55,8 @@ public class Server extends Thread{
 	}
 
 	private static void generaMapaInicial() {
-		GenerateMap.newMap(0);
+		GenerateMap gm = new GenerateMap();
+		gm.newMap(0);
 		initialMap=GenerateMap.getMap();
 		
 	}

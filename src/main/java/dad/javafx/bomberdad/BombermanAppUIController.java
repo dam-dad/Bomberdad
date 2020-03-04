@@ -63,8 +63,10 @@ public class BombermanAppUIController implements UIController {
 		bgRight.setFitWidth(BombermanApp.UI_SIZE);
 		bgLeft.setFitHeight(FXGL.getAppHeight());
 		bgRight.setFitHeight(FXGL.getAppHeight());
-		bgLeft.setImage(new Image("./assets/textures/bg" + BombermanApp.theme + "UI.gif"));
-		bgRight.setImage(new Image("./assets/textures/bg" + BombermanApp.theme + "UI.gif"));
+		bgLeft.setImage(
+				new Image(getClass().getResource("/assets/textures/bg" + BombermanApp.theme + "UI.gif").toString()));
+		bgRight.setImage(
+				new Image(getClass().getResource("/assets/textures/bg" + BombermanApp.theme + "UI.gif").toString()));
 		vboxLeft.setPrefHeight(FXGL.getAppHeight());
 		vboxRight.setPrefHeight(FXGL.getAppHeight());
 		hboxApp.setPrefWidth(FXGL.getAppWidth() - BombermanApp.UI_SIZE * 3);
@@ -83,9 +85,9 @@ public class BombermanAppUIController implements UIController {
 		if (BombermanApp.numberPlayers >= 4)
 			setPointsLbl(BombermanApp.ratings.getPoints().get(3).get(1), 3);
 
-			vboxpl3.setOpacity(0);
-			vboxpl4.setOpacity(0);
-		
+		vboxpl3.setOpacity(0);
+		vboxpl4.setOpacity(0);
+
 	}
 
 	/**
@@ -115,35 +117,35 @@ public class BombermanAppUIController implements UIController {
 	public void setLifesLbl(String lifes, int id) {
 		if (id == 0) {
 			if (lifes.equals("3")) {
-				tarjetapl1.getHeartpos4().setImage(new Image("./imgs/lessheart.gif"));
+				tarjetapl1.getHeartpos4().setImage(new Image(getClass().getResource("/imgs/lessheart.gif").toString()));
 			} else if (lifes.equals("2")) {
-				tarjetapl1.getHeartpos3().setImage(new Image("./imgs/lessheart.gif"));
+				tarjetapl1.getHeartpos3().setImage(new Image(getClass().getResource("/imgs/lessheart.gif").toString()));
 			} else if (lifes.equals("1")) {
-				tarjetapl1.getHeartpos2().setImage(new Image("./imgs/lessheart.gif"));
+				tarjetapl1.getHeartpos2().setImage(new Image(getClass().getResource("/imgs/lessheart.gif").toString()));
 			}
 		} else if (id == 1) {
 			if (lifes.equals("3")) {
-				tarjetapl2.getHeartpos4().setImage(new Image("./imgs/lessheart.gif"));
+				tarjetapl2.getHeartpos4().setImage(new Image(getClass().getResource("/imgs/lessheart.gif").toString()));
 			} else if (lifes.equals("2")) {
-				tarjetapl2.getHeartpos3().setImage(new Image("./imgs/lessheart.gif"));
+				tarjetapl2.getHeartpos3().setImage(new Image(getClass().getResource("/imgs/lessheart.gif").toString()));
 			} else if (lifes.equals("1")) {
-				tarjetapl2.getHeartpos2().setImage(new Image("./imgs/lessheart.gif"));
+				tarjetapl2.getHeartpos2().setImage(new Image(getClass().getResource("/imgs/lessheart.gif").toString()));
 			}
 		} else if (id == 2) {
 			if (lifes.equals("3")) {
-				tarjetapl3.getHeartpos4().setImage(new Image("./imgs/lessheart.gif"));
+				tarjetapl3.getHeartpos4().setImage(new Image(getClass().getResource("/imgs/lessheart.gif").toString()));
 			} else if (lifes.equals("2")) {
-				tarjetapl3.getHeartpos3().setImage(new Image("./imgs/lessheart.gif"));
+				tarjetapl3.getHeartpos3().setImage(new Image(getClass().getResource("/imgs/lessheart.gif").toString()));
 			} else if (lifes.equals("1")) {
-				tarjetapl3.getHeartpos2().setImage(new Image("./imgs/lessheart.gif"));
+				tarjetapl3.getHeartpos2().setImage(new Image(getClass().getResource("/imgs/lessheart.gif").toString()));
 			}
 		} else if (id == 3) {
 			if (lifes.equals("3")) {
-				tarjetapl4.getHeartpos4().setImage(new Image("./imgs/lessheart.gif"));
+				tarjetapl4.getHeartpos4().setImage(new Image(getClass().getResource("/imgs/lessheart.gif").toString()));
 			} else if (lifes.equals("2")) {
-				tarjetapl4.getHeartpos3().setImage(new Image("./imgs/lessheart.gif"));
+				tarjetapl4.getHeartpos3().setImage(new Image(getClass().getResource("/imgs/lessheart.gif").toString()));
 			} else if (lifes.equals("1")) {
-				tarjetapl4.getHeartpos2().setImage(new Image("./imgs/lessheart.gif"));
+				tarjetapl4.getHeartpos2().setImage(new Image(getClass().getResource("/imgs/lessheart.gif").toString()));
 			}
 		}
 	}

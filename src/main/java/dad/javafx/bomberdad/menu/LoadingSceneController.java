@@ -2,7 +2,6 @@ package dad.javafx.bomberdad.menu;
 
 import com.almasb.fxgl.app.LoadingScene;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.saving.DataFile;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -16,13 +15,11 @@ import javafx.scene.shape.Rectangle;
 public class LoadingSceneController extends LoadingScene {
 
 	private boolean loadingFinished = false;
-	private DataFile dataFile = DataFile.getEMPTY();
 	
 	private Rectangle rec;
 
 	public LoadingSceneController() {
 		super();
-//		getContentRoot().getChildren().addAll(vbox,progress,text);
 		rec = (Rectangle) getContentRoot().getChildren().get(0);
 		rec = new Rectangle(FXGL.getAppWidth(),FXGL.getAppHeight(),Color.GREY);
 		getContentRoot().getChildren().set(0, rec);
@@ -30,7 +27,7 @@ public class LoadingSceneController extends LoadingScene {
 
 	@Override
 	public void onCreate() {
-		InitTaskLoading initTask = new InitTaskLoading(FXGL.getApp(), dataFile);
+		InitTaskLoading initTask = new InitTaskLoading(FXGL.getApp());
 		initTask.setOnSucceeded(e -> loadingFinished = true);
 
 		bind(initTask);

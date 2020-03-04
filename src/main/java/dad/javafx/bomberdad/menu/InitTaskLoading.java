@@ -4,25 +4,24 @@ import java.util.HashMap;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.saving.DataFile;
 
 import dad.javafx.bomberdad.BombermanApp;
 import javafx.concurrent.Task;
 
 /**
  * Tarea para la pantalla de carga
- * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera, Pablo García Gómez
+ * 
+ * @author Alejandro Arrocha Hdez, Rosmen Ramos Díaz, Cristian Abad de Vera,
+ *         Pablo García Gómez
  *
  */
 
 public class InitTaskLoading extends Task<Void> {
 
 	private BombermanApp app;
-	private DataFile dataFile;
 
-	public InitTaskLoading(GameApplication app, DataFile dataFile) {
+	public InitTaskLoading(GameApplication app) {
 		this.app = (BombermanApp) app;
-		this.dataFile = dataFile;
 	}
 
 	@Override
@@ -61,11 +60,7 @@ public class InitTaskLoading extends Task<Void> {
 			FXGL.getGameState().setValue(name, value);
 		});
 
-		if (dataFile == DataFile.getEMPTY()) {
-			app.initGame();
-		} else {
-			app.loadState(dataFile);
-		}
+		app.initGame();
 	}
 
 	private void initPhysics() {
@@ -84,15 +79,8 @@ public class InitTaskLoading extends Task<Void> {
 	}
 
 	private void update(String message, int step) {
-		// log.debug(message);
 		updateMessage(message);
 		updateProgress((long) step, 3);
 	}
-
-//	@Override
-//	protected void failed() {
-//		Thread.getDefaultUncaughtExceptionHandler()
-//		.uncaughtException(Thread.currentThread(), exception ?: RuntimeException("Initialization failed"));
-//	}
 
 }

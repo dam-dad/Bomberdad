@@ -23,13 +23,12 @@ public class GenerateMap {
 	 * Función para la creación de mapas de manera aleatoria
 	 * @param lvl Nivel del mapa donde leer el archivo para generar la nueva matriz
 	 */
-	public static void newMap(int lvl) {
+	public void newMap(int lvl) {
 		map="";
 		try {
 			String line;
 			File file = new File(
-					
-					GenerateMap.class.getClassLoader().getResource("./assets/levels/"+lvl+".txt").getFile()
+					getClass().getResource("/assets/levels/"+lvl+".txt").getFile()
 				);
 			
 			FileReader f = new FileReader(file);
@@ -71,12 +70,10 @@ public class GenerateMap {
 	 * Escribe en el archivo map.txt la matriz del mapa ya generado
 	 * @param map Cadena que contiene la matriz del mapa
 	 */
-	public static void createMap(String map) {
-
-
+	public void createMap(String map) {
 		try {
 			File file2 = new File(
-					GenerateMap.class.getClassLoader().getResource("./assets/levels/map.txt").getFile()
+					getClass().getResource("/assets/levels/map.txt").getFile()
 				);
 			
 	
